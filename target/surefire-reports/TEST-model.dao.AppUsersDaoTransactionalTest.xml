@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="model.dao.AppUsersDaoTransactionalTest" time="0.049" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="model.dao.AppUsersDaoTransactionalTest" time="0.053" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FI"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\axela\AppData\Local\Temp\surefire10173658079484557363\surefirebooter-20250910150915284_3.jar C:\Users\axela\AppData\Local\Temp\surefire10173658079484557363 2025-09-10T15-09-15_167-jvmRun1 surefire-20250910150915284_1tmp surefire_0-20250910150915284_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\axela\AppData\Local\Temp\surefire6417914450523819183\surefirebooter-20250910160337994_3.jar C:\Users\axela\AppData\Local\Temp\surefire6417914450523819183 2025-09-10T16-03-37_869-jvmRun1 surefire-20250910160337994_1tmp surefire_0-20250910160337994_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="c:\Users\axela\Desktop\vscodeprojects\Ohjelmistotuotanto-1\target\test-classes;c:\Users\axela\Desktop\vscodeprojects\Ohjelmistotuotanto-1\target\classes;C:\Users\axela\.m2\repository\io\github\cdimascio\java-dotenv\5.2.2\java-dotenv-5.2.2.jar;C:\Users\axela\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib\1.4.0\kotlin-stdlib-1.4.0.jar;C:\Users\axela\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-common\1.4.0\kotlin-stdlib-common-1.4.0.jar;C:\Users\axela\.m2\repository\org\jetbrains\annotations\13.0\annotations-13.0.jar;C:\Users\axela\.m2\repository\org\mariadb\jdbc\mariadb-java-client\3.1.2\mariadb-java-client-3.1.2.jar;C:\Users\axela\.m2\repository\com\github\waffle\waffle-jna\3.2.0\waffle-jna-3.2.0.jar;C:\Users\axela\.m2\repository\net\java\dev\jna\jna\5.12.1\jna-5.12.1.jar;C:\Users\axela\.m2\repository\net\java\dev\jna\jna-platform\5.12.1\jna-platform-5.12.1.jar;C:\Users\axela\.m2\repository\org\slf4j\jcl-over-slf4j\1.7.36\jcl-over-slf4j-1.7.36.jar;C:\Users\axela\.m2\repository\com\github\ben-manes\caffeine\caffeine\2.9.3\caffeine-2.9.3.jar;C:\Users\axela\.m2\repository\com\google\errorprone\error_prone_annotations\2.10.0\error_prone_annotations-2.10.0.jar;C:\Users\axela\.m2\repository\org\checkerframework\checker-qual\3.23.0\checker-qual-3.23.0.jar;C:\Users\axela\.m2\repository\ch\qos\logback\logback-classic\1.4.6\logback-classic-1.4.6.jar;C:\Users\axela\.m2\repository\ch\qos\logback\logback-core\1.4.6\logback-core-1.4.6.jar;C:\Users\axela\.m2\repository\org\slf4j\slf4j-api\2.0.4\slf4j-api-2.0.4.jar;C:\Users\axela\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.4.2\junit-jupiter-api-5.4.2.jar;C:\Users\axela\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\axela\.m2\repository\org\opentest4j\opentest4j\1.1.1\opentest4j-1.1.1.jar;C:\Users\axela\.m2\repository\org\junit\platform\junit-platform-commons\1.4.2\junit-platform-commons-1.4.2.jar;C:\Users\axela\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.4.2\junit-jupiter-engine-5.4.2.jar;C:\Users\axela\.m2\repository\org\junit\platform\junit-platform-engine\1.4.2\junit-platform-engine-1.4.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\axela\AppData\Local\Temp\surefire10173658079484557363\surefirebooter-20250910150915284_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\axela\AppData\Local\Temp\surefire6417914450523819183\surefirebooter-20250910160337994_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.15+6"/>
@@ -58,10 +58,10 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testGetAllUsersReturnsInsertedUser" classname="model.dao.AppUsersDaoTransactionalTest" time="0.047">
-    <system-out><![CDATA[15:09:16.450 [main] DEBUG org.mariadb.jdbc.client.impl.StandardClient -- execute query: INSERT INTO app_users (username, email, password_hash, role, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?)
-15:09:16.463 [main] DEBUG org.mariadb.jdbc.client.impl.StandardClient -- execute query: SELECT * FROM app_users
-15:09:16.473 [main] DEBUG org.mariadb.jdbc.client.impl.StandardClient -- execute query: DELETE FROM app_users WHERE username = ?
+  <testcase name="testGetAllUsersReturnsInsertedUser" classname="model.dao.AppUsersDaoTransactionalTest" time="0.05">
+    <system-out><![CDATA[16:03:39.133 [main] DEBUG org.mariadb.jdbc.client.impl.StandardClient -- execute query: INSERT INTO app_users (username, email, password_hash, role, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?)
+16:03:39.151 [main] DEBUG org.mariadb.jdbc.client.impl.StandardClient -- execute query: SELECT * FROM app_users
+16:03:39.162 [main] DEBUG org.mariadb.jdbc.client.impl.StandardClient -- execute query: DELETE FROM app_users WHERE username = ?
 ]]></system-out>
   </testcase>
 </testsuite>
