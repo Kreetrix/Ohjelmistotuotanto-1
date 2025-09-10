@@ -1,0 +1,2 @@
+model\dao\AppUsersDaoTransactionalTest.class
+datasource\MariaDbJpaConnectionTest.class
