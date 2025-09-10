@@ -7,7 +7,7 @@ import java.sql.Connection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MariaDbJpaConnectionTest {
-
+    //tests connection
     @Test
     void testGetConnection() {
         try {
