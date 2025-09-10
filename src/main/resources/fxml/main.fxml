@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.fxml.FXML?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.MainController"
+            style="-fx-background-color: #202020;">
+            
+    <center >
+       
+    </center>
+
+    <bottom>
+        <fx:include source="navbar.fxml"/>
+    </bottom>
+</BorderPane>
+

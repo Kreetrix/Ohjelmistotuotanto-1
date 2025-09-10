@@ -1,3 +1,2 @@
-ui/.env
-server/.env
-backend/.env
+.env
+/target/
