@@ -1,0 +1,8 @@
+model\dao\DecksDao.class
+model\entity\AppUsers.class
+Main.class
+model\dao\AppUsersDao.class
+datasource\MariaDbJpaConnection.class
+model\entity\Decks.class
+model\dao\CardsDao.class
+model\entity\Cards.class

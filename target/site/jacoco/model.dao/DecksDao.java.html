@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DecksDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">OHJELMISTOTUOTANTO-1</a> &gt; <a href="index.source.html" class="el_package">model.dao</a> &gt; <span class="el_source">DecksDao.java</span></div><h1>DecksDao.java</h1><pre class="source lang-java linenums">package model.dao;
+
+import model.entity.Decks;
+import datasource.MariaDbJpaConnection;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L10">public class DecksDao {</span>
+
+    public List&lt;Decks&gt; getAllDecks() throws SQLException {
+<span class="nc" id="L13">        List&lt;Decks&gt; decks = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L14">        String sql = &quot;SELECT * FROM decks&quot;;</span>
+
+<span class="nc" id="L16">        try (Connection conn = MariaDbJpaConnection.getConnection();</span>
+<span class="nc" id="L17">             Statement stmt = conn.createStatement();</span>
+<span class="nc" id="L18">             ResultSet rs = stmt.executeQuery(sql)) {</span>
+
+<span class="nc bnc" id="L20" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L21">                int deck_id = rs.getInt(&quot;deck_id&quot;);</span>
+<span class="nc" id="L22">                int user_id = rs.getInt(&quot;user_id&quot;);</span>
+<span class="nc" id="L23">                String deck_name = rs.getString(&quot;deck_name&quot;);</span>
+<span class="nc" id="L24">                String description = rs.getString(&quot;description&quot;);</span>
+<span class="nc" id="L25">                int version = rs.getInt(&quot;version&quot;);</span>
+<span class="nc" id="L26">                boolean visibility = rs.getBoolean(&quot;visibility&quot;);</span>
+<span class="nc" id="L27">                boolean is_deleted = rs.getBoolean(&quot;is_deleted&quot;);</span>
+<span class="nc" id="L28">                Timestamp created_at = rs.getTimestamp(&quot;created_at&quot;);</span>
+
+<span class="nc" id="L30">                Decks deck = new Decks(user_id, deck_name, description, version, visibility, is_deleted, created_at);</span>
+<span class="nc" id="L31">                deck.setDeck_id(deck_id);</span>
+<span class="nc" id="L32">                decks.add(deck);</span>
+<span class="nc" id="L33">            }</span>
+        }
+
+<span class="nc" id="L36">        return decks;</span>
+    }
+
+    public void persist(Decks deck) throws SQLException {
+<span class="nc" id="L40">        String sql = &quot;INSERT INTO decks (user_id, deck_name, description, version, visibility, is_deleted, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)&quot;;</span>
+<span class="nc" id="L41">        try (Connection conn = MariaDbJpaConnection.getConnection();</span>
+<span class="nc" id="L42">             PreparedStatement ps = conn.prepareStatement(sql)) {</span>
+
+<span class="nc" id="L44">            ps.setInt(1, deck.getUser_id());</span>
+<span class="nc" id="L45">            ps.setString(2, deck.getDeck_name());</span>
+<span class="nc" id="L46">            ps.setString(3, deck.getDescription());</span>
+<span class="nc" id="L47">            ps.setInt(4, deck.getVersion());</span>
+<span class="nc" id="L48">            ps.setBoolean(5, deck.isVisibility());</span>
+<span class="nc" id="L49">            ps.setBoolean(6, deck.isIs_deleted());</span>
+<span class="nc" id="L50">            ps.setTimestamp(7, deck.getCreated_at());</span>
+<span class="nc" id="L51">            ps.executeUpdate();</span>
+        }
+<span class="nc" id="L53">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
