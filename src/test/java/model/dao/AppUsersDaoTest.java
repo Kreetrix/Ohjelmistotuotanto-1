@@ -28,6 +28,7 @@ public class AppUsersDaoTest {
         assertNotNull(users);
         assertTrue(users.stream().anyMatch(u -> u.getUsername().equals("txuser")));
 
+        //delete test user from db
         try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM app_users WHERE username = ?")) {
             ps.setString(1, "txuser");
