@@ -5,6 +5,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+///TODO: Replace png icons with svg
 public class CustomButton extends Button {
 
     private ImageView imageView;
