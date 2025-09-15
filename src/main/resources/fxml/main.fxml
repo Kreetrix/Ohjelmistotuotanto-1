@@ -11,7 +11,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.MainController"
             style="-fx-background-color: #202020;">
-            
+
     <center>
         <VBox spacing="0" alignment="TOP_CENTER">
             <MenuItemButton fx:id="deckBtn"/>
@@ -23,4 +23,3 @@
         <fx:include source="navbar.fxml"/>
     </bottom>
 </BorderPane>
-
