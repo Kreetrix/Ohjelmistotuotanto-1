@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
+// TODO
+// ADD METHODS CRUD
 @RestController
 public class UserController {
 
