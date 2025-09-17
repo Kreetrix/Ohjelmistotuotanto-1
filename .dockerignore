@@ -1,0 +1,24 @@
+# Maven/Gradle
+target/
+build/
+*.log
+.idea/
+.vscode/
+*.iml
+
+# documentation
+.doc
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+.dockerignore
+
+src/test/
+
+*.env
+*.env.example
+*.properties
