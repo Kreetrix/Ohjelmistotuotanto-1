@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import components.MenuItemButton?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.DecksController"
+            style="-fx-background-color: #202020;">
+            
+    <top>
+        <VBox style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #333333; -fx-border-width: 0 0 1 0;">
+            <Label text="My Decks" style="-fx-text-fill: #a9a9a9; -fx-font-size: 28; -fx-font-weight: bold;"/>
+            <Label text="Browse and manage your card decks" style="-fx-text-fill: #757575; -fx-font-size: 16;"/>
+        </VBox>
+    </top>
+            
+    <center>
+        <ScrollPane fx:id="scrollPane" style="-fx-background: #202020; -fx-background-color: #202020;" fitToWidth="true">
+            <VBox fx:id="decksContainer" spacing="0" style="-fx-background-color: #202020;"/>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+    </bottom>
+</BorderPane>
