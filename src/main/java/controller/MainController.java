@@ -5,8 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.awt.Dimension;
 
 public class MainController {
+
+        Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth() / 3;
+		double height = screenSize.getHeight() / 1.2;
 
     @FXML
     private MenuItemButton deckBtn;
@@ -29,7 +34,7 @@ public class MainController {
     private void renderAllDecks() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/decks.fxml"));
-            Scene scene = new Scene(loader.load(), 440, 956);
+            Scene scene = new Scene(loader.load(), width, height);
             
             Stage decksStage = new Stage();
             decksStage.setScene(scene);
