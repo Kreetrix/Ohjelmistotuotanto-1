@@ -1,5 +1,4 @@
 # Maven/Gradle
-target/
 build/
 *.log
 .idea/
@@ -19,6 +18,6 @@ Dockerfile*
 
 src/test/
 
-*.env
+
 *.env.example
 *.properties
