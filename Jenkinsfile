@@ -9,17 +9,17 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean install -DskipTests'
+                bat  'mvn clean install -DskipTests'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat  'mvn test'
             }
         }
         stage('Code Coverage') {
             steps {
-                sh 'mvn jacoco:report'
+                bat  'mvn jacoco:report'
             }
         }
         stage('Publish Test Results') {
