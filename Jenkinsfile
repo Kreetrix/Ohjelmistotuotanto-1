@@ -7,21 +7,27 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Kreetrix/Ohjelmistotuotanto-1'
             }
         }
+
         stage('Build') {
             steps {
-                bat  'mvn clean install -DskipTests'
+                bat 'mvn clean install -DskipTests'
             }
         }
+
         stage('Test') {
             steps {
-                bat  'mvn test'
+                bat 'copy .env src\\test\\resources\\.env'
+
+                bat 'mvn test'
             }
         }
+
         stage('Code Coverage') {
             steps {
-                bat  'mvn jacoco:report'
+                bat 'mvn jacoco:report'
             }
         }
+
         stage('Publish Test Results') {
             steps {
                 junit '**/target/surefire-reports/*.xml'
