@@ -36,15 +36,36 @@ public class DecksDao {
         return decks;
     }
 
-    // switches deck value to is_deleted or not is_deleted
+    // switches deck value to is_deleted or not is_deleted also updates all cards in the deck to have the same is_deleted status
     public void isDeleted(boolean value, int id) throws SQLException {
-        String sql = "UPDATE decks SET is_deleted = ? WHERE deck_id = ?";
+        String updateDeckSql = "UPDATE decks SET is_deleted = ? WHERE deck_id = ?";
+        String updateCardsSql = "UPDATE cards SET is_deleted = ? WHERE deck_id = ?";
         
-        try (Connection conn = MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, value ? 1 : 0);
-            ps.setInt(2, id);
-            ps.executeUpdate();
+        try (Connection conn = MariaDbJpaConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            
+            try {
+                // Update the deck
+                try (PreparedStatement ps1 = conn.prepareStatement(updateDeckSql)) {
+                    ps1.setInt(1, value ? 1 : 0);
+                    ps1.setInt(2, id);
+                    ps1.executeUpdate();
+                }
+                
+                // Update all cards in the deck
+                try (PreparedStatement ps2 = conn.prepareStatement(updateCardsSql)) {
+                    ps2.setInt(1, value ? 1 : 0);
+                    ps2.setInt(2, id);
+                    ps2.executeUpdate();
+                }
+                
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         }
     }
 
