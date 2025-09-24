@@ -15,12 +15,13 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                bat 'copy .env src\\test\\resources\\.env'
-
-                bat 'mvn test'
-            }
-        }
+                    steps {
+                        withCredentials([file(credentialsId: 'my-env-file', variable: '.env	')]) {
+                            bat "copy %.env	% src\\test\\resources\\.env"
+                            bat "mvn test"
+                        }
+                    }
+                }
 
         stage('Code Coverage') {
             steps {
