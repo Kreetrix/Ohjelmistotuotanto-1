@@ -15,13 +15,13 @@ pipeline {
         }
 
         stage('Test') {
-                    steps {
-                        withCredentials([file(credentialsId: 'my-env-file', variable: 'ENV_FILE')]) {
-                            bat "copy %ENV_FILE%" src\\test\\resources\\.env"
-                            bat "mvn test"
-                        }
-                    }
+            steps {
+                withCredentials([file(credentialsId: 'my-env-file', variable: 'ENV_FILE')]) {
+                    bat "copy %ENV_FILE% src\\test\\resources\\.env"
+                    bat "mvn test"
                 }
+            }
+        }
 
         stage('Code Coverage') {
             steps {
@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage('Publish Test Results') {
-            steps {м
+            steps {
                 junit '**/target/surefire-reports/*.xml'
             }
         }
