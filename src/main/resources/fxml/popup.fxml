@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import components.MenuItemButton?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.PopUpController"
+            style="-fx-background-color: #202020;">
+            
+            
+    <center>
+        <ScrollPane fx:id="scrollPane" style="-fx-background: #202020; -fx-background-color: #202020;" fitToWidth="true">
+            <VBox fx:id="PopUpContainer" spacing="0" style="-fx-background-color: #202020;"/>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

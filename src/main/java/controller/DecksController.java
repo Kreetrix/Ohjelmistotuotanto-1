@@ -2,10 +2,15 @@ package controller;
 
 import components.MenuItemButton;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.dao.DecksDao;
 import model.entity.Decks;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -32,8 +37,6 @@ public class DecksController {
                 MenuItemButton emptyMessage = new MenuItemButton();
                 emptyMessage.setIcon("list");
                 emptyMessage.setMainText("No Decks Found");
-                emptyMessage.setSubText("Create your first deck to get started");
-                emptyMessage.setOnAction(e -> System.out.println("Create new deck"));
                 decksContainer.getChildren().add(emptyMessage);
             } else {
                 for (Decks deck : allDecks) {
@@ -69,13 +72,24 @@ public class DecksController {
     }
     
     private void openDeck(Decks deck) {
-        System.out.println("Opening deck: " + deck.getDeck_name());
-        System.out.println("Deck ID: " + deck.getDeck_id());
-        System.out.println("Description: " + deck.getDescription());
-        System.out.println("User ID: " + deck.getUser_id());
-        System.out.println("Version: " + deck.getVersion());
-        System.out.println("Visibility: " + deck.isVisibility());
-        System.out.println("Created: " + deck.getCreated_at());
-        // TODO: Implement deck opening functionality
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/popup.fxml"));
+            Parent root = loader.load();
+            
+            PopUpController popupController = loader.getController();
+            popupController.setDeck(deck);
+            
+            Stage popupStage = new Stage();
+            popupController.setStage(popupStage);
+            
+            popupStage.setTitle("Study Deck - " + deck.getDeck_name());
+            popupStage.setScene(new Scene(root, 400, 300));
+            
+            popupStage.showAndWait();
+            
+        } catch (IOException e) {
+            System.err.println("Error opening popup: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
