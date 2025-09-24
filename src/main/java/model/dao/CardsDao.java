@@ -66,4 +66,19 @@ public class CardsDao {
             throw new RuntimeException("Error persisting card: " + e.getMessage(), e);
         }
     }
+
+    public int getCardCountByDeckId(int deckId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM cards WHERE deck_id = ? AND is_deleted = false";
+        
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, deckId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
 }

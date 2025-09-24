@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.dao.CardsDao;
 import model.dao.DecksDao;
 import model.entity.Decks;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class DecksController {
     private void loadDecks() {
         try {
             DecksDao decksDao = new DecksDao();
+            CardsDao cardsDao = new CardsDao();
             List<Decks> allDecks = decksDao.getAllDecks();
             
             decksContainer.getChildren().clear();
@@ -44,6 +46,8 @@ public class DecksController {
                     deckButton.setIcon("book");
                     deckButton.setMainText(deck.getDeck_name());
                     
+                    int cardCount = cardsDao.getCardCountByDeckId(deck.getDeck_id());
+                    
                     String subText = deck.getDescription();
                     if (subText == null || subText.trim().isEmpty()) {
                         subText = "No description";
@@ -51,6 +55,8 @@ public class DecksController {
                     if (subText.length() > 50) {
                         subText = subText.substring(0, 47) + "...";
                     }
+                    
+                    subText += " • " + cardCount + " cards";
                     deckButton.setSubText(subText);
                     
                     deckButton.setOnAction(e -> openDeck(deck));
