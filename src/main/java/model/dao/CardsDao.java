@@ -35,6 +35,18 @@ public class CardsDao {
         return cards;
     }
 
+    // switches cards value to is_deleted or not is_deleted
+    public void isDeleted(boolean value, int id) throws SQLException {
+        String sql = "UPDATE cards SET is_deleted = ? WHERE card_id = ?";
+        
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, value ? 1 : 0);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
     public void persist(Cards card) throws SQLException {
         Connection conn = MariaDbJpaConnection.getConnection();
         String sql = "INSERT INTO cards (deck_id, front_text, back_text, image_url, extra_info, is_deleted) VALUES (?, ?, ?, ?, ?, ?)";

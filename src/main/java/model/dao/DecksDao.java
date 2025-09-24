@@ -36,6 +36,18 @@ public class DecksDao {
         return decks;
     }
 
+    // switches deck value to is_deleted or not is_deleted
+    public void isDeleted(boolean value, int id) throws SQLException {
+        String sql = "UPDATE decks SET is_deleted = ? WHERE deck_id = ?";
+        
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, value ? 1 : 0);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        }
+    }
+
     public void persist(Decks deck) throws SQLException {
         String sql = "INSERT INTO decks (user_id, deck_name, description, version, visibility, is_deleted, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();

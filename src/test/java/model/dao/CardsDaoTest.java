@@ -41,4 +41,50 @@ public class CardsDaoTest {
             ps.executeUpdate();
         }
     }
+
+    @Test
+    void testIsDeleted() throws SQLException {
+        // Create test card with is_deleted = false
+        Cards testCard = new Cards(1, "Delete Front Test", "Delete Back Test", "http://example.com/img", "Extra info", false);
+        dao.persist(testCard);
+
+        // Get the card ID
+        int cardId = 0;
+        List<Cards> cards = dao.getAllCards();
+        for (Cards card : cards) {
+            if (card.getFront_text().equals("Delete Front Test") && card.getBack_text().equals("Delete Back Test")) {
+                cardId = card.getCard_id();
+                break;
+            }
+        }
+
+        // Test setting is_deleted to true
+        dao.isDeleted(true, cardId);
+        cards = dao.getAllCards();
+        Cards updatedCard = cards.stream()
+                .filter(c -> c.getFront_text().equals("Delete Front Test") && c.getBack_text().equals("Delete Back Test"))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(updatedCard);
+        assertTrue(updatedCard.isIs_deleted());
+
+        // Test setting is_deleted to false
+        dao.isDeleted(false, cardId);
+        cards = dao.getAllCards();
+        updatedCard = cards.stream()
+                .filter(c -> c.getFront_text().equals("Delete Front Test") && c.getBack_text().equals("Delete Back Test"))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(updatedCard);
+        assertFalse(updatedCard.isIs_deleted());
+
+        // Clean up - delete test card from db
+        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                     "DELETE FROM cards WHERE front_text = ? AND back_text = ?")) {
+            ps.setString(1, "Delete Front Test");
+            ps.setString(2, "Delete Back Test");
+            ps.executeUpdate();
+        }
+    }
 }

@@ -15,7 +15,7 @@ public class MariaDbJpaConnection {
         String host = dotenv.get("DB_HOST");
         String user = dotenv.get("DB_USER");
         String password = dotenv.get("DB_PASSWORD");
-        String database = dotenv.get("DB_NAME");
+        String database = dotenv.get("DB_DATABASE");
 
         String url = String.format("jdbc:mariadb://%s:3306/%s", host, database);
         return DriverManager.getConnection(url, user, password);

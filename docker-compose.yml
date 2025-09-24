@@ -6,9 +6,9 @@ services:
     container_name: mariadb-container
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: #           add here from .env
-      MYSQL_USER: #               add here from .env
-      MYSQL_PASSWORD: #            add here from .env
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
