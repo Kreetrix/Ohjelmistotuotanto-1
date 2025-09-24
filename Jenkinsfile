@@ -16,7 +16,7 @@ pipeline {
 
         stage('Test') {
                     steps {
-                        withCredentials([file(credentialsId: 'my-env-file', variable: 'ENV_FILE'	')]) {
+                        withCredentials([file(credentialsId: 'my-env-file', variable: 'ENV_FILE')]) {
                             bat "copy %ENV_FILE%" src\\test\\resources\\.env"
                             bat "mvn test"
                         }
