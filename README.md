@@ -22,12 +22,11 @@ Memory Master is a flashcard-based learning app that helps users remember inform
 - Ensure accuracy reports and deck mastery tracking  
 
 ## Tech Stack
-- **Backend:** Java 17+, Spring Boot, Maven  
+- **Backend:** Java 17+, Maven  
 - **Frontend/GUI:** JavaFX  
 - **Database:** MariaDB  
 - **Testing:** JUnit 5, Mockito  
 - **DevOps:** Jenkins, Docker, Kubernetes, GitHub  
-- **Cloud:** Microsoft Azure  
 
 ## Risk Management
 - Training for new tools (Kubernetes, Jenkins)  
