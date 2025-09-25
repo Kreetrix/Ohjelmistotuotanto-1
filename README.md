@@ -36,7 +36,7 @@ Memory Master is a flashcard-based learning app that helps users remember inform
 
 ## Testing
 - Unit tests with JUnit 5  
-- Integration tests with Spring Boot  
+- Integration tests 
 - Automated CI/CD with Jenkins  
 - Target: 80–90% test coverage  
 
