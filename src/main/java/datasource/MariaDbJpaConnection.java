@@ -12,18 +12,25 @@ public class MariaDbJpaConnection {
     private MariaDbJpaConnection() {}
 
     public static Connection getConnection() throws SQLException {
-        String envFileName = getEnvFileName();
-        System.out.println("Using environment file: " + envFileName);
+        String host = System.getenv("DB_HOST");
+        String user = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+        String database = System.getenv("DB_NAME");
 
-        Dotenv dotenv = Dotenv.configure()
-                .filename(envFileName)
-                .ignoreIfMissing()
-                .load();
+        if (host == null || user == null || password == null || database == null) {
+            String envFileName = getEnvFileName();
+            System.out.println("Using environment file: " + envFileName);
 
-        String host = dotenv.get("DB_HOST");
-        String user = dotenv.get("DB_USER");
-        String password = dotenv.get("DB_PASSWORD");
-        String database = dotenv.get("DB_NAME");
+            Dotenv dotenv = Dotenv.configure()
+                    .filename(envFileName)
+                    .ignoreIfMissing()
+                    .load();
+
+            host = dotenv.get("DB_HOST");
+            user = dotenv.get("DB_USER");
+            password = dotenv.get("DB_PASSWORD");
+            database = dotenv.get("DB_NAME");
+        }
 
         String url = String.format("jdbc:mariadb://%s:3306/%s", host, database);
         System.out.println("Connecting to database: " + url.replace(password, "***"));
