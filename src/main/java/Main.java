@@ -13,6 +13,7 @@ import view.View;
 public class Main {
 
     public static void main(String[] args) throws SQLException {
+        boolean headless = Boolean.getBoolean("javafx.headless");
         AppUsersDao usersDao = new AppUsersDao();
         CardsDao cardsDao = new CardsDao();
         DecksDao decksDao = new DecksDao();
@@ -35,7 +36,9 @@ public class Main {
             System.out.println(deck);
         }
 
-        View.launch(View.class);
+        if (!headless) {
+            View.launch(View.class);
+        }
     }
 
 }
