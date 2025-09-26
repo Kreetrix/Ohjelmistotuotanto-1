@@ -61,6 +61,12 @@ public class StudyController {
         }
     }
 
+    // maybe later add method for showing additional info
+    // from db
+
+
+
+
     private void flipCard(Cards card) {
         if (showingFront) {
             // rotateTransition class  for flip
