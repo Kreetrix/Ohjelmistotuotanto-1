@@ -66,4 +66,36 @@ public class CardsDao {
             throw new RuntimeException("Error persisting card: " + e.getMessage(), e);
         }
     }
+
+// added this method
+    public List<Cards> getCardsByDeckId(int deckId) throws SQLException {
+        List<Cards> cards = new ArrayList<>();
+        String sql = "SELECT * FROM cards WHERE deck_id = ? AND is_deleted = 0";
+
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, deckId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int card_id = rs.getInt("card_id");
+                int d_id = rs.getInt("deck_id");
+                String front_text = rs.getString("front_text");
+                String back_text = rs.getString("back_text");
+                String image_url = rs.getString("image_url");
+                String extra_info = rs.getString("extra_info");
+                boolean is_deleted = rs.getBoolean("is_deleted");
+
+                Cards card = new Cards(d_id, front_text, back_text, image_url, extra_info, is_deleted);
+                card.setCard_id(card_id);
+                cards.add(card);
+            }
+        }
+
+        return cards;
+    }
+
+
+
+
 }

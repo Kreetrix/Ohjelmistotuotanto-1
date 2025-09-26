@@ -2,10 +2,19 @@ package controller;
 
 import components.MenuItemButton;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.dao.CardsDao;
+import model.entity.Cards;
 import model.entity.Decks;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class PopUpController {
 
@@ -26,6 +35,10 @@ public class PopUpController {
     public void setStage(Stage stage) {
         this.popupStage = stage;
     }
+
+    // TODO : ADD SAVING RESULTS  FOR USERS IN DB
+
+
 
     private void setupStudyConfirmation() {
         PopUpContainer.getChildren().clear();
@@ -57,11 +70,27 @@ public class PopUpController {
     }
 
     private void startStudySession() {
-        System.out.println("Starting study session for deck: " + selectedDeck.getDeck_name());
-        System.out.println("Deck ID: " + selectedDeck.getDeck_id());
-        // TODO: Implement actual study session logic
-        // THIS IS WHERE TO NAVIGATE TO STUDY MODE
         closePopup();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/StudyView.fxml"));
+            Parent root = loader.load();
+
+            StudyController studyController = loader.getController();
+
+            CardsDao cardsDao = new CardsDao();
+            List<Cards> deckCards = cardsDao.getCardsByDeckId(selectedDeck.getDeck_id());
+
+            studyController.setDeck(selectedDeck, deckCards);
+
+            Stage stage = new Stage();
+            stage.setTitle("Study Mode - " + selectedDeck.getDeck_name());
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void closePopup() {
