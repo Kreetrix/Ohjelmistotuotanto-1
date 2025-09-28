@@ -27,7 +27,7 @@ public class AppUsersDaoTest {
     }
     @BeforeEach
     void initTestUser() throws SQLException {
-        AppUsers testUser = new AppUsers("activeuser", "active@example.com", "hashed_pw", "student", 1, null);
+        testUser = new AppUsers("activeuser", "active@example.com", "hashed_pw", "student", 1, null);
         dao.persist(testUser);
     }
 
