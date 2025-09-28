@@ -20,5 +20,8 @@
     <Button text="Log In" fx:id="loginBtn" onAction="#onLogin"
             style="-fx-background-color: #00ffff; -fx-text-fill: #130e0e; -fx-font-size: 18; -fx-background-radius: 10;"/>
 
+    <Button text="Register" fx:id="registerBtn" onAction="#toRegister"
+            style="-fx-background-color: #00ffff; -fx-text-fill: #130e0e; -fx-font-size: 18; -fx-background-radius: 10;"/>
+
     <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 14;"/>
 </VBox>

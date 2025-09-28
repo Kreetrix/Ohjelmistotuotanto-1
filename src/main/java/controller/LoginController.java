@@ -1,5 +1,7 @@
 package controller;
 
+import datasource.PasswordUtil;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,7 +33,7 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // TODO : ADD PASSWORD HASHING TO THE LOGIC
+
 
         AppUsersDao appUsersDao = new AppUsersDao();
         try {
@@ -40,12 +42,14 @@ public class LoginController {
             if (user == null) {
                 errorLabel.setText("User not found");
             } else {
-                if(username.equals(user.getUsername()) && password.equals(user.getPassword_hash())){
+
+                if(username.equals(user.getUsername()) && PasswordUtil.checkPassword(password,user.getPassword_hash())){
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
                         Parent root = loader.load();
                         Stage stage = (Stage) loginBtn.getScene().getWindow();
                         stage.setScene(new Scene(root));
+                        stage.setTitle("App");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -69,6 +73,18 @@ public class LoginController {
             }
         } else {
             errorLabel.setText("Invalid username or password");
+        }
+    }
+
+    public void toRegister( ) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/registerView.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) loginBtn.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Register");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
