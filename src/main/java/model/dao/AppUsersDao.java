@@ -60,4 +60,29 @@ public class AppUsersDao {
             ps.executeUpdate();
         }
     }
+    public AppUsers getUserByUsername(String SearchName) throws SQLException {
+        String sql = "SELECT * FROM app_users WHERE username = ?";
+                try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, SearchName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int user_id = rs.getInt("user_id");
+                    String username = rs.getString("username");
+                    String email = rs.getString("email");
+                    String password_hash = rs.getString("password_hash");
+                    String role = rs.getString("role");
+                    int is_active = rs.getInt("is_active");
+                    Timestamp created_at = rs.getTimestamp("created_at");
+
+                    AppUsers user = new AppUsers(username, email, password_hash, role, is_active, created_at);
+                    user.setUser_id(user_id);
+                    return user;
+                }
+                } catch (SQLException e){QLException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
