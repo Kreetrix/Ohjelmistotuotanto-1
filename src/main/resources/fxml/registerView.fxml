@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+
+<?import javafx.scene.control.ComboBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.RegisterController"
+      alignment="CENTER"
+      spacing="20"
+      style="-fx-background-color: #202020; -fx-padding: 50;">
+
+    <Label text="Register" style="-fx-text-fill: #ffffff; -fx-font-size: 36; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="usernameField" promptText="Username" style="-fx-font-size: 18;"/>
+    <TextField fx:id="emailField" promptText="Email" style="-fx-font-size: 18;"/>
+    <ComboBox fx:id="roleComboBox" layoutX="100" layoutY="150" prefWidth="200"/>
+    <PasswordField fx:id="passwordField" promptText="Password" style="-fx-font-size: 18;"/>
+    <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" style="-fx-font-size: 18;"/>
+
+    <Button text="Register" fx:id="registerBtn" onAction="#onRegister"
+            style="-fx-background-color: #00ffff; -fx-text-fill: #130e0e; -fx-font-size: 18; -fx-background-radius: 10;"/>
+
+    <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 14;"/>
+</VBox>

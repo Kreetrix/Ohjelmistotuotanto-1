@@ -2,9 +2,13 @@ package controller;
 
 import datasource.MariaDbJpaConnection;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
 
@@ -26,7 +30,7 @@ public class RegisterController {
     private PasswordField confirmPasswordField;
 
     @FXML
-    private javafx.scene.control.Button loginBtn;
+    private javafx.scene.control.Button registerBtn;
 
     @FXML
     private javafx.scene.control.Label errorLabel;
@@ -48,6 +52,16 @@ public class RegisterController {
             AppUsers user = new AppUsers(username, email, password, role, 0, null);
             try{
                 dao.persist(user);
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) registerBtn.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("App");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 System.out.println(e);
             }
