@@ -1,9 +1,13 @@
 package model.dao;
 
+
+import datasource.PasswordUtil;
 import model.entity.AppUsers;
 import org.junit.jupiter.api.*;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,35 +16,47 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AppUsersDaoTest {
 
     private AppUsersDao dao;
+    private Connection conn;
+    private AppUsers testUser;
 
     @BeforeAll
-    void initDao() {
+    void initDao() throws SQLException {
         dao = new AppUsersDao();
+        conn = datasource.MariaDbJpaConnection.getConnection();
+
+    }
+    @BeforeEach
+    void initTestUser() throws SQLException {
+        testUser = new AppUsers("activeuser", "active@example.com", "hashed_pw", "student", 1, null);
+        dao.persist(testUser);
+    }
+
+    @AfterEach
+    void destroyUser() throws SQLException {
+
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM app_users WHERE username = ?")) {
+            ps.setString(1, "activeuser");
+            ps.executeUpdate();
+        }
+    }
+    @AfterAll
+    void destroyConnection() throws SQLException {
+        conn.close();
     }
 
     //creates test user and add it to db checks if test user in db then deletes the test user
     @Test
     void testGetAllUsersReturnsInsertedUser() throws SQLException {
-        AppUsers testUser = new AppUsers("txuser", "tx@example.com", "hashed_pw", "student", 1, null);
-        dao.persist(testUser);
+
 
         List<AppUsers> users = dao.getAllUsers();
         assertNotNull(users);
-        assertTrue(users.stream().anyMatch(u -> u.getUsername().equals("txuser")));
+        assertTrue(users.stream().anyMatch(u -> u.getUsername().equals("activeuser")));
 
-        //delete test user from db
-        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM app_users WHERE username = ?")) {
-            ps.setString(1, "txuser");
-            ps.executeUpdate();
-        }
     }
 
     @Test
     void testSetActive() throws SQLException {
-        // Create test user with is_active = 1
-        AppUsers testUser = new AppUsers("activeuser", "active@example.com", "hashed_pw", "student", 1, null);
-        dao.persist(testUser);
 
         // Get the user ID
         int userId = 0;
@@ -72,33 +88,21 @@ public class AppUsersDaoTest {
         assertNotNull(updatedUser);
         assertEquals(1, updatedUser.getIs_active());
 
-        // Clean up - delete test user from db
-        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM app_users WHERE username = ?")) {
-            ps.setString(1, "activeuser");
-            ps.executeUpdate();
-        }
+
     }
+
     @Test
     void testGetUserByName() throws SQLException {
 
-        AppUsers testUser = new AppUsers("activeuser", "active@example.com", "hashed_pw", "student", 1, null);
-        dao.persist(testUser);
-
-
-        AppUsers user  = dao.getUserByUsername("activeuser");
+        AppUsers user = dao.getUserByUsername("activeuser");
         assertEquals("activeuser", user.getUsername());
         assertEquals("active@example.com", user.getEmail());
-        assertEquals("hashed_pw",user.getPassword_hash());
-        assertEquals("student",user.getRole());
-        assertEquals(1,user.getIs_active());
+        assertTrue(PasswordUtil.checkPassword("hashed_pw", user.getPassword_hash()));
+        assertEquals("student", user.getRole());
+        assertEquals(1, user.getIs_active());
 
         assertNull(dao.getUserByUsername(null));
 
-        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM app_users WHERE username = ?")) {
-            ps.setString(1, "activeuser");
-            ps.executeUpdate();
-        }
+
     }
 }

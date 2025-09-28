@@ -1,6 +1,7 @@
 package model.dao;
 
 import datasource.MariaDbJpaConnection;
+import datasource.PasswordUtil;
 import model.entity.AppUsers;
 
 import java.sql.*;
@@ -53,7 +54,7 @@ public class AppUsersDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword_hash());
+            ps.setString(3, PasswordUtil.hashPassword(user.getPassword_hash()));
             ps.setString(4, user.getRole());
             ps.setInt(5, user.getIs_active());
             ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
