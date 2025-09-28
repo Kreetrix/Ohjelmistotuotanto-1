@@ -70,9 +70,16 @@ public class DecksController {
             decksContainer.getChildren().add(errorMessage);
         }
     }
-    
+   
+    private Stage currentPopupStage;
     private void openDeck(Decks deck) {
         try {
+
+            if (currentPopupStage != null && currentPopupStage.isShowing()) {
+                currentPopupStage.close();
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/popup.fxml"));
             Parent root = loader.load();
             
@@ -84,6 +91,7 @@ public class DecksController {
             
             popupStage.setTitle("Study Deck - " + deck.getDeck_name());
             popupStage.setScene(new Scene(root, 400, 300));
+            currentPopupStage = popupStage;
             
             popupStage.showAndWait();
             
