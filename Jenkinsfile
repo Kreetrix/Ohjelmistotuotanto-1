@@ -19,6 +19,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'my-env-file', variable: 'ENV_FILE')]) {
                     bat "if not exist src\\test\\resources mkdir src\\test\\resources"
                     bat "copy %ENV_FILE% src\\test\\resources\\.env"
+                    bat "copy %ENV_FILE% .env"
                     bat "mvn test"
                 }
             }
