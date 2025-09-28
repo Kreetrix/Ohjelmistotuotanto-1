@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import model.dao.AppUsersDao;
+import model.entity.AppUsers;
 
 public class LoginController {
 
@@ -29,9 +31,33 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // TODO : ADD ACTUAL USER LOGIN FROM DB
-        //just test user
+        // TODO : ADD PASSWORD HASHING TO THE LOGIC
 
+        AppUsersDao appUsersDao = new AppUsersDao();
+        try {
+            AppUsers user = appUsersDao.getUserByUsername(username);
+
+            if (user == null) {
+                errorLabel.setText("User not found");
+            } else {
+                if(username.equals(user.getUsername()) && password.equals(user.getPassword_hash())){
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+                        Parent root = loader.load();
+                        Stage stage = (Stage) loginBtn.getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    errorLabel.setText("Invalid username or password");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //just test user TODO: REMOVE WHEN NOT NEEDED
         if (username.equals("user") && password.equals("1234")) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
