@@ -1,7 +1,7 @@
 package model.dao;
 
-import model.entity.AppUsers;
 import datasource.MariaDbJpaConnection;
+import model.entity.AppUsers;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class AppUsersDao {
     // switches app_users value to active or not active 
     public void setActive(boolean value, int id) throws SQLException {
         String sql = "UPDATE app_users SET is_active = ? WHERE user_id = ?";
-        
+
         try (Connection conn = MariaDbJpaConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, value ? 1 : 0);
@@ -60,9 +60,10 @@ public class AppUsersDao {
             ps.executeUpdate();
         }
     }
+
     public AppUsers getUserByUsername(String SearchName) throws SQLException {
         String sql = "SELECT * FROM app_users WHERE username = ?";
-                try (Connection conn = MariaDbJpaConnection.getConnection();
+        try (Connection conn = MariaDbJpaConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, SearchName);
             try (ResultSet rs = ps.executeQuery()) {
@@ -79,8 +80,9 @@ public class AppUsersDao {
                     user.setUser_id(user_id);
                     return user;
                 }
-                } catch (SQLException e){QLException e){
-            e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
