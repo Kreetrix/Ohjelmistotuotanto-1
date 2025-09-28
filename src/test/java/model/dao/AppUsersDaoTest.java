@@ -97,6 +97,7 @@ public class AppUsersDaoTest {
         AppUsers user = dao.getUserByUsername("activeuser");
         assertEquals("activeuser", user.getUsername());
         assertEquals("active@example.com", user.getEmail());
+        assertNotNull(user.getPassword_hash());
         assertEquals("student", user.getRole());
         assertEquals(1, user.getIs_active());
 
