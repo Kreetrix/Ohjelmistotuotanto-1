@@ -79,4 +79,26 @@ public class AppUsersDaoTest {
             ps.executeUpdate();
         }
     }
+    @Test
+    void testGetUserByName() throws SQLException {
+
+        AppUsers testUser = new AppUsers("activeuser", "active@example.com", "hashed_pw", "student", 1, null);
+        dao.persist(testUser);
+
+
+        AppUsers user  = dao.getUserByUsername("activeuser");
+        assertEquals("activeuser", user.getUsername());
+        assertEquals("active@example.com", user.getEmail());
+        assertEquals("hashed_pw",user.getPassword_hash());
+        assertEquals("student",user.getRole());
+        assertEquals(1,user.getIs_active());
+
+        assertNull(dao.getUserByUsername(null));
+
+        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement("DELETE FROM app_users WHERE username = ?")) {
+            ps.setString(1, "activeuser");
+            ps.executeUpdate();
+        }
+    }
 }
