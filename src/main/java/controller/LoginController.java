@@ -14,6 +14,8 @@ import javafx.scene.Parent;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
 
+import java.io.IOException;
+
 public class LoginController {
 
     @FXML
@@ -27,6 +29,17 @@ public class LoginController {
 
     @FXML
     private Label errorLabel;
+
+    @FXML
+    protected void initialize() throws IOException {
+        if(Session.getInstance().getCurrentUser()!=null){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) loginBtn.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("App");
+        }
+    }
 
     @FXML
     private void onLogin() {
