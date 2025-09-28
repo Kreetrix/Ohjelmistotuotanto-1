@@ -5,8 +5,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import model.dao.GameSessionsDao;
 import model.entity.Cards;
 import model.entity.Decks;
+import model.entity.GameSessions;
+import java.sql.Timestamp;
 
 import java.util.List;
 import javafx.animation.RotateTransition;
@@ -18,6 +21,8 @@ import javafx.scene.transform.Rotate;
 
 
 public class StudyController {
+    private Timestamp startTime;
+    private Timestamp endTime;
 
     @FXML
     public Button closeButton;
@@ -34,6 +39,7 @@ public class StudyController {
     @FXML
     private Button didntKnowButton;
 
+    GameSessionsDao gameSessionsDao = new GameSessionsDao();
     private Decks deck;
     private List<Cards> cards;
     private int currentIndex = 0;
@@ -43,6 +49,7 @@ public class StudyController {
     public void setDeck(Decks deck, List<Cards> cards) {
         this.deck = deck;
         this.cards = cards;
+        this.startTime = new Timestamp(System.currentTimeMillis());
         showCard();
     }
 
@@ -117,11 +124,21 @@ public class StudyController {
     }
 
     private void showResult() {
+        endTime = new Timestamp(System.currentTimeMillis());
         cardLabel.setText("The game is over!\nScore: " + score + " / " + cards.size());
         knewButton.setVisible(false);
         didntKnowButton.setVisible(false);
         closeButton.setVisible(true);
+        saveResults();
 
 
+    }
+
+    private void saveResults() {
+        try {
+            gameSessionsDao.persist(new GameSessions(Session.getInstance().getUserId(), deck.getDeck_id(), startTime, endTime));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

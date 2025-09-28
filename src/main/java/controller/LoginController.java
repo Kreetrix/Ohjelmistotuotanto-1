@@ -42,6 +42,7 @@ public class LoginController {
             } else {
                 if(username.equals(user.getUsername()) && password.equals(user.getPassword_hash())){
                     try {
+                        Session.getInstance().setCurrentUser(user);
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
                         Parent root = loader.load();
                         Stage stage = (Stage) loginBtn.getScene().getWindow();
