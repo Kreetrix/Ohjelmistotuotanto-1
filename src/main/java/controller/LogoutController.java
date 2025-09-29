@@ -14,7 +14,9 @@ public class LogoutController {
     double width = screenSize.getWidth() / 3;
     double height = screenSize.getHeight() / 1.2;
     public void onLogout() throws IOException {
+        session.getCurrentUser().setIs_active(0);
         session.clear();
+
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
         Parent loginRoot = loginLoader.load();
         Stage loginStage = new Stage();
