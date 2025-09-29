@@ -40,6 +40,9 @@
                     <Tooltip text="Search"/>
                 </tooltip>
             </Button>
+            <Region HBox.hgrow="ALWAYS"/>
+            <CustomButton fx:id="logoutBtn" />
+            <Region HBox.hgrow="ALWAYS"/>
 
         </children>
     </HBox>
