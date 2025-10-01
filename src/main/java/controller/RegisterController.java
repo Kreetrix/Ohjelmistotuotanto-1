@@ -37,6 +37,9 @@ public class RegisterController {
 
     AppUsersDao dao = new AppUsersDao();
 
+    // TODO :  OMG NEED TO ADD ADMIN PANEL  FOR UPDATING/DELETING USERS
+    //
+
     public void initialize(){
         roleComboBox.getItems().addAll("Student", "Teacher", "Admin");
         roleComboBox.setValue("Student");
@@ -58,7 +61,7 @@ public class RegisterController {
                     Parent root = loader.load();
                     Stage stage = (Stage) registerBtn.getScene().getWindow();
                     stage.setScene(new Scene(root));
-                    stage.setTitle("App");
+                    stage.setTitle("Memory Master");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

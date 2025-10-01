@@ -38,7 +38,7 @@ public class MainController {
             
             Stage decksStage = new Stage();
             decksStage.setScene(scene);
-            decksStage.setTitle("My Decks - CARDS MEMO GAME");
+            decksStage.setTitle("Memory Master - Decks");
             decksStage.show();
             
         } catch (Exception ex) {

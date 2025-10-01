@@ -1,6 +1,7 @@
 package controller;
 
 import datasource.PasswordUtil;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,9 +15,13 @@ import javafx.scene.Parent;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class LoginController {
+    Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    double width = screenSize.getWidth() / 3;
+    double height = screenSize.getHeight() / 1.2;
 
     @FXML
     private TextField usernameField;
@@ -31,13 +36,21 @@ public class LoginController {
     private Label errorLabel;
 
     @FXML
-    protected void initialize() throws IOException {
-        if(Session.getInstance().getCurrentUser()!=null){
+    protected void initialize() {
+        if (Session.getInstance().getCurrentUser() != null) {
+            Platform.runLater(() -> redirectToMain());
+        }
+    }
+
+    private void redirectToMain() {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) loginBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("App");
+            stage.setTitle("Memory Master");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -45,8 +58,6 @@ public class LoginController {
     private void onLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-
-
 
         AppUsersDao appUsersDao = new AppUsersDao();
         try {
@@ -63,8 +74,9 @@ public class LoginController {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
                         Parent root = loader.load();
                         Stage stage = (Stage) loginBtn.getScene().getWindow();
-                        stage.setScene(new Scene(root));
-                        stage.setTitle("App");
+
+                        stage.setScene(new Scene(root,width,height));
+                        stage.setTitle("Memory Master");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -76,19 +88,6 @@ public class LoginController {
             e.printStackTrace();
         }
 
-        //just test user TODO: REMOVE WHEN NOT NEEDED
-        if (username.equals("user") && password.equals("1234")) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) loginBtn.getScene().getWindow();
-                stage.setScene(new Scene(root));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            errorLabel.setText("Invalid username or password");
-        }
     }
 
     public void toRegister( ) {
