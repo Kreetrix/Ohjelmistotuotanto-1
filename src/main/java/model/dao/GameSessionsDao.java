@@ -33,16 +33,26 @@ public class GameSessionsDao {
         return sessions;
     }
 
-    public void persist(GameSessions session) throws SQLException {
+    public int persist(GameSessions session) throws SQLException {
         String sql = "INSERT INTO gamesessions (user_id, deck_id, start_time, end_time) VALUES (?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, session.getUser_id());
             ps.setInt(2, session.getDeck_id());
             ps.setTimestamp(3, session.getStart_time());
             ps.setTimestamp(4, session.getEnd_time());
             ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int sessionId = rs.getInt(1);
+                    session.setSession_id(sessionId);
+                    return sessionId;
+                } else {
+                    throw new SQLException("Failed to get session_id after insert");
+                }
+            }
         }
     }
 }
