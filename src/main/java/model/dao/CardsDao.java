@@ -7,13 +7,12 @@ import datasource.MariaDbJpaConnection;
 public class CardsDao {
 
     public List<Cards> getAllCards() throws SQLException {
-        Connection conn = MariaDbJpaConnection.getConnection();
         String sql = "SELECT * FROM cards";
         List<Cards> cards = new ArrayList<>();
 
-        try {
-            Statement s = conn.createStatement();
-            ResultSet rs = s.executeQuery(sql);
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             Statement s = conn.createStatement();
+             ResultSet rs = s.executeQuery(sql)) {
 
             while (rs.next()) {
                 int card_id = rs.getInt(1);
@@ -30,6 +29,7 @@ public class CardsDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw e;
         }
 
         return cards;
@@ -48,10 +48,9 @@ public class CardsDao {
     }
 
     public void persist(Cards card) throws SQLException {
-        Connection conn = MariaDbJpaConnection.getConnection();
         String sql = "INSERT INTO cards (deck_id, front_text, back_text, image_url, extra_info, is_deleted) VALUES (?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, card.getDeck_id());
             ps.setString(2, card.getFront_text());
             ps.setString(3, card.getBack_text());
@@ -59,8 +58,6 @@ public class CardsDao {
             ps.setString(5, card.getExtra_info());
             ps.setBoolean(6, card.isIs_deleted());
             ps.executeUpdate();
-
-            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error persisting card: " + e.getMessage(), e);
@@ -95,7 +92,41 @@ public class CardsDao {
         return cards;
     }
 
+    public void updateCard(Cards card) throws SQLException {
+        String sql = "UPDATE cards SET deck_id = ?, front_text = ?, back_text = ?, image_url = ?, extra_info = ? WHERE card_id = ?";
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, card.getDeck_id());
+            ps.setString(2, card.getFront_text());
+            ps.setString(3, card.getBack_text());
+            ps.setString(4, card.getImage_url());
+            ps.setString(5, card.getExtra_info());
+            ps.setInt(6, card.getCard_id());
+            ps.executeUpdate();
+        }
+    }
 
+    public Cards getCardById(int cardId) throws SQLException {
+        String sql = "SELECT * FROM cards WHERE card_id = ?";
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, cardId);
+            ResultSet rs = ps.executeQuery();
 
+            if (rs.next()) {
+                int card_id = rs.getInt("card_id");
+                int deck_id = rs.getInt("deck_id");
+                String front_text = rs.getString("front_text");
+                String back_text = rs.getString("back_text");
+                String image_url = rs.getString("image_url");
+                String extra_info = rs.getString("extra_info");
+                boolean is_deleted = rs.getBoolean("is_deleted");
 
+                Cards card = new Cards(deck_id, front_text, back_text, image_url, extra_info, is_deleted);
+                card.setCard_id(card_id);
+                return card;
+            }
+        }
+        return null;
+    }
 }
