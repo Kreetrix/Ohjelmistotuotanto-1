@@ -16,6 +16,8 @@ COPY pom.xml /app
 
 COPY . /app
 
+RUN mvn clean package -DskipTests
+
 ENV DISPLAY=host.docker.internal:0.0
 
-CMD ["java", "-Djavafx.headless=true", "-jar", "target/CardApp.jar"]
+CMD ["java", "-jar", "target/CardApp.jar"]
