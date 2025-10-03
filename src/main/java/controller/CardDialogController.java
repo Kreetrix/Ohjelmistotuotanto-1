@@ -69,8 +69,8 @@ public class CardDialogController {
                     if ("admin".equalsIgnoreCase(userRole) || "teacher".equalsIgnoreCase(userRole)) {
                         return true;
                     }
-                    // Students can only use their own decks or public decks
-                    return deck.getUser_id() == currentUserId || "public".equals(deck.getVisibility());
+
+                    return deck.getUser_id() == currentUserId;
                 })
                 .toList();
             
@@ -178,7 +178,7 @@ public class CardDialogController {
                         backTextField.getText().trim(),
                         imageUrlField.getText() != null && !imageUrlField.getText().trim().isEmpty() ? imageUrlField.getText().trim() : null,
                         extraInfoField.getText() != null && !extraInfoField.getText().trim().isEmpty() ? extraInfoField.getText().trim() : null,
-                        false // Not deleted
+                        false
                     );
                     
                     cardsDao.persist(newCard);

@@ -58,7 +58,7 @@ public class DeckDialogController {
             titleLabel.setText("Create New Deck");
             deckNameField.clear();
             descriptionField.clear();
-            visibilityComboBox.setValue("private"); // Default to private
+            visibilityComboBox.setValue("private");
         }
         
         validateInput();
@@ -88,7 +88,6 @@ public class DeckDialogController {
         saveButton.setDisable(!valid);
         
         if (!valid && !errorMessage.isEmpty()) {
-            // You could show error message somewhere if needed
         }
     }
     
@@ -115,9 +114,9 @@ public class DeckDialogController {
                         currentUserId,
                         deckNameField.getText().trim(),
                         descriptionField.getText() != null ? descriptionField.getText().trim() : "",
-                        1, // Initial version
+                        1,
                         visibilityComboBox.getValue(),
-                        false, // Not deleted
+                        false,
                         new Timestamp(System.currentTimeMillis())
                     );
                     
