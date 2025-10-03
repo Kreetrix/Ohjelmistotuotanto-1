@@ -1,6 +1,11 @@
 package model.entity;
 
 import java.sql.Timestamp;
+/**
+ * Entity class representing an application user.
+ * <p>
+ * Contains user information such as username, email, password hash, role, activity status, and creation timestamp.
+ */
 
 public class AppUsers {
     private int user_id, is_active;
