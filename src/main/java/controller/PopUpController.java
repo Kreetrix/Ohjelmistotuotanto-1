@@ -38,8 +38,6 @@ public class PopUpController {
 
     // TODO : ADD SAVING RESULTS  FOR USERS IN DB
 
-
-
     private void setupStudyConfirmation() {
         PopUpContainer.getChildren().clear();
 

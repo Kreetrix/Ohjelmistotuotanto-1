@@ -8,16 +8,16 @@ public class Decks {
     private String deck_name;
     private String description;
     private int version;
-    private boolean visibility;
+    private String visibility;
     private boolean is_deleted;
     private Timestamp created_at;
 
-    public Decks(int user_id, String deck_name, String description, int version, boolean visibility, boolean is_deleted, Timestamp created_at) {
+    public Decks(int user_id, String deck_name, String description, int version, String visibility, boolean is_deleted, Timestamp created_at) {
         this.user_id = user_id;
         this.deck_name = deck_name;
         this.description = description;
         this.version = version;
-        this.visibility = visibility;
+        this.visibility = visibility != null ? visibility : "private"; // Default to private
         this.is_deleted = is_deleted;
         this.created_at = created_at;
     }
@@ -63,12 +63,21 @@ public class Decks {
         this.version = version;
     }
 
-    public boolean isVisibility() {
+    public String getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(boolean visibility) {
-        this.visibility = visibility;
+    public void setVisibility(String visibility) {
+        this.visibility = visibility != null ? visibility : "private";
+    }
+
+    // Convenience methods for backwards compatibility
+    public boolean isVisibility() {
+        return "public".equals(visibility);
+    }
+
+    public void setVisibility(boolean isPublic) {
+        this.visibility = isPublic ? "public" : "private";
     }
 
     public boolean isIs_deleted() {

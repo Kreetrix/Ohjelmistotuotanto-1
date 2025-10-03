@@ -17,7 +17,7 @@ public class MainController {
     private MenuItemButton deckBtn;
 
     @FXML
-    private MenuItemButton somethingBtn;
+    private MenuItemButton createBtn;
 
     public void initialize() {
         deckBtn.setIcon("book");
@@ -25,10 +25,26 @@ public class MainController {
         deckBtn.setSubText("Browse decks");
         deckBtn.setOnAction(e -> renderAllDecks());
 
-        somethingBtn.setIcon("loading");
-        somethingBtn.setMainText("Something");
-        somethingBtn.setSubText("TBA");
-        somethingBtn.setOnAction(e -> System.out.println("Bruh"));
+        createBtn.setIcon("loading");
+        createBtn.setMainText("edit and create cards/decks");
+        createBtn.setSubText("SO MUCH FUN!");
+        createBtn.setOnAction(e -> renderCardDeckCreation());
+    }
+
+    private void renderCardDeckCreation() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/creation.fxml"));
+            Scene scene = new Scene(loader.load(), width, height);
+
+            Stage creationStage = new Stage();
+            creationStage.setScene(scene);
+            creationStage.setTitle("Memory Master - Create Cards and Decks");
+            creationStage.show();
+        } catch (Exception ex) {
+            System.err.println("Error opening creation window: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
     }
 
     private void renderAllDecks() {
@@ -38,7 +54,7 @@ public class MainController {
             
             Stage decksStage = new Stage();
             decksStage.setScene(scene);
-            decksStage.setTitle("My Decks - CARDS MEMO GAME");
+            decksStage.setTitle("Memory Master - Decks");
             decksStage.show();
             
         } catch (Exception ex) {

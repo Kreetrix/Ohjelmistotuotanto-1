@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.dao.GameSessionsDao;
+import model.dao.SessionResultsDao;
 import model.entity.Cards;
 import model.entity.Decks;
 import model.entity.GameSessions;
@@ -15,14 +16,12 @@ import java.util.List;
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 import javafx.scene.transform.Rotate;
-
-
-// TODO : ADD SAVING RESULTS  FOR USERS IN DB
-
+import model.entity.SessionResults;
 
 public class StudyController {
     private Timestamp startTime;
     private Timestamp endTime;
+    private int currentSessionId;
 
     @FXML
     public Button closeButton;
@@ -40,6 +39,8 @@ public class StudyController {
     private Button didntKnowButton;
 
     GameSessionsDao gameSessionsDao = new GameSessionsDao();
+    private SessionResultsDao sessionResultsDao = new SessionResultsDao();
+
     private Decks deck;
     private List<Cards> cards;
     private int currentIndex = 0;
@@ -50,15 +51,21 @@ public class StudyController {
         this.deck = deck;
         this.cards = cards;
         this.startTime = new Timestamp(System.currentTimeMillis());
+        GameSessions session = new GameSessions(Session.getInstance().getUserId(), deck.getDeck_id(), startTime, null);
+        try {
+            currentSessionId = gameSessionsDao.persist(session);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         showCard();
     }
+
 
     private void showCard() {
         if (currentIndex < cards.size()) {
             Cards currentCard = cards.get(currentIndex);
             cardLabel.setText(currentCard.getFront_text());
-
-
             showingFront = true;
             knewButton.setVisible(false);
             didntKnowButton.setVisible(false);
@@ -70,9 +77,6 @@ public class StudyController {
 
     // maybe later add method for showing additional info
     // from db
-
-
-
 
     private void flipCard(Cards card) {
         if (showingFront) {
@@ -103,6 +107,7 @@ public class StudyController {
     @FXML
     private void onKnew() {
         score++;
+        saveCardResult(cards.get(currentIndex), true, 0);
         nextCard();
     }
 
@@ -115,6 +120,7 @@ public class StudyController {
 
     @FXML
     private void onDidntKnow() {
+        saveCardResult(cards.get(currentIndex), false, 0);
         nextCard();
     }
 
@@ -123,6 +129,17 @@ public class StudyController {
         showCard();
     }
 
+    private void saveCardResult(Cards card, boolean isCorrect, int responseTime) {
+        try {
+            sessionResultsDao.persist(
+                    new SessionResults(currentSessionId, card.getCard_id(), isCorrect, responseTime)
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private void showResult() {
         endTime = new Timestamp(System.currentTimeMillis());
         cardLabel.setText("The game is over!\nScore: " + score + " / " + cards.size());
@@ -130,7 +147,6 @@ public class StudyController {
         didntKnowButton.setVisible(false);
         closeButton.setVisible(true);
         saveResults();
-
 
     }
 
@@ -141,4 +157,5 @@ public class StudyController {
             e.printStackTrace();
         }
     }
+
 }
