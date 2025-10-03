@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.CreationController"
+            style="-fx-background-color: #202020;">
+            
+    <top>
+        <VBox style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #333333; -fx-border-width: 0 0 1 0;">
+            <Label text="Content Management" style="-fx-text-fill: #a9a9a9; -fx-font-size: 28; -fx-font-weight: bold;"/>
+            <Label text="Create, edit and manage your decks and cards" style="-fx-text-fill: #757575; -fx-font-size: 16;"/>
+        </VBox>
+    </top>
+            
+    <center>
+        <TabPane fx:id="tabPane" style="-fx-background-color: #202020;" tabClosingPolicy="UNAVAILABLE">
+            
+            <Tab text="Decks" style="-fx-background-color: #a9a9a9;">
+                <BorderPane style="-fx-background-color: #202020;">
+                    <top>
+                        <HBox style="-fx-padding: 10; -fx-spacing: 10; -fx-alignment: CENTER_LEFT;">
+                            <Button fx:id="createDeckButton" text="Create New Deck" 
+                                    style="-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 8 16;"/>
+                        </HBox>
+                    </top>
+                    <center>
+                        <ScrollPane fx:id="decksScrollPane" style="-fx-background: #202020; -fx-background-color: #202020;" fitToWidth="true">
+                            <VBox fx:id="decksContainer" spacing="5" style="-fx-background-color: #202020; -fx-padding: 10;"/>
+                        </ScrollPane>
+                    </center>
+                </BorderPane>
+            </Tab>
+            
+
+            <Tab text="Cards" style="-fx-background-color: #a9a9a9;">
+                <BorderPane style="-fx-background-color: #202020;">
+                    <top>
+                        <VBox style="-fx-padding: 10; -fx-spacing: 10;">
+                            <HBox style="-fx-spacing: 10; -fx-alignment: CENTER_LEFT;">
+                                <Button fx:id="createCardButton" text="Create New Card" 
+                                        style="-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 8 16;"/>
+                                <Label text="Filter by deck:" style="-fx-text-fill: #757575;"/>
+                                <javafx.scene.control.ComboBox fx:id="deckFilterComboBox" 
+                                        style="-fx-background-color: #333333; -fx-text-fill: white;" 
+                                        prefWidth="200"/>
+                            </HBox>
+                        </VBox>
+                    </top>
+                    <center>
+                        <ScrollPane fx:id="cardsScrollPane" style="-fx-background: #202020; -fx-background-color: #202020;" fitToWidth="true">
+                            <VBox fx:id="cardsContainer" spacing="5" style="-fx-background-color: #202020; -fx-padding: 10;"/>
+                        </ScrollPane>
+                    </center>
+                </BorderPane>
+            </Tab>
+            
+        </TabPane>
+    </center>
+
+</BorderPane>

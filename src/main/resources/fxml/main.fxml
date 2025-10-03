@@ -15,7 +15,7 @@
     <center>
         <VBox spacing="0" alignment="TOP_CENTER">
             <MenuItemButton fx:id="deckBtn"/>
-            <MenuItemButton fx:id="somethingBtn"/>
+            <MenuItemButton fx:id="createBtn"/>
         </VBox>
     </center>
 

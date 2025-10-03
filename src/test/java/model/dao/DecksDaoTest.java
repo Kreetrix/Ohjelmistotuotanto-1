@@ -22,7 +22,7 @@ public class DecksDaoTest {
     @Test
     void testGetAllDecksReturnsInsertedDeck() throws SQLException {
         // Create test deck and insert into db
-        Decks testDeck = new Decks(1, "Test Deck", "Test Description", 1, true, false, new Timestamp(System.currentTimeMillis()));
+        Decks testDeck = new Decks(1, "Test Deck", "Test Description", 1, "private", false, new Timestamp(System.currentTimeMillis()));
         dao.persist(testDeck);
 
         // Fetch all decks and test if test deck is in there
@@ -48,7 +48,7 @@ public class DecksDaoTest {
     @Test
     void testIsDeleted() throws SQLException {
         // Create test deck with is_deleted = false
-        Decks testDeck = new Decks(1, "Delete Test Deck", "Delete Test Description", 1, true, false, new Timestamp(System.currentTimeMillis()));
+        Decks testDeck = new Decks(1, "Delete Test Deck", "Delete Test Description", 1, "private", false, new Timestamp(System.currentTimeMillis()));
         dao.persist(testDeck);
 
         // Get the deck ID

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CardDialogController"
+      style="-fx-background-color: #202020; -fx-padding: 20;">
+   <children>
+      <Label fx:id="titleLabel" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #a9a9a9;" text="Create New Card">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </Label>
+      
+      <VBox spacing="15.0">
+         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Deck:" />
+         <ComboBox fx:id="deckComboBox" maxWidth="Infinity" promptText="Select a deck..." 
+                  style="-fx-background-color: #333333; -fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-border-radius: 0;" />
+         
+         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Question:" />
+         <TextField fx:id="frontTextField"  promptText="Enter the question..." 
+                  style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" 
+                   />
+         
+         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Answer:" />
+         <TextField fx:id="backTextField"  promptText="Enter the answer..." 
+                  style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" 
+                   />
+         
+         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Image URL (optional):" />
+         <TextField fx:id="imageUrlField" promptText="Enter image URL..." 
+                   style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" />
+         
+         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Extra Info (optional):" />
+         <TextField fx:id="extraInfoField" promptText="Enter additional information..." 
+                  style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" 
+                   />
+      </VBox>
+      
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+         <children>
+            <Button fx:id="cancelButton" text="Cancel" 
+                   style="-fx-background-color: #555555; -fx-text-fill: white; -fx-padding: 8 20;" />
+            <Button fx:id="saveButton" text="Save" 
+                   style="-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 8 20;" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

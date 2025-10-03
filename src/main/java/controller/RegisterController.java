@@ -52,7 +52,7 @@ public class RegisterController {
         String email = emailField.getText();
 
         if (password.equals(confirmPassword)){
-            AppUsers user = new AppUsers(username, email, password, role, 0, null);
+            AppUsers user = new AppUsers(username, email, password, role, 1, null);
             try{
                 dao.persist(user);
 
