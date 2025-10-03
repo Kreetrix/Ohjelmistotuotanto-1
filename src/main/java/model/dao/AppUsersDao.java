@@ -10,6 +10,12 @@ import java.util.List;
 
 public class AppUsersDao {
 
+
+    /**
+     *
+     * @return returns list of every user in database
+     * @throws SQLException
+     */
     public List<AppUsers> getAllUsers() throws SQLException {
         List<AppUsers> users = new ArrayList<>();
         String sql = "SELECT * FROM app_users";
@@ -36,6 +42,12 @@ public class AppUsersDao {
         return users;
     }
 
+    /**
+     *
+     * @param value     Boolean
+     * @param id        User ID
+     * @throws SQLException
+     */
     // switches app_users value to active or not active 
     public void setActive(boolean value, int id) throws SQLException {
         String sql = "UPDATE app_users SET is_active = ? WHERE user_id = ?";
@@ -48,6 +60,11 @@ public class AppUsersDao {
         }
     }
 
+    /**
+     * inserts user into database
+     * @param user
+     * @throws SQLException
+     */
     public void persist(AppUsers user) throws SQLException {
         String sql = "INSERT INTO app_users (username, email, password_hash, role, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();
@@ -62,6 +79,12 @@ public class AppUsersDao {
         }
     }
 
+    /** Searches and returns user from database by username
+     *
+     * @param SearchName
+     * @return User from database
+     * @throws SQLException
+     */
     public AppUsers getUserByUsername(String SearchName) throws SQLException {
         String sql = "SELECT * FROM app_users WHERE username = ?";
         try (Connection conn = MariaDbJpaConnection.getConnection();
