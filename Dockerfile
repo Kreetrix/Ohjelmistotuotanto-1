@@ -14,7 +14,8 @@ RUN mkdir -p /javafx-sdk \
 
 COPY pom.xml /app
 
-COPY . /app
+COPY src /app/src
+COPY pom.xml /app/
 
 RUN mvn clean package -DskipTests
 
