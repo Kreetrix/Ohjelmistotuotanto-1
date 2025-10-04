@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.entity.AppUsers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -64,14 +65,24 @@ stmt.execute(
     @Test
     void userCanCreateNewDeck() throws Exception {
         clickOn("#createDeckButton");
-        clickOn("#deckNameField").write("Physics Basics");
-        clickOn("#descriptionField").write("Intro to Physics concepts");
+        clickOn("#deckNameField").write("English");
+        clickOn("#descriptionField").write("Basic English vocabulary");
         clickOn("#saveButton");
-        assertThat(lookup(".menu-item-button").lookup("Physics Basics")).isNotNull();
+        assertThat(lookup(".menu-item-button").lookup("English")).isNotNull();
         try (Connection conn = MariaDbJpaConnection.getConnection(); PreparedStatement ps = conn.prepareStatement("SELECT * FROM decks WHERE deck_name=?")) {
-            ps.setString(1, "Physics Basics");
+            ps.setString(1, "English");
             ResultSet rs = ps.executeQuery();
             assertThat(rs.next()).isTrue();
         }
+    }
+
+    @AfterEach
+    void cleanUp() throws Exception {
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement("DELETE FROM decks WHERE deck_name = ?")) {
+            ps.setString(1, "English");
+            ps.executeUpdate();
+        }
+
     }
 }
