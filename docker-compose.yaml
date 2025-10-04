@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=3306
+      - DB_NAME=card_memory_db
+      - DB_USER=appuser
+      - DB_PASSWORD=password
+    ports:
+      - "8081:8080"

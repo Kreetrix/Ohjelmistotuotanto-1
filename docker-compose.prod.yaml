@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  app:
+    image: vladi1009/card_memo:v0.1.1 # Replace with your actual DockerHub repo
+    environment:
+      - DB_HOST=host.docker.internal # Connect to local database
+      - DB_PORT=3306
+      - DB_NAME=card_memory_db
+      - DB_USER=appuser
+      - DB_PASSWORD=${DB_PASSWORD} # Read from environment variable
+    ports:
+      - "8081:8080"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw # For GUI support on Linux
