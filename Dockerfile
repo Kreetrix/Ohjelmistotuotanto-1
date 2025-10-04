@@ -16,6 +16,8 @@ COPY pom.xml /app
 
 COPY . /app
 
+COPY .env* /app/
+
 RUN mvn clean package -DskipTests
 
 ENV DISPLAY=host.docker.internal:0.0
