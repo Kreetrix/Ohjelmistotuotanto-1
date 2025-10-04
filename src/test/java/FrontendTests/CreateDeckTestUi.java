@@ -1,0 +1,77 @@
+package FrontendTests;
+
+import controller.Session;
+import datasource.MariaDbJpaConnection;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import model.entity.AppUsers;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.ApplicationTest;
+
+import java.sql.*;
+
+import static org.testfx.assertions.api.Assertions.assertThat;
+
+public class CreateDeckTestUi extends ApplicationTest {
+
+    @BeforeAll
+    static void prepareTestData() throws Exception {
+        try (Connection conn = MariaDbJpaConnection.getConnection()) {
+            try (Statement stmt = conn.createStatement()) {
+stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS decks (" +
+                    "deck_id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id BIGINT, " +
+                    "deck_name VARCHAR(255), " +
+                    "description VARCHAR(255)" +
+                    ")"
+                );            }
+        }
+    }
+
+    @BeforeAll
+    static void loginTestUser() throws Exception {
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM app_users WHERE username=?")) {
+            ps.setString(1, "user");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                AppUsers user = new AppUsers(
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password_hash"),
+                        rs.getString("role"),
+                        rs.getInt("is_active"),
+                        rs.getTimestamp("created_at")
+                );
+                user.setUser_id(rs.getInt("user_id"));
+                Session.getInstance().setCurrentUser(user);
+            }
+        }
+    }
+
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/creation.fxml"));
+        stage.setScene(new Scene(root, 600, 400));
+        stage.show();
+    }
+
+    @Test
+    void userCanCreateNewDeck() throws Exception {
+        clickOn("#createDeckButton");
+        clickOn("#deckNameField").write("Physics Basics");
+        clickOn("#descriptionField").write("Intro to Physics concepts");
+        clickOn("#saveButton");
+        assertThat(lookup(".menu-item-button").lookup("Physics Basics")).isNotNull();
+        try (Connection conn = MariaDbJpaConnection.getConnection(); PreparedStatement ps = conn.prepareStatement("SELECT * FROM decks WHERE deck_name=?")) {
+            ps.setString(1, "Physics Basics");
+            ResultSet rs = ps.executeQuery();
+            assertThat(rs.next()).isTrue();
+        }
+    }
+}
