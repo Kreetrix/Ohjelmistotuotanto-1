@@ -4,13 +4,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 
 /**
  * A custom button component that displays an icon image and supports tooltips.
  *
  */
 
-// TODO Replace PNG icons with SVG for better scalability and performance
+///TODO Replace PNG with SVG
 public class CustomButton extends Button {
 
     private ImageView imageView;
@@ -42,6 +44,19 @@ public class CustomButton extends Button {
     public void setIcon(String resourcePath) {
         Image image = new Image(getClass().getResourceAsStream(resourcePath));
         imageView.setImage(image);
+    }
+
+    public void setSvgIcon(String resourcePath, String color, int size) {
+        SVGPath svg = new SVGPath();
+        svg.setContent(IconManager.getPath(resourcePath));
+        svg.setFill(Color.web(color));
+        svg.setScaleX(size);
+        svg.setScaleY(size);
+
+        svg.setTranslateX(0);
+        svg.setTranslateY(0);
+
+        setGraphic(svg);
     }
 
     /**

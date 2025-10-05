@@ -30,19 +30,9 @@
             <Region HBox.hgrow="ALWAYS"/>   
                 <CustomButton fx:id="listBtn" />   
             <Region HBox.hgrow="ALWAYS"/>          
-            <Button fx:id="studyBtn" style="-fx-background-color: transparent; -fx-text-fill: #1b1010ff;">
-                <graphic>
-                    <ImageView fitHeight="47" fitWidth="47">
-                        <Image url="@../icons/arrowup.png"/>
-                    </ImageView>
-                </graphic>
-                <tooltip>
-                    <Tooltip text="Search"/>
-                </tooltip>
-            </Button>
+                <CustomButton fx:id="admin" />
             <Region HBox.hgrow="ALWAYS"/>
-            <CustomButton fx:id="logoutBtn" />
-            <Region HBox.hgrow="ALWAYS"/>
+                <CustomButton fx:id="logoutBtn" />
 
         </children>
     </HBox>
