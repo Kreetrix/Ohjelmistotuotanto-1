@@ -8,45 +8,62 @@ import model.dao.DecksDao;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * Controller for the Deck Dialog window used for creating and editing flashcard decks.
+ * Handles deck creation, editing, validation, and saving operations.
+ */
 public class DeckDialogController {
-    
+
     @FXML private TextField deckNameField;
     @FXML private TextField descriptionField;
     @FXML private ComboBox<String> visibilityComboBox;
     @FXML private Button saveButton;
     @FXML private Button cancelButton;
     @FXML private Label titleLabel;
-    
+
     private Stage dialogStage;
     private Decks deck;
     private boolean okClicked = false;
     private boolean isEditMode = false;
     private DecksDao decksDao;
-    
+
+    /**
+     * Initializes the controller after FXML loading.
+     * Sets up DAOs, event handlers, and UI components.
+     */
+    @FXML
     public void initialize() {
         decksDao = new DecksDao();
         setupEventHandlers();
         setupVisibilityComboBox();
         styleVisibilityComboBox();
     }
-    
+
     private void setupEventHandlers() {
         saveButton.setOnAction(e -> handleSave());
         cancelButton.setOnAction(e -> handleCancel());
-        
+
         // Validation listeners
         deckNameField.textProperty().addListener((observable, oldValue, newValue) -> {
             validateInput();
         });
     }
-    
+
+    /**
+     * Sets the dialog stage for this controller.
+     * @param dialogStage the stage containing this dialog
+     */
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
-    
+
+    /**
+     * Sets the deck to be edited. If null, the dialog will be in create mode.
+     * @param deck the deck to edit, or null for create mode
+     */
     public void setDeck(Decks deck) {
         this.deck = deck;
-        
+
         if (deck != null) {
             isEditMode = true;
             titleLabel.setText("Edit Deck");
@@ -60,18 +77,22 @@ public class DeckDialogController {
             descriptionField.clear();
             visibilityComboBox.setValue("private");
         }
-        
+
         validateInput();
     }
-    
+
+    /**
+     * Returns whether the user clicked OK to save changes.
+     * @return true if OK was clicked, false otherwise
+     */
     public boolean isOkClicked() {
         return okClicked;
     }
-    
+
     private void validateInput() {
         boolean valid = true;
         String errorMessage = "";
-        
+
         if (deckNameField.getText() == null || deckNameField.getText().trim().isEmpty()) {
             valid = false;
             errorMessage += "Deck name is required!\n";
@@ -79,18 +100,15 @@ public class DeckDialogController {
             valid = false;
             errorMessage += "Deck name must be less than 100 characters!\n";
         }
-        
+
         if (descriptionField.getText() != null && descriptionField.getText().length() > 500) {
             valid = false;
             errorMessage += "Description must be less than 500 characters!\n";
         }
-        
+
         saveButton.setDisable(!valid);
-        
-        if (!valid && !errorMessage.isEmpty()) {
-        }
     }
-    
+
     private void handleSave() {
         if (isInputValid()) {
             try {
@@ -99,7 +117,7 @@ public class DeckDialogController {
                     deck.setDeck_name(deckNameField.getText().trim());
                     deck.setDescription(descriptionField.getText() != null ? descriptionField.getText().trim() : "");
                     deck.setVisibility(visibilityComboBox.getValue());
-                    
+
                     decksDao.updateDeck(deck);
                     showInfo("Deck updated successfully!");
                 } else {
@@ -109,47 +127,47 @@ public class DeckDialogController {
                         showError("User not logged in!");
                         return;
                     }
-                    
+
                     Decks newDeck = new Decks(
-                        currentUserId,
-                        deckNameField.getText().trim(),
-                        descriptionField.getText() != null ? descriptionField.getText().trim() : "",
-                        1,
-                        visibilityComboBox.getValue(),
-                        false,
-                        new Timestamp(System.currentTimeMillis())
+                            currentUserId,
+                            deckNameField.getText().trim(),
+                            descriptionField.getText() != null ? descriptionField.getText().trim() : "",
+                            1,
+                            visibilityComboBox.getValue(),
+                            false,
+                            new Timestamp(System.currentTimeMillis())
                     );
-                    
+
                     decksDao.persist(newDeck);
                     showInfo("Deck created successfully!");
                 }
-                
+
                 okClicked = true;
                 dialogStage.close();
-                
+
             } catch (SQLException e) {
                 showError("Database error: " + e.getMessage());
             }
         }
     }
-    
+
     private void handleCancel() {
         dialogStage.close();
     }
-    
+
     private boolean isInputValid() {
         String errorMessage = "";
-        
+
         if (deckNameField.getText() == null || deckNameField.getText().trim().isEmpty()) {
             errorMessage += "Deck name is required!\n";
         } else if (deckNameField.getText().trim().length() > 100) {
             errorMessage += "Deck name must be less than 100 characters!\n";
         }
-        
+
         if (descriptionField.getText() != null && descriptionField.getText().length() > 500) {
             errorMessage += "Description must be less than 500 characters!\n";
         }
-        
+
         if (errorMessage.isEmpty()) {
             return true;
         } else {
@@ -157,7 +175,7 @@ public class DeckDialogController {
             return false;
         }
     }
-    
+
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -166,7 +184,7 @@ public class DeckDialogController {
         alert.initOwner(dialogStage);
         alert.showAndWait();
     }
-    
+
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -179,7 +197,7 @@ public class DeckDialogController {
     private void setupVisibilityComboBox() {
         // Add visibility options
         visibilityComboBox.getItems().addAll("private", "public", "assigned");
-        
+
         // Set default value
         visibilityComboBox.setValue("private");
     }
@@ -187,20 +205,20 @@ public class DeckDialogController {
     private void styleVisibilityComboBox() {
         // Apply additional styling to ComboBox to ensure text visibility
         visibilityComboBox.setStyle(
-            "-fx-background-color: #333333;" +
-            "-fx-border-color: transparent;" +
-            "-fx-border-width: 0;" +
-            "-fx-background-radius: 0;" +
-            "-fx-border-radius: 0;"
+                "-fx-background-color: #333333;" +
+                        "-fx-border-color: transparent;" +
+                        "-fx-border-width: 0;" +
+                        "-fx-background-radius: 0;" +
+                        "-fx-border-radius: 0;"
         );
-        
+
         // Style the ComboBox when it's shown
         visibilityComboBox.setOnShown(e -> {
             visibilityComboBox.lookupAll(".list-cell").forEach(node -> {
                 node.setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
             });
         });
-        
+
         // Apply cell factory for better text visibility
         visibilityComboBox.setCellFactory(listView -> {
             return new javafx.scene.control.ListCell<String>() {
@@ -217,7 +235,7 @@ public class DeckDialogController {
                 }
             };
         });
-        
+
         // Style the button cell (the selected item display)
         visibilityComboBox.setButtonCell(new javafx.scene.control.ListCell<String>() {
             @Override
@@ -242,5 +260,4 @@ public class DeckDialogController {
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
-
 }

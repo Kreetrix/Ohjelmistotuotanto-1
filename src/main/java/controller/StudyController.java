@@ -18,6 +18,10 @@ import javafx.util.Duration;
 import javafx.scene.transform.Rotate;
 import model.entity.SessionResults;
 
+/**
+ * Controller for the study session view.
+ * Handles flashcard study sessions with flip animations and progress tracking.
+ */
 public class StudyController {
     private Timestamp startTime;
     private Timestamp endTime;
@@ -47,6 +51,11 @@ public class StudyController {
     private int score = 0;
     private boolean showingFront = true;
 
+    /**
+     * Sets up the study session with the selected deck and cards.
+     * @param deck the deck being studied
+     * @param cards the list of cards in the deck
+     */
     public void setDeck(Decks deck, List<Cards> cards) {
         this.deck = deck;
         this.cards = cards;
@@ -61,7 +70,9 @@ public class StudyController {
         showCard();
     }
 
-
+    /**
+     * Displays the current card or shows results if all cards are completed.
+     */
     private void showCard() {
         if (currentIndex < cards.size()) {
             Cards currentCard = cards.get(currentIndex);
@@ -75,13 +86,14 @@ public class StudyController {
         }
     }
 
-    // maybe later add method for showing additional info
-    // from db
+    // TODO: Add method for showing additional info from database
 
+    /**
+     * Flips the card to show the back side with flip animation.
+     * @param card the current card being flipped
+     */
     private void flipCard(Cards card) {
         if (showingFront) {
-            // rotateTransition class  for flip
-            // from javafx.animation
             RotateTransition rotateOut = new RotateTransition(Duration.millis(200), cardLabel);
             rotateOut.setAxis(Rotate.Y_AXIS);
             rotateOut.setFromAngle(0);
@@ -104,6 +116,9 @@ public class StudyController {
         }
     }
 
+    /**
+     * Handles when user indicates they knew the card answer.
+     */
     @FXML
     private void onKnew() {
         score++;
@@ -111,24 +126,38 @@ public class StudyController {
         nextCard();
     }
 
-
+    /**
+     * Closes the study session window.
+     */
     @FXML
     private void onClose() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Handles when user indicates they didn't know the card answer.
+     */
     @FXML
     private void onDidntKnow() {
         saveCardResult(cards.get(currentIndex), false, 0);
         nextCard();
     }
 
+    /**
+     * Advances to the next card in the study session.
+     */
     private void nextCard() {
         currentIndex++;
         showCard();
     }
 
+    /**
+     * Saves the result for the current card.
+     * @param card the card being evaluated
+     * @param isCorrect whether the user knew the answer
+     * @param responseTime time taken to respond (not currently used)
+     */
     private void saveCardResult(Cards card, boolean isCorrect, int responseTime) {
         try {
             sessionResultsDao.persist(
@@ -139,7 +168,9 @@ public class StudyController {
         }
     }
 
-
+    /**
+     * Displays the final results of the study session.
+     */
     private void showResult() {
         endTime = new Timestamp(System.currentTimeMillis());
         cardLabel.setText("The game is over!\nScore: " + score + " / " + cards.size());
@@ -147,9 +178,11 @@ public class StudyController {
         didntKnowButton.setVisible(false);
         closeButton.setVisible(true);
         saveResults();
-
     }
 
+    /**
+     * Saves the final session results to the database.
+     */
     private void saveResults() {
         try {
             gameSessionsDao.persist(new GameSessions(Session.getInstance().getUserId(), deck.getDeck_id(), startTime, endTime));
@@ -157,5 +190,4 @@ public class StudyController {
             e.printStackTrace();
         }
     }
-
 }

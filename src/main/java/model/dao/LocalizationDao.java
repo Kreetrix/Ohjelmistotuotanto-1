@@ -7,8 +7,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for Localization entity.
+ * Handles database operations for multi-language text translations.
+ *
+ * <p>Currently not used in the application and will be added in OTP2</p>
+ */
 public class LocalizationDao {
 
+    /**
+     * Retrieves all localization records from the database.
+     * @return List of all Localization entities
+     * @throws SQLException if database access error occurs
+     */
     public List<Localization> getAllLocalizations() throws SQLException {
         List<Localization> localizations = new ArrayList<>();
         String sql = "SELECT * FROM localization";
@@ -33,6 +44,11 @@ public class LocalizationDao {
         return localizations;
     }
 
+    /**
+     * Saves a new localization record to the database.
+     * @param localization the Localization entity to persist
+     * @throws SQLException if database access error occurs
+     */
     public void persist(Localization localization) throws SQLException {
         String sql = "INSERT INTO localization (entity_type, entity_id, language_code, translated_text) VALUES (?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();

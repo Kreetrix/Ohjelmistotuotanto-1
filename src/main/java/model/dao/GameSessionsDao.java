@@ -7,8 +7,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for GameSessions entity.
+ * Handles database operations for study session tracking.
+ */
 public class GameSessionsDao {
 
+    /**
+     * Retrieves all game sessions from the database.
+     * @return List of all GameSessions entities
+     * @throws SQLException if database access error occurs
+     */
     public List<GameSessions> getAllGameSessions() throws SQLException {
         List<GameSessions> sessions = new ArrayList<>();
         String sql = "SELECT * FROM gamesessions";
@@ -33,6 +42,12 @@ public class GameSessionsDao {
         return sessions;
     }
 
+    /**
+     * Saves a new game session to the database and returns the generated session ID.
+     * @param session the GameSessions entity to persist
+     * @return the generated session ID
+     * @throws SQLException if database access error occurs
+     */
     public int persist(GameSessions session) throws SQLException {
         String sql = "INSERT INTO gamesessions (user_id, deck_id, start_time, end_time) VALUES (?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();

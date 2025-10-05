@@ -4,8 +4,17 @@ import java.sql.*;
 import java.util.*;
 import datasource.MariaDbJpaConnection;
 
+/**
+ * Data Access Object for Cards entity.
+ * Handles database operations for flashcard management.
+ */
 public class CardsDao {
 
+    /**
+     * Retrieves all cards from the database.
+     * @return List of all Cards entities
+     * @throws SQLException if database access error occurs
+     */
     public List<Cards> getAllCards() throws SQLException {
         String sql = "SELECT * FROM cards";
         List<Cards> cards = new ArrayList<>();
@@ -35,10 +44,15 @@ public class CardsDao {
         return cards;
     }
 
-    // switches cards value to is_deleted or not is_deleted
+    /**
+     * Updates the deletion status of a card.
+     * @param value true to mark as deleted, false to restore
+     * @param id the card ID to update
+     * @throws SQLException if database access error occurs
+     */
     public void isDeleted(boolean value, int id) throws SQLException {
         String sql = "UPDATE cards SET is_deleted = ? WHERE card_id = ?";
-        
+
         try (Connection conn = MariaDbJpaConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, value ? 1 : 0);
@@ -47,6 +61,11 @@ public class CardsDao {
         }
     }
 
+    /**
+     * Saves a new card to the database.
+     * @param card the Cards entity to persist
+     * @throws SQLException if database access error occurs
+     */
     public void persist(Cards card) throws SQLException {
         String sql = "INSERT INTO cards (deck_id, front_text, back_text, image_url, extra_info, is_deleted) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();
@@ -64,7 +83,12 @@ public class CardsDao {
         }
     }
 
-// added this method
+    /**
+     * Retrieves all active cards for a specific deck.
+     * @param deckId the deck ID to filter by
+     * @return List of Cards entities for the specified deck
+     * @throws SQLException if database access error occurs
+     */
     public List<Cards> getCardsByDeckId(int deckId) throws SQLException {
         List<Cards> cards = new ArrayList<>();
         String sql = "SELECT * FROM cards WHERE deck_id = ? AND is_deleted = 0";
@@ -92,6 +116,11 @@ public class CardsDao {
         return cards;
     }
 
+    /**
+     * Updates an existing card in the database.
+     * @param card the Cards entity with updated values
+     * @throws SQLException if database access error occurs
+     */
     public void updateCard(Cards card) throws SQLException {
         String sql = "UPDATE cards SET deck_id = ?, front_text = ?, back_text = ?, image_url = ?, extra_info = ? WHERE card_id = ?";
         try (Connection conn = MariaDbJpaConnection.getConnection();
@@ -106,6 +135,12 @@ public class CardsDao {
         }
     }
 
+    /**
+     * Retrieves a specific card by its ID.
+     * @param cardId the card ID to search for
+     * @return Cards entity if found, null otherwise
+     * @throws SQLException if database access error occurs
+     */
     public Cards getCardById(int cardId) throws SQLException {
         String sql = "SELECT * FROM cards WHERE card_id = ?";
         try (Connection conn = MariaDbJpaConnection.getConnection();

@@ -7,8 +7,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for SessionResults entity.
+ * Handles database operations for study session results tracking.
+ */
 public class SessionResultsDao {
 
+    /**
+     * Retrieves all session results from the database.
+     * @return List of all SessionResults entities
+     * @throws SQLException if database access error occurs
+     */
     public List<SessionResults> getAllSessionResults() throws SQLException {
         List<SessionResults> results = new ArrayList<>();
         String sql = "SELECT * FROM sessionresults";
@@ -33,6 +42,11 @@ public class SessionResultsDao {
         return results;
     }
 
+    /**
+     * Saves a new session result to the database.
+     * @param result the SessionResults entity to persist
+     * @throws SQLException if database access error occurs
+     */
     public void persist(SessionResults result) throws SQLException {
         String sql = "INSERT INTO sessionresults (session_id, card_id, is_correct, response_time) VALUES (?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();

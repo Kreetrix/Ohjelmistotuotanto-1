@@ -18,6 +18,10 @@ import model.entity.AppUsers;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Controller for the Login view handling user authentication.
+ * Manages login process, validation, and navigation to main application.
+ */
 public class LoginController {
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     double width = screenSize.getWidth() / 3;
@@ -35,6 +39,10 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
+    /**
+     * Initializes the controller after FXML loading.
+     * Redirects to main view if user is already logged in.
+     */
     @FXML
     protected void initialize() {
         if (Session.getInstance().getCurrentUser() != null) {
@@ -42,6 +50,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Redirects to the main application view.
+     */
     private void redirectToMain() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
@@ -54,6 +65,10 @@ public class LoginController {
         }
     }
 
+    /**
+     * Handles the login process when login button is clicked.
+     * Validates credentials and redirects to main view on success.
+     */
     @FXML
     private void onLogin() {
         String username = usernameField.getText();
@@ -66,7 +81,6 @@ public class LoginController {
             if (user == null) {
                 errorLabel.setText("User not found");
             } else {
-
                 if(username.equals(user.getUsername()) && PasswordUtil.checkPassword(password,user.getPassword_hash())){
                     try {
                         Session.getInstance().setCurrentUser(user);
@@ -87,10 +101,12 @@ public class LoginController {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
-    public void toRegister( ) {
+    /**
+     * Navigates to the registration view.
+     */
+    public void toRegister() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/registerView.fxml"));
             Parent root = loader.load();

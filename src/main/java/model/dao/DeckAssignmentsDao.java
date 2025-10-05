@@ -7,8 +7,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for DeckAssignments entity.
+ * Handles database operations for deck assignment management.
+ */
 public class DeckAssignmentsDao {
 
+    /**
+     * Retrieves all deck assignments from the database.
+     * @return List of all DeckAssignments entities
+     * @throws SQLException if database access error occurs
+     */
     public List<DeckAssignments> getAllDeckAssignments() throws SQLException {
         List<DeckAssignments> assignments = new ArrayList<>();
         String sql = "SELECT * FROM deckassignments";
@@ -32,6 +41,11 @@ public class DeckAssignmentsDao {
         return assignments;
     }
 
+    /**
+     * Saves a new deck assignment to the database.
+     * @param assignment the DeckAssignments entity to persist
+     * @throws SQLException if database access error occurs
+     */
     public void persist(DeckAssignments assignment) throws SQLException {
         String sql = "INSERT INTO deckassignments (deck_id, student_id, assigned_at) VALUES (?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();

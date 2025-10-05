@@ -15,6 +15,10 @@ import model.entity.AppUsers;
 import java.awt.*;
 import java.sql.Connection;
 
+/**
+ * Controller for the user registration view.
+ * Handles new user registration with role selection and validation.
+ */
 public class RegisterController {
     @FXML
     private ComboBox<String> roleComboBox;
@@ -37,13 +41,21 @@ public class RegisterController {
 
     AppUsersDao dao = new AppUsersDao();
 
-    // TODO :  OMG NEED TO ADD ADMIN PANEL  FOR UPDATING/DELETING USERS
-    //
+    // TODO: ADD ADMIN PANEL FOR UPDATING/DELETING USERS
 
+    /**
+     * Initializes the registration controller after FXML loading.
+     * Sets up the role selection combo box.
+     */
     public void initialize(){
         roleComboBox.getItems().addAll("Student", "Teacher", "Admin");
         roleComboBox.setValue("Student");
     }
+
+    /**
+     * Handles the user registration process.
+     * Validates input and creates new user account.
+     */
     public void onRegister(){
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -71,7 +83,7 @@ public class RegisterController {
 
         }
         else{
-        errorLabel.setText("Passwords do not match");}
+            errorLabel.setText("Passwords do not match");
+        }
     }
-
 }

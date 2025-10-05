@@ -22,9 +22,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+/**
+ * Controller for the Creation Management interface that handles deck and card creation, editing, and deletion.
+ *
+ */
 public class CreationController {
-    
 
+    // FXML injected UI components
     @FXML private TabPane tabPane;
     @FXML private Button createDeckButton;
     @FXML private Button createCardButton;
@@ -34,9 +38,15 @@ public class CreationController {
     @FXML private VBox decksContainer;
     @FXML private VBox cardsContainer;
 
+    // Data access objects
     private DecksDao decksDao;
     private CardsDao cardsDao;
 
+    /**
+     * Initializes the controller after FXML loading.
+     * Sets up DAOs, event handlers, and loads initial data.
+     */
+    @FXML
     public void initialize(){
         decksDao = new DecksDao();
         cardsDao = new CardsDao();
@@ -47,53 +57,70 @@ public class CreationController {
         setupDeckFilter();
     }
 
+    /**
+     * Sets up event handlers for buttons and interactive components.
+     */
     private void setupEventHandlers() {
         createDeckButton.setOnAction(e -> createNewDeck());
         createCardButton.setOnAction(e -> createNewCard());
         deckFilterComboBox.setOnAction(e -> filterCardsByDeck());
     }
 
+    /**
+     * Initializes the deck filter combo box with available decks.
+     * Includes an "All Decks" option and filters out deleted decks.
+     */
     private void setupDeckFilter() {
         try {
             List<Decks> allDecks = decksDao.getAllDecks();
             deckFilterComboBox.getItems().clear();
 
+            // Create "All Decks" option
             Decks allDecksOption = new Decks(0, "All Decks", "", 0, "private", false, null);
             allDecksOption.setDeck_id(-1);
             deckFilterComboBox.getItems().add(allDecksOption);
 
+            // Add active (non-deleted) decks
             deckFilterComboBox.getItems().addAll(allDecks.stream()
-                .filter(deck -> !deck.isIs_deleted())
-                .toList());
+                    .filter(deck -> !deck.isIs_deleted())
+                    .toList());
 
+            // Set up display converter for deck objects
             deckFilterComboBox.setConverter(new javafx.util.StringConverter<Decks>() {
                 @Override
                 public String toString(Decks deck) {
                     return deck != null ? deck.getDeck_name() : "";
                 }
-                
+
                 @Override
                 public Decks fromString(String string) {
-                    return null;
+                    return null; // Not needed for display-only combo box
                 }
             });
-            
+
+            // Select "All Decks" by default
             deckFilterComboBox.getSelectionModel().selectFirst();
         } catch (SQLException e) {
             System.err.println("Failed to load deck filter options: " + e.getMessage());
         }
-
     }
+
+    /**
+     * Loads all decks from the database and displays them in the decks container.
+     * Shows an empty state message if no decks are found.
+     */
     private void loadDecks() {
         try {
             List<Decks> allDecks = decksDao.getAllDecks();
             decksContainer.getChildren().clear();
-            
+
+            // Check if there are any active decks
             if (allDecks.isEmpty() || allDecks.stream().noneMatch(deck -> !deck.isIs_deleted())) {
                 Label emptyLabel = new Label("No decks found. Create your first deck!");
                 emptyLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 16; -fx-padding: 20;");
                 decksContainer.getChildren().add(emptyLabel);
             } else {
+                // Create UI items for each active deck
                 for (Decks deck : allDecks) {
                     if (!deck.isIs_deleted()) {
                         VBox deckItem = createDeckItem(deck);
@@ -105,6 +132,10 @@ public class CreationController {
             showError("Failed to load decks: " + e.getMessage());
         }
     }
+
+    /**
+     * Loads all cards from the database and displays them in the cards container.
+     */
     private void loadCards() {
         try {
             List<Cards> allCards = cardsDao.getAllCards();
@@ -114,18 +145,26 @@ public class CreationController {
         }
     }
 
+    /**
+     * Displays the provided list of cards in the cards container.
+     * Shows an empty state message if no active cards are found.
+     *
+     * @param cards the list of cards to display
+     */
     private void displayCards(List<Cards> cards) {
         cardsContainer.getChildren().clear();
-        
+
+        // Filter out deleted cards
         List<Cards> activeCards = cards.stream()
-            .filter(card -> !card.isIs_deleted())
-            .toList();
-            
+                .filter(card -> !card.isIs_deleted())
+                .toList();
+
         if (activeCards.isEmpty()) {
             Label emptyLabel = new Label("No cards found. Create your first card!");
             emptyLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 16; -fx-padding: 20;");
             cardsContainer.getChildren().add(emptyLabel);
         } else {
+            // Create UI items for each active card
             for (Cards card : activeCards) {
                 VBox cardItem = createCardItem(card);
                 cardsContainer.getChildren().add(cardItem);
@@ -133,38 +172,47 @@ public class CreationController {
         }
     }
 
-    // Create a deck item UI component
+    /**
+     * Creates a visual deck item component for display in the decks list.
+     *
+     * @param deck the deck entity to display
+     * @return a VBox containing the deck item UI
+     */
     private VBox createDeckItem(Decks deck) {
         VBox container = new VBox(5);
         container.setStyle("-fx-background-color: #1a1a1a; -fx-border-color: #333333; -fx-border-width: 1; -fx-padding: 15;");
-        
+
         HBox mainContent = new HBox(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
-        
+
+        // Deck icon
         SVGPath deckIcon = new SVGPath();
         deckIcon.setContent(IconManager.getPath("book"));
         deckIcon.setFill(Color.CYAN);
         deckIcon.setScaleX(1.5);
         deckIcon.setScaleY(1.5);
-        
+
+        // Text content (name and description)
         VBox textContent = new VBox(2);
         Label nameLabel = new Label(deck.getDeck_name());
         nameLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 18; -fx-font-weight: bold;");
-        
+
         String description = deck.getDescription();
         if (description == null || description.trim().isEmpty()) {
             description = "No description";
         }
         Label descLabel = new Label(description);
         descLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 14;");
-        
+
         textContent.getChildren().addAll(nameLabel, descLabel);
-        
+
+        // Spacer to push buttons to the right
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-        
+
+        // Action buttons (conditionally displayed based on permissions)
         HBox buttonBox = new HBox(5);
-        
+
         // Add Card button - only show if user can create cards in this deck
         if (canCreateCardsInDeck(deck)) {
             Button addCardButton = new Button("Add Card");
@@ -172,7 +220,7 @@ public class CreationController {
             addCardButton.setOnAction(e -> createCardForDeck(deck));
             buttonBox.getChildren().add(addCardButton);
         }
-        
+
         // Edit button - only show if user can edit this deck
         if (hasEditPermission(deck)) {
             Button editButton = new Button("Edit");
@@ -180,7 +228,7 @@ public class CreationController {
             editButton.setOnAction(e -> editDeck(deck));
             buttonBox.getChildren().add(editButton);
         }
-        
+
         // Delete button - only show if user can delete this deck
         if (hasDeletePermission()) {
             Button deleteButton = new Button("Delete");
@@ -188,24 +236,30 @@ public class CreationController {
             deleteButton.setOnAction(e -> deleteDeck(deck));
             buttonBox.getChildren().add(deleteButton);
         }
-        
+
         mainContent.getChildren().addAll(deckIcon, textContent, spacer, buttonBox);
         container.getChildren().add(mainContent);
-        
+
         return container;
     }
 
-    // Create a card item UI component with deck name
+    /**
+     * Creates a visual card item component for display in the cards list.
+     *
+     * @param card the card entity to display
+     * @return a VBox containing the card item UI
+     */
     private VBox createCardItem(Cards card) {
         VBox container = new VBox(5);
         container.setStyle("-fx-background-color: #1a1a1a; -fx-border-color: #333333; -fx-border-width: 1; -fx-padding: 15;");
-        
+
         HBox mainContent = new HBox(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
-        
-        
+
+        // Text content (question, answer, and deck name)
         VBox textContent = new VBox(2);
 
+        // Truncate long question text
         String question = card.getFront_text();
         if (question.length() > 50) {
             question = question.substring(0, 47) + "...";
@@ -213,13 +267,15 @@ public class CreationController {
         Label questionLabel = new Label("Q: " + question);
         questionLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 16; -fx-font-weight: bold;");
 
+        // Truncate long answer text
         String answer = card.getBack_text();
         if (answer.length() > 50) {
             answer = answer.substring(0, 47) + "...";
         }
         Label answerLabel = new Label("A: " + answer);
         answerLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 14;");
-        
+
+        // Add deck name if available
         try {
             String deckName = getDeckNameById(card.getDeck_id());
             Label deckLabel = new Label("Deck: " + deckName);
@@ -229,11 +285,13 @@ public class CreationController {
             textContent.getChildren().addAll(questionLabel, answerLabel);
         }
 
+        // Spacer to push buttons to the right
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
-        
+
+        // Action buttons (conditionally displayed based on permissions)
         HBox buttonBox = new HBox(5);
-        
+
         // Edit button - only show if user can edit this card
         if (hasEditCardPermission(card)) {
             Button editButton = new Button("Edit");
@@ -241,7 +299,7 @@ public class CreationController {
             editButton.setOnAction(e -> editCard(card));
             buttonBox.getChildren().add(editButton);
         }
-        
+
         // Delete button - only show if user can delete this card
         if (hasDeleteCardPermission(card)) {
             Button deleteButton = new Button("Delete");
@@ -249,44 +307,60 @@ public class CreationController {
             deleteButton.setOnAction(e -> deleteCard(card));
             buttonBox.getChildren().add(deleteButton);
         }
-        
+
         mainContent.getChildren().addAll(textContent, spacer, buttonBox);
         container.getChildren().add(mainContent);
-        
+
         return container;
     }
 
+    /**
+     * Retrieves the deck name for a given deck ID.
+     *
+     * @param deckId the ID of the deck
+     * @return the deck name, or "Unknown Deck" if not found
+     * @throws SQLException if database access fails
+     */
     private String getDeckNameById(int deckId) throws SQLException {
         List<Decks> allDecks = decksDao.getAllDecks();
         return allDecks.stream()
-            .filter(deck -> deck.getDeck_id() == deckId)
-            .map(Decks::getDeck_name)
-            .findFirst()
-            .orElse("Unknown Deck");
+                .filter(deck -> deck.getDeck_id() == deckId)
+                .map(Decks::getDeck_name)
+                .findFirst()
+                .orElse("Unknown Deck");
     }
 
+    /**
+     * Filters the cards display based on the selected deck in the filter combo box.
+     * Shows all cards if "All Decks" is selected, otherwise shows only cards from the selected deck.
+     */
     private void filterCardsByDeck() {
         Decks selectedDeck = deckFilterComboBox.getSelectionModel().getSelectedItem();
         if (selectedDeck == null) return;
-        
+
         try {
             List<Cards> allCards = cardsDao.getAllCards();
             List<Cards> filteredCards;
-            
+
             if (selectedDeck.getDeck_id() == -1) {
+                // Show all cards
                 filteredCards = allCards;
             } else {
+                // Filter by selected deck
                 filteredCards = allCards.stream()
-                    .filter(card -> card.getDeck_id() == selectedDeck.getDeck_id())
-                    .toList();
+                        .filter(card -> card.getDeck_id() == selectedDeck.getDeck_id())
+                        .toList();
             }
-            
+
             displayCards(filteredCards);
         } catch (SQLException e) {
             showError("Failed to filter cards: " + e.getMessage());
         }
     }
 
+    /**
+     * Opens the deck creation dialog.
+     */
     private void createNewDeck() {
         try {
             showDeckDialog(null);
@@ -295,6 +369,9 @@ public class CreationController {
         }
     }
 
+    /**
+     * Opens the card creation dialog without a preselected deck.
+     */
     private void createNewCard() {
         try {
             showCardDialog(null, null);
@@ -303,6 +380,11 @@ public class CreationController {
         }
     }
 
+    /**
+     * Opens the deck editing dialog for the specified deck.
+     *
+     * @param deck the deck to edit
+     */
     private void editDeck(Decks deck) {
         if (!hasEditPermission(deck)) {
             showError("You do not have permission to edit this deck.");
@@ -315,6 +397,11 @@ public class CreationController {
         }
     }
 
+    /**
+     * Opens the card editing dialog for the specified card.
+     *
+     * @param card the card to edit
+     */
     private void editCard(Cards card) {
         if (!hasEditCardPermission(card)) {
             showError("You do not have permission to edit this card.");
@@ -327,6 +414,11 @@ public class CreationController {
         }
     }
 
+    /**
+     * Opens the card creation dialog with a preselected deck.
+     *
+     * @param deck the deck to preselect in the card creation dialog
+     */
     private void createCardForDeck(Decks deck) {
         try {
             showCardDialog(null, deck);
@@ -335,6 +427,12 @@ public class CreationController {
         }
     }
 
+    /**
+     * Deletes the specified deck after confirmation.
+     * Also deletes all cards in the deck (soft delete).
+     *
+     * @param deck the deck to delete
+     */
     private void deleteDeck(Decks deck) {
         if (!hasDeletePermission()) {
             showError("You do not have permission to delete decks.");
@@ -344,7 +442,7 @@ public class CreationController {
         alert.setTitle("Delete Deck");
         alert.setHeaderText("Are you sure you want to delete this deck?");
         alert.setContentText("This will also delete all cards in the deck: " + deck.getDeck_name());
-        
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
@@ -359,6 +457,11 @@ public class CreationController {
         }
     }
 
+    /**
+     * Deletes the specified card after confirmation.
+     *
+     * @param card the card to delete
+     */
     private void deleteCard(Cards card) {
         if (!hasDeleteCardPermission(card)) {
             showError("You do not have permission to delete this card.");
@@ -368,7 +471,7 @@ public class CreationController {
         alert.setTitle("Delete Card");
         alert.setHeaderText("Are you sure you want to delete this card?");
         alert.setContentText("This action cannot be undone.");
-        
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
@@ -381,6 +484,11 @@ public class CreationController {
         }
     }
 
+    /**
+     * Displays an error alert dialog.
+     *
+     * @param message the error message to display
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -389,6 +497,11 @@ public class CreationController {
         alert.showAndWait();
     }
 
+    /**
+     * Displays an information alert dialog.
+     *
+     * @param message the information message to display
+     */
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
@@ -397,32 +510,44 @@ public class CreationController {
         alert.showAndWait();
     }
 
+    /**
+     * Checks if the current user has permission to edit the specified deck.
+     *
+     * @param deck the deck to check permissions for
+     * @return true if the user can edit the deck, false otherwise
+     */
     private boolean hasEditPermission(Decks deck) {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
-        
+
         // Admin and teacher can edit any deck
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
-        
+
         // Student can edit their own deck
         if ("student".equals(role) && deck.getUser_id() == userId) {
             return true;
         }
-        
+
         return false;
     }
 
+    /**
+     * Checks if the current user has permission to edit the specified card.
+     *
+     * @param card the card to check permissions for
+     * @return true if the user can edit the card, false otherwise
+     */
     private boolean hasEditCardPermission(Cards card) {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
-        
+
         // Admin and teacher can edit any card
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
-        
+
         // Student can edit cards in their own decks
         if ("student".equals(role)) {
             try {
@@ -432,26 +557,35 @@ public class CreationController {
                 return false;
             }
         }
-        
+
         return false;
     }
-    
 
-
+    /**
+     * Checks if the current user has permission to delete decks.
+     *
+     * @return true if the user can delete decks, false otherwise
+     */
     private boolean hasDeletePermission() {
         String role = Session.getInstance().getRole();
         return "admin".equals(role) || "teacher".equals(role);
     }
 
+    /**
+     * Checks if the current user has permission to delete the specified card.
+     *
+     * @param card the card to check permissions for
+     * @return true if the user can delete the card, false otherwise
+     */
     private boolean hasDeleteCardPermission(Cards card) {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
-        
+
         // Admin and teacher can delete any card
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
-        
+
         // Student can delete cards in their own decks
         if ("student".equals(role)) {
             try {
@@ -461,30 +595,37 @@ public class CreationController {
                 return false;
             }
         }
-        
+
         return false;
     }
 
+    /**
+     * Shows the deck creation/editing dialog.
+     *
+     * @param deck the deck to edit, or null for creation
+     * @throws IOException if the FXML file cannot be loaded
+     */
     private void showDeckDialog(Decks deck) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/deckDialog.fxml"));
         Parent root = loader.load();
 
         DeckDialogController controller = loader.getController();
-        
+
         Stage dialogStage = new Stage();
         dialogStage.setTitle(deck == null ? "Create New Deck" : "Edit Deck");
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(createDeckButton.getScene().getWindow());
         dialogStage.setResizable(false);
-        
+
         Scene scene = new Scene(root);
         dialogStage.setScene(scene);
-        
+
         controller.setDialogStage(dialogStage);
         controller.setDeck(deck);
-        
+
         dialogStage.showAndWait();
-        
+
+        // Refresh data if changes were made
         if (controller.isOkClicked()) {
             loadDecks();
             setupDeckFilter();
@@ -495,50 +636,63 @@ public class CreationController {
         }
     }
 
+    /**
+     * Shows the card creation/editing dialog.
+     *
+     * @param card the card to edit, or null for creation
+     * @param preselectedDeck the deck to preselect, or null for no preselection
+     * @throws IOException if the FXML file cannot be loaded
+     */
     private void showCardDialog(Cards card, Decks preselectedDeck) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/cardDialog.fxml"));
         Parent root = loader.load();
 
         CardDialogController controller = loader.getController();
-        
+
         Stage dialogStage = new Stage();
         dialogStage.setTitle(card == null ? "Create New Card" : "Edit Card");
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.initOwner(createCardButton.getScene().getWindow());
         dialogStage.setResizable(false);
-        
+
         Scene scene = new Scene(root);
         dialogStage.setScene(scene);
-        
+
         controller.setDialogStage(dialogStage);
         controller.setCard(card);
-        
+
         if (preselectedDeck != null) {
             controller.setPreselectedDeck(preselectedDeck);
         }
-        
+
         dialogStage.showAndWait();
-        
+
+        // Refresh cards display if changes were made
         if (controller.isOkClicked()) {
-            filterCardsByDeck(); // Refresh the cards view
+            filterCardsByDeck();
         }
     }
 
+    /**
+     * Checks if the current user can create cards in the specified deck.
+     *
+     * @param deck the deck to check permissions for
+     * @return true if the user can create cards in the deck, false otherwise
+     */
     private boolean canCreateCardsInDeck(Decks deck) {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
-        
+
         // Admin and teacher can create cards in any deck
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
-        
+
         // Student can create cards in their own decks
         if ("student".equals(role)) {
             return deck.getUser_id() == userId;
         }
-        
+
         return false;
     }
 }
-

@@ -11,6 +11,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
+/**
+ * A customizable menu item button component that displays an icon, main text,
+ * subtext, and a right arrow indicator. Supports hover effects and click actions.
+ *
+ */
 public class MenuItemButton extends VBox {
 
     private final SVGPath mainIcon;
@@ -19,57 +24,73 @@ public class MenuItemButton extends VBox {
     private final SVGPath arrowIcon;
     private final HBox content;
 
+    /**
+     * Constructs a new MenuItemButton with default styling and layout.
+     * Initializes all UI components and sets up hover effects.
+     */
     public MenuItemButton() {
+        // Set main container styling
         setStyle("-fx-background-color: #1a1a1a; -fx-border-color: #333333; -fx-border-width: 1;");
         setSpacing(0);
 
+        // Create main content container
         content = new HBox(10);
         content.setStyle("-fx-padding: 5;");
         content.setMinHeight(105);
         content.setMaxHeight(105);
         content.setAlignment(Pos.CENTER);
 
-        // Icon on the left
+        // Initialize and configure main icon
         mainIcon = new SVGPath();
-        mainIcon.setContent(IconManager.getPath("book"));
+        mainIcon.setContent(IconManager.getPath("book")); // Default icon
         mainIcon.setFill(Color.CYAN);
         mainIcon.setScaleX(2);
         mainIcon.setScaleY(2);
 
-        // Margin for icon itself
+        // Add margin around the icon
         HBox.setMargin(mainIcon, new Insets(20));
 
-        // Text part top
+        // Initialize and configure main text label
         mainText = new Label("placeholder");
         mainText.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 24;");
 
+        // Initialize and configure subtext label
         subText = new Label("placeholder");
         subText.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 16;");
 
+        // Create text container with vertical layout
         VBox textBox = new VBox(2, mainText, subText);
         textBox.setAlignment(Pos.CENTER_LEFT);
 
-        // Right arrow
+        // Initialize and configure right arrow icon
         arrowIcon = new SVGPath();
         arrowIcon.setContent(IconManager.getPath("arrowRight"));
         arrowIcon.setFill(Color.web("#757575"));
         arrowIcon.setScaleX(3);
         arrowIcon.setScaleY(3);
 
-        // Just here to push the right icon to the righ
+        // Create spacer to push arrow to the right
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         HBox.setMargin(arrowIcon, new Insets(20));
 
+        // Assemble all components in the content container
         content.getChildren().addAll(mainIcon, textBox, spacer, arrowIcon);
 
+        // Add separator line at the bottom
         ThinLine separator = new ThinLine();
 
+        // Add content and separator to main container
         getChildren().addAll(content, separator);
 
+        // Set up hover effects
         hover();
     }
 
+    /**
+     * Sets up mouse hover effects for the button.
+     * Changes background color and text colors on hover.
+     */
     private void hover() {
         content.setOnMouseEntered(e -> {
             content.setStyle(
@@ -86,6 +107,12 @@ public class MenuItemButton extends VBox {
         });
     }
 
+    /**
+     * Sets an action handler to be called when the button is clicked.
+     * Only triggers if the mouse hasn't moved significantly since press (isStillSincePress).
+     *
+     * @param handler the event handler to be called on button click
+     */
     public void setOnAction(EventHandler<ActionEvent> handler) {
         content.setOnMouseClicked(e -> {
             if (e.isStillSincePress()) {
@@ -94,14 +121,29 @@ public class MenuItemButton extends VBox {
         });
     }
 
+    /**
+     * Sets the main icon for the button using an icon name from IconManager.
+     *
+     * @param icon the name of the icon to use
+     */
     public void setIcon(String icon) {
         mainIcon.setContent(IconManager.getPath(icon));
     }
 
+    /**
+     * Sets the main text displayed in the button.
+     *
+     * @param text the text to display as main title
+     */
     public void setMainText(String text) {
         mainText.setText(text);
     }
 
+    /**
+     * Sets the subtext displayed in the button.
+     *
+     * @param text the text to display as subtitle
+     */
     public void setSubText(String text) {
         subText.setText(text);
     }

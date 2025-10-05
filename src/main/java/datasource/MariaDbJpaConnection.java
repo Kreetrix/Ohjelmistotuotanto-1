@@ -7,7 +7,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Utility class for managing MariaDB database connections using environment variables or .env files.
- * <p>
  * Supports automatic detection of Docker environment and selection of the appropriate .env file.
  * Provides methods to obtain and terminate a database connection.
  */

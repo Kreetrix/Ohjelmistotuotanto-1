@@ -7,8 +7,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for CardHistory entity.
+ * Handles database operations for card version history tracking.
+ */
 public class CardHistoryDao {
 
+    /**
+     * Retrieves all card history records from the database.
+     * @return List of all CardHistory entities
+     * @throws SQLException if database access error occurs
+     */
     public List<CardHistory> getAllCardHistories() throws SQLException {
         List<CardHistory> histories = new ArrayList<>();
         String sql = "SELECT * FROM cardhistory";
@@ -36,6 +45,11 @@ public class CardHistoryDao {
         return histories;
     }
 
+    /**
+     * Saves a new card history record to the database.
+     * @param history the CardHistory entity to persist
+     * @throws SQLException if database access error occurs
+     */
     public void persist(CardHistory history) throws SQLException {
         String sql = "INSERT INTO cardhistory (card_id, deck_version, front_text, back_text, image_url, extra_info, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();

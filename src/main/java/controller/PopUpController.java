@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Controller for the study confirmation popup window.
+ * Handles deck selection confirmation and navigation to study sessions.
+ */
 public class PopUpController {
 
     @FXML
@@ -24,20 +28,34 @@ public class PopUpController {
     private Decks selectedDeck;
     private Stage popupStage;
 
+    /**
+     * Initializes the popup controller after FXML loading.
+     */
     public void initialize() {
     }
 
+    /**
+     * Sets the deck to be studied.
+     * @param deck the deck selected for study
+     */
     public void setDeck(Decks deck) {
         this.selectedDeck = deck;
         setupStudyConfirmation();
     }
 
+    /**
+     * Sets the stage for this popup window.
+     * @param stage the popup stage
+     */
     public void setStage(Stage stage) {
         this.popupStage = stage;
     }
 
-    // TODO : ADD SAVING RESULTS  FOR USERS IN DB
+    // TODO: ADD SAVING RESULTS FOR USERS IN DB
 
+    /**
+     * Sets up the study confirmation interface with deck info and action buttons.
+     */
     private void setupStudyConfirmation() {
         PopUpContainer.getChildren().clear();
 
@@ -67,6 +85,10 @@ public class PopUpController {
         PopUpContainer.getChildren().addAll(titleLabel, deckInfoLabel, confirmButton, cancelButton);
     }
 
+    /**
+     * Starts the study session for the selected deck.
+     * Closes popup and opens study view with deck cards.
+     */
     private void startStudySession() {
         closePopup();
 
@@ -91,6 +113,9 @@ public class PopUpController {
         }
     }
 
+    /**
+     * Closes the popup window.
+     */
     private void closePopup() {
         if (popupStage != null) {
             popupStage.close();
