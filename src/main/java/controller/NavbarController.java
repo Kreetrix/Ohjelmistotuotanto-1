@@ -22,9 +22,6 @@ public class NavbarController {
     public CustomButton logoutBtn;
 
     @FXML
-    private Button searchBtn;
-
-    @FXML
     private CustomButton admin;
 
     @FXML
@@ -36,12 +33,11 @@ public class NavbarController {
      */
     @FXML
     private void initialize() {
-
-        searchBtn.setOnAction(e -> System.out.println("Search clicked"));
         
         listBtn.setIcon("/icons/list.png");
         listBtn.setTooltipText("List");
         listBtn.setOnAction(e -> System.out.println("List clicked"));
+        listBtn.setVisible(false);
         
         // Only for admin!!!
         setupAdminButton();
@@ -82,21 +78,22 @@ public class NavbarController {
             alert.showAndWait();
             return;
         }
-
+        
         admin.setDisable(true);
-
+        
         try {
             AdminPanel adminPanel = new AdminPanel();
             Stage adminStage = new Stage();
             
-            adminStage.setOnCloseRequest(e -> {
+            adminStage.setOnHidden(e -> {
                 admin.setDisable(false);
+                System.out.println("Admin panel closed, button re-enabled");
             });
             
             adminPanel.start(adminStage);
         } catch (Exception e) {
             e.printStackTrace();
-            admin.setDisable(false); 
+            admin.setDisable(false);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("Failed to open admin panel: " + e.getMessage());
