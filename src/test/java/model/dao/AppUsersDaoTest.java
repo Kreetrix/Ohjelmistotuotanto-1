@@ -1,6 +1,7 @@
 package model.dao;
 
 
+import datasource.MariaDbJpaConnection;
 import datasource.PasswordUtil;
 import model.entity.AppUsers;
 import org.junit.jupiter.api.*;
@@ -104,5 +105,32 @@ public class AppUsersDaoTest {
         assertNull(dao.getUserByUsername(null));
 
 
+    }
+
+    @Test 
+    void testUpdateUser() throws SQLException {
+        AppUsers originalUser = dao.getUserByUsername("activeuser");
+        assertNotNull(originalUser, "Test user should exist before update");
+
+        int userId = originalUser.getUser_id();
+
+        originalUser.setUsername("updateduser");
+        originalUser.setEmail("updated@example.com");
+        originalUser.setRole("admin");
+
+        dao.updateUser(originalUser);
+
+        AppUsers updatedUser = dao.getUserByUsername("updateduser");
+        assertNotNull(updatedUser, "Updated user should be found in the DB");
+
+        assertEquals("updateduser", updatedUser.getUsername());
+        assertEquals("updated@example.com", updatedUser.getEmail());
+        assertEquals("admin", updatedUser.getRole());
+        assertEquals(userId, updatedUser.getUser_id(), "User ID should remain unchanged");
+
+        updatedUser.setUsername("activeuser");
+        updatedUser.setEmail("active@example.com");
+        updatedUser.setRole("student");
+        dao.updateUser(updatedUser);
     }
 }
