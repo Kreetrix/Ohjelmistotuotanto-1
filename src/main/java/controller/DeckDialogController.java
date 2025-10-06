@@ -43,7 +43,6 @@ public class DeckDialogController {
         saveButton.setOnAction(e -> handleSave());
         cancelButton.setOnAction(e -> handleCancel());
 
-        // Validation listeners
         deckNameField.textProperty().addListener((observable, oldValue, newValue) -> {
             validateInput();
         });
@@ -195,15 +194,15 @@ public class DeckDialogController {
     }
 
     private void setupVisibilityComboBox() {
-        // Add visibility options
+        
         visibilityComboBox.getItems().addAll("private", "public", "assigned");
 
-        // Set default value
+        
         visibilityComboBox.setValue("private");
     }
 
     private void styleVisibilityComboBox() {
-        // Apply additional styling to ComboBox to ensure text visibility
+        
         visibilityComboBox.setStyle(
                 "-fx-background-color: #333333;" +
                         "-fx-border-color: transparent;" +
@@ -212,14 +211,14 @@ public class DeckDialogController {
                         "-fx-border-radius: 0;"
         );
 
-        // Style the ComboBox when it's shown
+        
         visibilityComboBox.setOnShown(e -> {
             visibilityComboBox.lookupAll(".list-cell").forEach(node -> {
                 node.setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
             });
         });
 
-        // Apply cell factory for better text visibility
+        
         visibilityComboBox.setCellFactory(listView -> {
             return new javafx.scene.control.ListCell<String>() {
                 @Override
@@ -230,25 +229,25 @@ public class DeckDialogController {
                     } else {
                         setText(capitalizeFirst(item));
                     }
-                    // Style the cell
+                    
                     setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
                 }
             };
         });
 
-        // Style the button cell (the selected item display)
+        
         visibilityComboBox.setButtonCell(new javafx.scene.control.ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText("Select visibility...");
-                    setStyle("-fx-text-fill: #757575;"); // Placeholder color
+                    setStyle("-fx-text-fill: #757575;");
                 } else {
                     setText(capitalizeFirst(item));
-                    setStyle("-fx-text-fill: #ffffff;"); // Selected text color
+                    setStyle("-fx-text-fill: #ffffff;");
                 }
-                // Always set background
+                
                 setStyle(getStyle() + "-fx-background-color: #333333;");
             }
         });

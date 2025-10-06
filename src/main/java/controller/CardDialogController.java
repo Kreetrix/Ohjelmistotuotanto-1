@@ -98,7 +98,6 @@ public class CardDialogController {
 
             deckComboBox.getItems().addAll(availableDecks);
 
-            // Set up string converter for proper deck display
             deckComboBox.setConverter(new javafx.util.StringConverter<Decks>() {
                 @Override
                 public String toString(Decks deck) {
@@ -107,7 +106,7 @@ public class CardDialogController {
 
                 @Override
                 public Decks fromString(String string) {
-                    return null; // Not needed for display-only combo box
+                    return null;
                 }
             });
 
@@ -141,7 +140,6 @@ public class CardDialogController {
             imageUrlField.setText(card.getImage_url() != null ? card.getImage_url() : "");
             extraInfoField.setText(card.getExtra_info() != null ? card.getExtra_info() : "");
 
-            // Select the appropriate deck
             for (Decks deck : deckComboBox.getItems()) {
                 if (deck.getDeck_id() == card.getDeck_id()) {
                     deckComboBox.setValue(deck);
@@ -324,7 +322,7 @@ public class CardDialogController {
      * Ensures proper text visibility and consistent appearance with the application theme.
      */
     private void styleComboBox() {
-        // Apply additional styling to ComboBox to ensure text visibility
+
         deckComboBox.setStyle(
                 "-fx-background-color: #333333;" +
                         "-fx-border-color: transparent;" +
@@ -333,14 +331,14 @@ public class CardDialogController {
                         "-fx-border-radius: 0;"
         );
 
-        // Style the ComboBox when it's shown
+        
         deckComboBox.setOnShown(e -> {
             deckComboBox.lookupAll(".list-cell").forEach(node -> {
                 node.setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
             });
         });
 
-        // Apply cell factory for better text visibility
+
         deckComboBox.setCellFactory(listView -> {
             return new javafx.scene.control.ListCell<Decks>() {
                 @Override
@@ -351,25 +349,24 @@ public class CardDialogController {
                     } else {
                         setText(item.getDeck_name());
                     }
-                    // Style the cell
+                    
                     setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
                 }
             };
         });
 
-        // Style the button cell (the selected item display)
+
         deckComboBox.setButtonCell(new javafx.scene.control.ListCell<Decks>() {
             @Override
             protected void updateItem(Decks item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText("Select a deck...");
-                    setStyle("-fx-text-fill: #757575;"); // Placeholder color
+                    setStyle("-fx-text-fill: #757575;");
                 } else {
                     setText(item.getDeck_name());
-                    setStyle("-fx-text-fill: #ffffff;"); // Selected text color
+                    setStyle("-fx-text-fill: #ffffff;");
                 }
-                // Always set background
                 setStyle(getStyle() + "-fx-background-color: #333333;");
             }
         });

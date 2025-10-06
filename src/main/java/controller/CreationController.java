@@ -28,7 +28,7 @@ import java.io.IOException;
  */
 public class CreationController {
 
-    // FXML injected UI components
+    
     @FXML private TabPane tabPane;
     @FXML private Button createDeckButton;
     @FXML private Button createCardButton;
@@ -38,7 +38,7 @@ public class CreationController {
     @FXML private VBox decksContainer;
     @FXML private VBox cardsContainer;
 
-    // Data access objects
+    
     private DecksDao decksDao;
     private CardsDao cardsDao;
 
@@ -94,11 +94,11 @@ public class CreationController {
 
                 @Override
                 public Decks fromString(String string) {
-                    return null; // Not needed for display-only combo box
+                    return null;
                 }
             });
 
-            // Select "All Decks" by default
+            
             deckFilterComboBox.getSelectionModel().selectFirst();
         } catch (SQLException e) {
             System.err.println("Failed to load deck filter options: " + e.getMessage());
@@ -114,13 +114,13 @@ public class CreationController {
             List<Decks> allDecks = decksDao.getAllDecks();
             decksContainer.getChildren().clear();
 
-            // Check if there are any active decks
+            
             if (allDecks.isEmpty() || allDecks.stream().noneMatch(deck -> !deck.isIs_deleted())) {
                 Label emptyLabel = new Label("No decks found. Create your first deck!");
                 emptyLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 16; -fx-padding: 20;");
                 decksContainer.getChildren().add(emptyLabel);
             } else {
-                // Create UI items for each active deck
+                
                 for (Decks deck : allDecks) {
                     if (!deck.isIs_deleted()) {
                         VBox deckItem = createDeckItem(deck);
@@ -154,7 +154,7 @@ public class CreationController {
     private void displayCards(List<Cards> cards) {
         cardsContainer.getChildren().clear();
 
-        // Filter out deleted cards
+        
         List<Cards> activeCards = cards.stream()
                 .filter(card -> !card.isIs_deleted())
                 .toList();
@@ -164,7 +164,7 @@ public class CreationController {
             emptyLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 16; -fx-padding: 20;");
             cardsContainer.getChildren().add(emptyLabel);
         } else {
-            // Create UI items for each active card
+            
             for (Cards card : activeCards) {
                 VBox cardItem = createCardItem(card);
                 cardsContainer.getChildren().add(cardItem);
@@ -185,14 +185,14 @@ public class CreationController {
         HBox mainContent = new HBox(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
 
-        // Deck icon
+        
         SVGPath deckIcon = new SVGPath();
         deckIcon.setContent(IconManager.getPath("book"));
         deckIcon.setFill(Color.CYAN);
         deckIcon.setScaleX(1.5);
         deckIcon.setScaleY(1.5);
 
-        // Text content (name and description)
+        
         VBox textContent = new VBox(2);
         Label nameLabel = new Label(deck.getDeck_name());
         nameLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 18; -fx-font-weight: bold;");
@@ -206,11 +206,11 @@ public class CreationController {
 
         textContent.getChildren().addAll(nameLabel, descLabel);
 
-        // Spacer to push buttons to the right
+        
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // Action buttons (conditionally displayed based on permissions)
+        
         HBox buttonBox = new HBox(5);
 
         // Add Card button - only show if user can create cards in this deck
@@ -256,10 +256,10 @@ public class CreationController {
         HBox mainContent = new HBox(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
 
-        // Text content (question, answer, and deck name)
+        
         VBox textContent = new VBox(2);
 
-        // Truncate long question text
+        
         String question = card.getFront_text();
         if (question.length() > 50) {
             question = question.substring(0, 47) + "...";
@@ -267,7 +267,7 @@ public class CreationController {
         Label questionLabel = new Label("Q: " + question);
         questionLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 16; -fx-font-weight: bold;");
 
-        // Truncate long answer text
+        
         String answer = card.getBack_text();
         if (answer.length() > 50) {
             answer = answer.substring(0, 47) + "...";
@@ -275,7 +275,7 @@ public class CreationController {
         Label answerLabel = new Label("A: " + answer);
         answerLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 14;");
 
-        // Add deck name if available
+        
         try {
             String deckName = getDeckNameById(card.getDeck_id());
             Label deckLabel = new Label("Deck: " + deckName);
@@ -285,14 +285,14 @@ public class CreationController {
             textContent.getChildren().addAll(questionLabel, answerLabel);
         }
 
-        // Spacer to push buttons to the right
+        
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // Action buttons (conditionally displayed based on permissions)
+        
         HBox buttonBox = new HBox(5);
 
-        // Edit button - only show if user can edit this card
+        
         if (hasEditCardPermission(card)) {
             Button editButton = new Button("Edit");
             editButton.setStyle("-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 5 10;");
@@ -300,7 +300,7 @@ public class CreationController {
             buttonBox.getChildren().add(editButton);
         }
 
-        // Delete button - only show if user can delete this card
+       
         if (hasDeleteCardPermission(card)) {
             Button deleteButton = new Button("Delete");
             deleteButton.setStyle("-fx-background-color: #d13438; -fx-text-fill: white; -fx-padding: 5 10;");
@@ -343,10 +343,8 @@ public class CreationController {
             List<Cards> filteredCards;
 
             if (selectedDeck.getDeck_id() == -1) {
-                // Show all cards
                 filteredCards = allCards;
             } else {
-                // Filter by selected deck
                 filteredCards = allCards.stream()
                         .filter(card -> card.getDeck_id() == selectedDeck.getDeck_id())
                         .toList();
