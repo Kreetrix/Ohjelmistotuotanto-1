@@ -518,12 +518,10 @@ public class CreationController {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
 
-        // Admin and teacher can edit any deck
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
 
-        // Student can edit their own deck
         if ("student".equals(role) && deck.getUser_id() == userId) {
             return true;
         }
@@ -541,12 +539,10 @@ public class CreationController {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
 
-        // Admin and teacher can edit any card
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
 
-        // Student can edit cards in their own decks
         if ("student".equals(role)) {
             try {
                 Decks deck = decksDao.getDeckById(card.getDeck_id());
@@ -623,12 +619,10 @@ public class CreationController {
 
         dialogStage.showAndWait();
 
-        // Refresh data if changes were made
         if (controller.isOkClicked()) {
             loadDecks();
             setupDeckFilter();
             if (deck == null) {
-                // If we created a new deck, refresh cards too
                 loadCards();
             }
         }
@@ -665,7 +659,6 @@ public class CreationController {
 
         dialogStage.showAndWait();
 
-        // Refresh cards display if changes were made
         if (controller.isOkClicked()) {
             filterCardsByDeck();
         }
@@ -681,12 +674,10 @@ public class CreationController {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
 
-        // Admin and teacher can create cards in any deck
         if ("admin".equals(role) || "teacher".equals(role)) {
             return true;
         }
 
-        // Student can create cards in their own decks
         if ("student".equals(role)) {
             return deck.getUser_id() == userId;
         }

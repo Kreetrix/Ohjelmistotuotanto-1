@@ -112,7 +112,6 @@ public class DeckDialogController {
         if (isInputValid()) {
             try {
                 if (isEditMode) {
-                    // Update existing deck
                     deck.setDeck_name(deckNameField.getText().trim());
                     deck.setDescription(descriptionField.getText() != null ? descriptionField.getText().trim() : "");
                     deck.setVisibility(visibilityComboBox.getValue());
@@ -120,7 +119,6 @@ public class DeckDialogController {
                     decksDao.updateDeck(deck);
                     showInfo("Deck updated successfully!");
                 } else {
-                    // Create new deck
                     int currentUserId = Session.getInstance().getUserId();
                     if (currentUserId == -1) {
                         showError("User not logged in!");

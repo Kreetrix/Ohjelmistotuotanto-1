@@ -16,7 +16,6 @@ import java.util.List;
  */
 public class CardDialogController {
 
-    // FXML injected components
     @FXML private ComboBox<Decks> deckComboBox;
     @FXML private TextField frontTextField;
     @FXML private TextField backTextField;
@@ -26,7 +25,6 @@ public class CardDialogController {
     @FXML private Button cancelButton;
     @FXML private Label titleLabel;
 
-    // Dialog and business logic fields
     private Stage dialogStage;
     private Cards card;
     private boolean okClicked = false;
@@ -57,7 +55,6 @@ public class CardDialogController {
         saveButton.setOnAction(e -> handleSave());
         cancelButton.setOnAction(e -> handleCancel());
 
-        // Real-time input validation
         frontTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             validateInput();
         });
@@ -80,14 +77,13 @@ public class CardDialogController {
             List<Decks> allDecks = decksDao.getAllDecks();
             deckComboBox.getItems().clear();
 
-            // Filter decks based on user permissions
+
             String userRole = Session.getInstance().getRole();
             int currentUserId = Session.getInstance().getUserId();
 
             List<Decks> availableDecks = allDecks.stream()
                     .filter(deck -> !deck.isIs_deleted())
                     .filter(deck -> {
-                        // Admin and teacher can use any deck
                         if ("admin".equalsIgnoreCase(userRole) || "teacher".equalsIgnoreCase(userRole)) {
                             return true;
                         }
@@ -209,7 +205,6 @@ public class CardDialogController {
         if (isInputValid()) {
             try {
                 if (isEditMode) {
-                    // Update existing card
                     card.setDeck_id(deckComboBox.getValue().getDeck_id());
                     card.setFront_text(frontTextField.getText().trim());
                     card.setBack_text(backTextField.getText().trim());
@@ -219,7 +214,6 @@ public class CardDialogController {
                     cardsDao.updateCard(card);
                     showInfo("Card updated successfully!");
                 } else {
-                    // Create new card
                     Cards newCard = new Cards(
                             deckComboBox.getValue().getDeck_id(),
                             frontTextField.getText().trim(),
