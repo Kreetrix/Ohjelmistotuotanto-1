@@ -45,7 +45,7 @@ public class CustomButton extends Button {
         Image image = new Image(getClass().getResourceAsStream(resourcePath));
         imageView.setImage(image);
     }
-
+    
     public void setSvgIcon(String resourcePath, String color, int size) {
         SVGPath svg = new SVGPath();
         svg.setContent(IconManager.getPath(resourcePath));
