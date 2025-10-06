@@ -34,7 +34,7 @@ Card Memo is a flashcard-based learning app that helps users remember informatio
 
 ## Risk Management
 
-- Training for new tools (Kubernetes, Jenkins)
+- Training for new tools (Jenkins)
 - Agile sprints to manage time constraints
 - CI/CD pipelines to reduce integration errors
 - Backup and staging environments for deployment
@@ -44,11 +44,8 @@ Card Memo is a flashcard-based learning app that helps users remember informatio
 - Unit tests with JUnit 5
 - Integration tests
 - Automated CI/CD with Jenkins
-- Target: 80–90% test coverage
 
 ## Documentation & Reporting
 
-- User manual and setup guide (ReadMe)
-- Source code docs (Javadoc)
 - Weekly sprint reports and reviews
 - Final project report at completion
