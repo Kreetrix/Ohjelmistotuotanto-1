@@ -1,8 +1,8 @@
-# Memory Master
+# Card Memo
 
 ## Overview
 
-Memory Master is a flashcard-based learning app that helps users remember information in a fun and simple way. It’s designed for students, language learners, and anyone preparing for exams.
+Card Memo is a flashcard-based learning app that helps users remember information in a fun and simple way. It’s designed for students, language learners, and anyone preparing for exams.
 
 ## Team
 
@@ -21,7 +21,7 @@ Memory Master is a flashcard-based learning app that helps users remember inform
 ## Objectives
 
 - Provide learning statistics and progress tracking
-- Deliver fast, responsive UI (under 2s load time)
+- Deliver fast, responsive UI
 - Ensure accuracy reports and deck mastery tracking
 
 ## Tech Stack
