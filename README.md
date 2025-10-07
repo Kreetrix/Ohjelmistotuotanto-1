@@ -29,7 +29,7 @@ Card Memo is a flashcard-based learning app that helps users remember informatio
 - **Backend:** Java 17+, Maven
 - **Frontend/GUI:** JavaFX
 - **Database:** MariaDB
-- **Testing:** JUnit 5
+- **Testing:** JUnit 5, TestFx
 - **DevOps:** Jenkins, Docker, GitHub, Jacoco
 
 ## Risk Management
