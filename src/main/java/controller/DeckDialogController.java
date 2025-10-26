@@ -7,6 +7,8 @@ import model.entity.Decks;
 import model.dao.DecksDao;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import javafx.beans.binding.Bindings;
+import util.I18n;
 
 /**
  * Controller for the Deck Dialog window used for creating and editing flashcard decks.
@@ -20,6 +22,9 @@ public class DeckDialogController {
     @FXML private Button saveButton;
     @FXML private Button cancelButton;
     @FXML private Label titleLabel;
+    @FXML private Label deckNameLabel;
+    @FXML private Label descriptionLabel;
+    @FXML private Label visibilityLabel;
 
     private Stage dialogStage;
     private Decks deck;
@@ -37,15 +42,25 @@ public class DeckDialogController {
         setupEventHandlers();
         setupVisibilityComboBox();
         styleVisibilityComboBox();
+
+        titleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.title.create"), I18n.localeProperty()));
+        deckNameLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.nameLabel"), I18n.localeProperty()));
+        descriptionLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.descriptionLabel"), I18n.localeProperty()));
+        visibilityLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.visibilityLabel"), I18n.localeProperty()));
+        saveButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.saveBtn"), I18n.localeProperty()));
+        cancelButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.cancelBtn"), I18n.localeProperty()));
+
+        deckNameField.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.prompt.name"), I18n.localeProperty()));
+        descriptionField.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.prompt.description"), I18n.localeProperty()));
+
+        I18n.localeProperty().addListener((obs, oldV, newV) -> styleVisibilityComboBox());
     }
 
     private void setupEventHandlers() {
         saveButton.setOnAction(e -> handleSave());
         cancelButton.setOnAction(e -> handleCancel());
 
-        deckNameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            validateInput();
-        });
+        deckNameField.textProperty().addListener((observable, oldValue, newValue) -> validateInput());
     }
 
     /**
@@ -65,13 +80,13 @@ public class DeckDialogController {
 
         if (deck != null) {
             isEditMode = true;
-            titleLabel.setText("Edit Deck");
+            titleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.title.edit"), I18n.localeProperty()));
             deckNameField.setText(deck.getDeck_name());
             descriptionField.setText(deck.getDescription());
             visibilityComboBox.setValue(deck.getVisibility() != null ? deck.getVisibility() : "private");
         } else {
             isEditMode = false;
-            titleLabel.setText("Create New Deck");
+            titleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("deck.title.create"), I18n.localeProperty()));
             deckNameField.clear();
             descriptionField.clear();
             visibilityComboBox.setValue("private");
@@ -90,19 +105,15 @@ public class DeckDialogController {
 
     private void validateInput() {
         boolean valid = true;
-        String errorMessage = "";
 
         if (deckNameField.getText() == null || deckNameField.getText().trim().isEmpty()) {
             valid = false;
-            errorMessage += "Deck name is required!\n";
         } else if (deckNameField.getText().trim().length() > 100) {
             valid = false;
-            errorMessage += "Deck name must be less than 100 characters!\n";
         }
 
         if (descriptionField.getText() != null && descriptionField.getText().length() > 500) {
             valid = false;
-            errorMessage += "Description must be less than 500 characters!\n";
         }
 
         saveButton.setDisable(!valid);
@@ -117,11 +128,11 @@ public class DeckDialogController {
                     deck.setVisibility(visibilityComboBox.getValue());
 
                     decksDao.updateDeck(deck);
-                    showInfo("Deck updated successfully!");
+                    showInfo(I18n.get("deck.updated"));
                 } else {
                     int currentUserId = Session.getInstance().getUserId();
                     if (currentUserId == -1) {
-                        showError("User not logged in!");
+                        showError(I18n.get("deck.error.notLoggedIn"));
                         return;
                     }
 
@@ -136,14 +147,14 @@ public class DeckDialogController {
                     );
 
                     decksDao.persist(newDeck);
-                    showInfo("Deck created successfully!");
+                    showInfo(I18n.get("deck.created"));
                 }
 
                 okClicked = true;
                 dialogStage.close();
 
             } catch (SQLException e) {
-                showError("Database error: " + e.getMessage());
+                showError(I18n.get("deck.dbError") + ": " + e.getMessage());
             }
         }
     }
@@ -156,13 +167,13 @@ public class DeckDialogController {
         String errorMessage = "";
 
         if (deckNameField.getText() == null || deckNameField.getText().trim().isEmpty()) {
-            errorMessage += "Deck name is required!\n";
+            errorMessage += I18n.get("deck.error.nameRequired") + "\n";
         } else if (deckNameField.getText().trim().length() > 100) {
-            errorMessage += "Deck name must be less than 100 characters!\n";
+            errorMessage += I18n.get("deck.error.nameTooLong") + "\n";
         }
 
         if (descriptionField.getText() != null && descriptionField.getText().length() > 500) {
-            errorMessage += "Description must be less than 500 characters!\n";
+            errorMessage += I18n.get("deck.error.descriptionTooLong") + "\n";
         }
 
         if (errorMessage.isEmpty()) {
@@ -175,7 +186,7 @@ public class DeckDialogController {
 
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
+        alert.setTitle(I18n.get("alert.errorTitle"));
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initOwner(dialogStage);
@@ -184,7 +195,7 @@ public class DeckDialogController {
 
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
+        alert.setTitle(I18n.get("alert.successTitle"));
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initOwner(dialogStage);
@@ -192,15 +203,12 @@ public class DeckDialogController {
     }
 
     private void setupVisibilityComboBox() {
-        
+        visibilityComboBox.getItems().clear();
         visibilityComboBox.getItems().addAll("private", "public", "assigned");
-
-        
         visibilityComboBox.setValue("private");
     }
 
     private void styleVisibilityComboBox() {
-        
         visibilityComboBox.setStyle(
                 "-fx-background-color: #333333;" +
                         "-fx-border-color: transparent;" +
@@ -209,14 +217,12 @@ public class DeckDialogController {
                         "-fx-border-radius: 0;"
         );
 
-        
         visibilityComboBox.setOnShown(e -> {
             visibilityComboBox.lookupAll(".list-cell").forEach(node -> {
                 node.setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
             });
         });
 
-        
         visibilityComboBox.setCellFactory(listView -> {
             return new javafx.scene.control.ListCell<String>() {
                 @Override
@@ -225,27 +231,26 @@ public class DeckDialogController {
                     if (empty || item == null) {
                         setText(null);
                     } else {
-                        setText(capitalizeFirst(item));
+                        String localized = I18n.get("visibility." + item);
+                        setText(localized == null || localized.isEmpty() ? capitalizeFirst(item) : localized);
                     }
-                    
                     setStyle("-fx-background-color: #333333; -fx-text-fill: #ffffff;");
                 }
             };
         });
 
-        
         visibilityComboBox.setButtonCell(new javafx.scene.control.ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
-                    setText("Select visibility...");
+                    setText(I18n.get("deck.visibility.select"));
                     setStyle("-fx-text-fill: #757575;");
                 } else {
-                    setText(capitalizeFirst(item));
+                    String localized = I18n.get("visibility." + item);
+                    setText(localized == null || localized.isEmpty() ? capitalizeFirst(item) : localized);
                     setStyle("-fx-text-fill: #ffffff;");
                 }
-                
                 setStyle(getStyle() + "-fx-background-color: #333333;");
             }
         });

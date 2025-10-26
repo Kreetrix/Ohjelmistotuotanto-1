@@ -85,7 +85,7 @@ public class LoginController {
             Parent root = loader.load();
             Stage stage = (Stage) loginBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Memory Master");
+            stage.setTitle(I18n.get("app.title"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,7 +116,7 @@ public class LoginController {
                         Stage stage = (Stage) loginBtn.getScene().getWindow();
 
                         stage.setScene(new Scene(root,width,height));
-                        stage.setTitle("Memory Master");
+                        stage.setTitle(I18n.get("app.title"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -138,7 +138,7 @@ public class LoginController {
             Parent root = loader.load();
             Stage stage = (Stage) loginBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Register");
+            stage.setTitle(I18n.get("register.title"));
         } catch (Exception e) {
             e.printStackTrace();
         }

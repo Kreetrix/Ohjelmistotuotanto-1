@@ -11,9 +11,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
+import util.I18n;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 
-import java.awt.*;
-import java.sql.Connection;
 
 /**
  * Controller for the user registration view.
@@ -39,6 +41,9 @@ public class RegisterController {
     @FXML
     private javafx.scene.control.Label errorLabel;
 
+    @FXML
+    private Label registerTitleLabel;
+
     AppUsersDao dao = new AppUsersDao();
 
     // TODO: ADD ADMIN PANEL FOR UPDATING/DELETING USERS
@@ -48,8 +53,54 @@ public class RegisterController {
      * Sets up the role selection combo box.
      */
     public void initialize(){
-        roleComboBox.getItems().addAll("Student", "Teacher", "Admin");
-        roleComboBox.setValue("Student");
+        roleComboBox.getItems().clear();
+        roleComboBox.getItems().addAll("student", "teacher", "admin");
+
+        roleComboBox.setCellFactory(cb -> new javafx.scene.control.ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(I18n.get("role." + item));
+                }
+            }
+        });
+        roleComboBox.setButtonCell(new javafx.scene.control.ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(I18n.get("role." + item));
+                }
+            }
+        });
+
+        roleComboBox.setValue("student");
+
+    try {
+        registerTitleLabel.textProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("register.title"), I18n.localeProperty())
+        );
+        registerBtn.textProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("register.registerBtn"), I18n.localeProperty())
+        );
+        usernameField.promptTextProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("register.username"), I18n.localeProperty())
+        );
+        emailField.promptTextProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("register.email"), I18n.localeProperty())
+        );
+        passwordField.promptTextProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("register.password"), I18n.localeProperty())
+        );
+        confirmPasswordField.promptTextProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("register.confirmPassword"), I18n.localeProperty())
+        );
+    } catch (Exception ignored) {}
     }
 
     /**
@@ -73,7 +124,7 @@ public class RegisterController {
                     Parent root = loader.load();
                     Stage stage = (Stage) registerBtn.getScene().getWindow();
                     stage.setScene(new Scene(root));
-                    stage.setTitle("Memory Master");
+                    stage.setTitle(I18n.get("app.title"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -83,7 +134,7 @@ public class RegisterController {
 
         }
         else{
-            errorLabel.setText("Passwords do not match");
+            errorLabel.setText(I18n.get("register.passwordMismatch"));
         }
     }
 }

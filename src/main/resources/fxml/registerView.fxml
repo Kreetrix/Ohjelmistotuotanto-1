@@ -13,7 +13,7 @@
       spacing="20"
       style="-fx-background-color: #202020; -fx-padding: 50;">
 
-    <Label text="Register" style="-fx-text-fill: #ffffff; -fx-font-size: 36; -fx-font-weight: bold;"/>
+        <Label fx:id="registerTitleLabel" text="Register" style="-fx-text-fill: #ffffff; -fx-font-size: 36; -fx-font-weight: bold;"/>
 
     <TextField fx:id="usernameField" promptText="Username" style="-fx-font-size: 18;"/>
     <TextField fx:id="emailField" promptText="Email" style="-fx-font-size: 18;"/>

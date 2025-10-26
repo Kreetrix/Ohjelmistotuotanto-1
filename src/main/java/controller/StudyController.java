@@ -5,6 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.beans.binding.Bindings;
+import util.I18n;
+import java.text.MessageFormat;
 import model.dao.GameSessionsDao;
 import model.dao.SessionResultsDao;
 import model.entity.Cards;
@@ -29,6 +32,12 @@ public class StudyController {
 
     @FXML
     public Button closeButton;
+
+    @FXML
+    private Label studyTitleLabel;
+
+    @FXML
+    private Label studySubtitleLabel;
 
     @FXML
     private StackPane cardContainer;
@@ -84,6 +93,18 @@ public class StudyController {
         } else {
             showResult();
         }
+    }
+
+    @FXML
+    public void initialize() {
+        studyTitleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.title"), I18n.localeProperty()));
+        studySubtitleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.instruction"), I18n.localeProperty()));
+
+        knewButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.knewBtn"), I18n.localeProperty()));
+        didntKnowButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.didntKnowBtn"), I18n.localeProperty()));
+        closeButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.closeBtn"), I18n.localeProperty()));
+
+        cardLabel.setText(I18n.get("study.cardPlaceholder"));
     }
 
     // TODO: Add method for showing additional info from database
@@ -173,7 +194,8 @@ public class StudyController {
      */
     private void showResult() {
         endTime = new Timestamp(System.currentTimeMillis());
-        cardLabel.setText("The game is over!\nScore: " + score + " / " + cards.size());
+        String formatted = MessageFormat.format(I18n.get("study.gameOver"), score, cards.size());
+        cardLabel.setText(formatted);
         knewButton.setVisible(false);
         didntKnowButton.setVisible(false);
         closeButton.setVisible(true);

@@ -9,12 +9,12 @@
             style="-fx-background-color: #202020;">
 
     <top>
-        <VBox style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #333333; -fx-border-width: 0 0 1 0;">
-            <Label text="The game is starts!"
-                   style="-fx-text-fill: #a9a9a9; -fx-font-size: 28; -fx-font-weight: bold;"/>
-            <Label text="Click the card to flip"
-                   style="-fx-text-fill: #00ffff; -fx-font-size: 16;-fx-font-weight: bold;"/>
-        </VBox>
+     <VBox style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #333333; -fx-border-width: 0 0 1 0;">
+         <Label fx:id="studyTitleLabel" text="The game is starts!"
+             style="-fx-text-fill: #a9a9a9; -fx-font-size: 28; -fx-font-weight: bold;"/>
+         <Label fx:id="studySubtitleLabel" text="Click the card to flip"
+             style="-fx-text-fill: #00ffff; -fx-font-size: 16;-fx-font-weight: bold;"/>
+     </VBox>
     </top>
 
 

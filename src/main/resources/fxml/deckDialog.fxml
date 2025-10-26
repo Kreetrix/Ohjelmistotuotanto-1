@@ -14,15 +14,15 @@
       </Label>
       
       <VBox spacing="15.0">
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Deck Name:" />
+         <Label fx:id="deckNameLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Deck Name:" />
          <TextField fx:id="deckNameField" promptText="Enter deck name..." 
                    style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" />
          
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Description:" />
+         <Label fx:id="descriptionLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Description:" />
          <TextField fx:id="descriptionField" promptText="Enter description (optional)..." 
                   style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" />
 
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Visibility:" />
+         <Label fx:id="visibilityLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Visibility:" />
          <ComboBox fx:id="visibilityComboBox" maxWidth="Infinity" 
                   style="-fx-background-color: #333333; -fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-border-radius: 0;" />
       </VBox>

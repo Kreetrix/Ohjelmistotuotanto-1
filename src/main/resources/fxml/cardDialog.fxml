@@ -14,25 +14,25 @@
       </Label>
       
       <VBox spacing="15.0">
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Deck:" />
+         <Label fx:id="deckLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Deck:" />
          <ComboBox fx:id="deckComboBox" maxWidth="Infinity" promptText="Select a deck..." 
                   style="-fx-background-color: #333333; -fx-border-color: transparent; -fx-border-width: 0; -fx-background-radius: 0; -fx-border-radius: 0;" />
          
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Question:" />
+         <Label fx:id="questionLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Question:" />
          <TextField fx:id="frontTextField"  promptText="Enter the question..." 
                   style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" 
                    />
          
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Answer:" />
+         <Label fx:id="answerLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Answer:" />
          <TextField fx:id="backTextField"  promptText="Enter the answer..." 
                   style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" 
                    />
          
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Image URL (optional):" />
+         <Label fx:id="imageUrlLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Image URL (optional):" />
          <TextField fx:id="imageUrlField" promptText="Enter image URL..." 
                    style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" />
          
-         <Label style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Extra Info (optional):" />
+         <Label fx:id="extraInfoLabel" style="-fx-text-fill: #a9a9a9; -fx-font-size: 14;" text="Extra Info (optional):" />
          <TextField fx:id="extraInfoField" promptText="Enter additional information..." 
                   style="-fx-control-inner-background: #333333; -fx-text-fill: #ffffff; -fx-prompt-text-fill: #757575; -fx-border-color: transparent; -fx-background-color: #333333; -fx-text-box-border: transparent; -fx-focus-color: transparent;" 
                    />

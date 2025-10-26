@@ -9,6 +9,8 @@ import model.dao.CardsDao;
 import model.dao.DecksDao;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.beans.binding.Bindings;
+import util.I18n;
 
 /**
  * Controller for the Card Dialog window used for creating and editing flash cards.
@@ -24,6 +26,11 @@ public class CardDialogController {
     @FXML private Button saveButton;
     @FXML private Button cancelButton;
     @FXML private Label titleLabel;
+    @FXML private Label deckLabel;
+    @FXML private Label questionLabel;
+    @FXML private Label answerLabel;
+    @FXML private Label imageUrlLabel;
+    @FXML private Label extraInfoLabel;
 
     private Stage dialogStage;
     private Cards card;
@@ -45,6 +52,24 @@ public class CardDialogController {
         setupEventHandlers();
         loadDecks();
         styleComboBox();
+
+        titleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.title.create"), I18n.localeProperty()));
+        deckLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.deckLabel"), I18n.localeProperty()));
+        questionLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.questionLabel"), I18n.localeProperty()));
+        answerLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.answerLabel"), I18n.localeProperty()));
+        imageUrlLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.imageUrlLabel"), I18n.localeProperty()));
+        extraInfoLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.extraInfoLabel"), I18n.localeProperty()));
+
+        saveButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.saveBtn"), I18n.localeProperty()));
+        cancelButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.cancelBtn"), I18n.localeProperty()));
+
+        deckComboBox.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.deckPrompt"), I18n.localeProperty()));
+        frontTextField.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.frontPrompt"), I18n.localeProperty()));
+        backTextField.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.backPrompt"), I18n.localeProperty()));
+        imageUrlField.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.imageUrlPrompt"), I18n.localeProperty()));
+        extraInfoField.promptTextProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.extraInfoPrompt"), I18n.localeProperty()));
+
+        I18n.localeProperty().addListener((obs, oldV, newV) -> styleComboBox());
     }
 
     /**
@@ -130,7 +155,7 @@ public class CardDialogController {
 
         if (card != null) {
             isEditMode = true;
-            titleLabel.setText("Edit Card");
+            titleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.title.edit"), I18n.localeProperty()));
             frontTextField.setText(card.getFront_text() != null ? card.getFront_text() : "");
             backTextField.setText(card.getBack_text() != null ? card.getBack_text() : "");
             imageUrlField.setText(card.getImage_url() != null ? card.getImage_url() : "");
@@ -144,7 +169,7 @@ public class CardDialogController {
             }
         } else {
             isEditMode = false;
-            titleLabel.setText("Create New Card");
+            titleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("card.title.create"), I18n.localeProperty()));
             frontTextField.clear();
             backTextField.clear();
             imageUrlField.clear();
@@ -212,7 +237,7 @@ public class CardDialogController {
                     card.setExtra_info(extraInfoField.getText() != null && !extraInfoField.getText().trim().isEmpty() ? extraInfoField.getText().trim() : null);
 
                     cardsDao.updateCard(card);
-                    showInfo("Card updated successfully!");
+                    showInfo(I18n.get("card.updated"));
                 } else {
                     Cards newCard = new Cards(
                             deckComboBox.getValue().getDeck_id(),
@@ -224,14 +249,14 @@ public class CardDialogController {
                     );
 
                     cardsDao.persist(newCard);
-                    showInfo("Card created successfully!");
+                    showInfo(I18n.get("card.created"));
                 }
 
                 okClicked = true;
                 dialogStage.close();
 
             } catch (SQLException e) {
-                showError("Database error: " + e.getMessage());
+            showError(I18n.get("card.dbError") + ": " + e.getMessage());
             }
         }
     }
@@ -252,27 +277,27 @@ public class CardDialogController {
         String errorMessage = "";
 
         if (frontTextField.getText() == null || frontTextField.getText().trim().isEmpty()) {
-            errorMessage += "Front text (question) is required!\n";
+            errorMessage += I18n.get("card.error.frontRequired") + "\n";
         } else if (frontTextField.getText().trim().length() > 1000) {
-            errorMessage += "Front text must be less than 1000 characters!\n";
+            errorMessage += I18n.get("card.error.frontTooLong") + "\n";
         }
 
         if (backTextField.getText() == null || backTextField.getText().trim().isEmpty()) {
-            errorMessage += "Back text (answer) is required!\n";
+            errorMessage += I18n.get("card.error.backRequired") + "\n";
         } else if (backTextField.getText().trim().length() > 1000) {
-            errorMessage += "Back text must be less than 1000 characters!\n";
+            errorMessage += I18n.get("card.error.backTooLong") + "\n";
         }
 
         if (deckComboBox.getValue() == null) {
-            errorMessage += "Please select a deck!\n";
+            errorMessage += I18n.get("card.error.noDeck") + "\n";
         }
 
         if (imageUrlField.getText() != null && imageUrlField.getText().length() > 500) {
-            errorMessage += "Image URL must be less than 500 characters!\n";
+            errorMessage += I18n.get("card.error.imageTooLong") + "\n";
         }
 
         if (extraInfoField.getText() != null && extraInfoField.getText().length() > 1000) {
-            errorMessage += "Extra info must be less than 1000 characters!\n";
+            errorMessage += I18n.get("card.error.extraTooLong") + "\n";
         }
 
         if (errorMessage.isEmpty()) {
@@ -290,7 +315,7 @@ public class CardDialogController {
      */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
+        alert.setTitle(I18n.get("alert.errorTitle"));
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initOwner(dialogStage);
@@ -304,7 +329,7 @@ public class CardDialogController {
      */
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
+        alert.setTitle(I18n.get("alert.successTitle"));
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initOwner(dialogStage);
@@ -317,7 +342,7 @@ public class CardDialogController {
      */
     private void styleComboBox() {
 
-        deckComboBox.setStyle(
+    deckComboBox.setStyle(
                 "-fx-background-color: #333333;" +
                         "-fx-border-color: transparent;" +
                         "-fx-border-width: 0;" +
@@ -355,7 +380,7 @@ public class CardDialogController {
             protected void updateItem(Decks item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
-                    setText("Select a deck...");
+                    setText(I18n.get("card.deckPrompt"));
                     setStyle("-fx-text-fill: #757575;");
                 } else {
                     setText(item.getDeck_name());
