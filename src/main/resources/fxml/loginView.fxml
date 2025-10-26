@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.LoginController"
@@ -12,7 +13,8 @@
       spacing="20"
       style="-fx-background-color: #202020; -fx-padding: 50;">
 
-    <Label text="Login" style="-fx-text-fill: #ffffff; -fx-font-size: 36; -fx-font-weight: bold;"/>
+        <Label fx:id="loginTitleLabel" text="Login" style="-fx-text-fill: #ffffff; -fx-font-size: 36; -fx-font-weight: bold;"/>
+    <fx:include source="languageSelector.fxml" />
 
     <TextField fx:id="usernameField" promptText="Username" style="-fx-font-size: 18;"/>
     <PasswordField fx:id="passwordField" promptText="Password" style="-fx-font-size: 18;"/>

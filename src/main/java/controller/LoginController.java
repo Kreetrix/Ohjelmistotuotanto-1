@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.beans.binding.Bindings;
+import util.I18n;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -37,7 +39,13 @@ public class LoginController {
     private Button loginBtn;
 
     @FXML
+    private Button registerBtn;
+
+    @FXML
     private Label errorLabel;
+
+    @FXML
+    private Label loginTitleLabel;
 
     /**
      * Initializes the controller after FXML loading.
@@ -45,6 +53,24 @@ public class LoginController {
      */
     @FXML
     protected void initialize() {
+        try {
+            loginTitleLabel.textProperty().bind(
+                    Bindings.createStringBinding(() -> I18n.get("login.title"), I18n.localeProperty())
+            );
+            loginBtn.textProperty().bind(
+                    Bindings.createStringBinding(() -> I18n.get("login.loginBtn"), I18n.localeProperty())
+            );
+        registerBtn.textProperty().bind(
+            Bindings.createStringBinding(() -> I18n.get("login.registerBtn"), I18n.localeProperty())
+        );
+            usernameField.promptTextProperty().bind(
+                    Bindings.createStringBinding(() -> I18n.get("login.username"), I18n.localeProperty())
+            );
+            passwordField.promptTextProperty().bind(
+                    Bindings.createStringBinding(() -> I18n.get("login.password"), I18n.localeProperty())
+            );
+        } catch (Exception ignored) {}
+
         if (Session.getInstance().getCurrentUser() != null) {
             Platform.runLater(() -> redirectToMain());
         }
@@ -79,7 +105,7 @@ public class LoginController {
             AppUsers user = appUsersDao.getUserByUsername(username);
 
             if (user == null) {
-                errorLabel.setText("User not found");
+                errorLabel.setText(I18n.get("login.userNotFound"));
             } else {
                 if(username.equals(user.getUsername()) && PasswordUtil.checkPassword(password,user.getPassword_hash())){
                     try {
@@ -95,7 +121,7 @@ public class LoginController {
                         e.printStackTrace();
                     }
                 }else {
-                    errorLabel.setText("Invalid username or password");
+                    errorLabel.setText(I18n.get("login.invalidCredentials"));
                 }
             }
         }catch (Exception e){

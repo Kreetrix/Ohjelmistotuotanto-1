@@ -4,9 +4,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import util.I18n;
 
+import java.util.Locale;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for handling user logout functionality.
@@ -24,8 +29,24 @@ public class LogoutController {
      * @throws IOException if login view FXML cannot be loaded
      */
     public void onLogout() throws IOException {
-        session.getCurrentUser().setIs_active(0);
+        if (session.getCurrentUser() != null) {
+            session.getCurrentUser().setIs_active(0);
+        }
         session.clear();
+
+        List<Window> windows = new ArrayList<>(Window.getWindows());
+        for (Window w : windows) {
+            try {
+                if (w instanceof Stage) {
+                    ((Stage) w).close();
+                } else {
+                    w.hide();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        I18n.setLocale(Locale.ENGLISH);
+        session.setLanguage("en");
 
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
         Parent loginRoot = loginLoader.load();

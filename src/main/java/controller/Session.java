@@ -6,10 +6,21 @@ import model.entity.AppUsers;
  * Singleton class for managing session information, including the current user and their role.
  */
 public class Session {
+    private String language;
     private static Session instance;
     private AppUsers currentUser;
 
     private Session() {}
+
+
+    public void setLanguage(String lan) {
+        this.language = lan;
+    }
+
+    
+    public String getLanguage() {
+        return language;
+    }
 
     /**
      * Returns the singleton instance of the session. If no session exists, a new one is created.

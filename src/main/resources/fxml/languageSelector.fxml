@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="controller.LanguageController"
+      spacing="6" alignment="CENTER_RIGHT" style="-fx-padding: 0 8 0 8;">
+    <Label fx:id="langLabel" text="Lang:" style="-fx-text-fill: #ffffff; -fx-font-size: 12;"/>
+    <ComboBox fx:id="languageCombo" promptText="Select" prefWidth="120"/>
+</HBox>

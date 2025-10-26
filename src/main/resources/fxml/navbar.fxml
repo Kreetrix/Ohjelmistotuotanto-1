@@ -23,6 +23,8 @@
                 <CustomButton fx:id="listBtn" />
             <Region HBox.hgrow="ALWAYS"/>
                 <CustomButton fx:id="logoutBtn" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <fx:include source="languageSelector.fxml" />
 
         </children>
     </HBox>
