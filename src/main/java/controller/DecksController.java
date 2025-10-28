@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -12,6 +13,7 @@ import model.dao.DecksDao;
 import model.dao.LocalizationDao;
 import model.entity.Decks;
 import model.entity.Localization;
+import util.I18n;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,6 +25,8 @@ import java.util.List;
  */
 public class DecksController {
 
+    public Label myDecksLabel;
+    public Label myDecksSubLabel;
     @FXML
     private ScrollPane scrollPane;
     private final LocalizationDao localizationDao = new LocalizationDao();
@@ -38,6 +42,8 @@ public class DecksController {
      */
     @FXML
     public void initialize() {
+        myDecksLabel.setText(I18n.get("myDecks.title"));
+        myDecksSubLabel.setText(I18n.get("myDecks.subText"));
         loadDecks();
     }
 
