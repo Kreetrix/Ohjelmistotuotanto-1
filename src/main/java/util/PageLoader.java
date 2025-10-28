@@ -41,10 +41,10 @@ public class PageLoader {
      */
      private Stage currentStage = null;
 
-    /**
-     * Private constructor to enforce singleton usage. Use {@link #getInstance()} to obtain
-     * the single PageLoader instance.
-     */
+     private double height = getScreenSize().getHeight() / 1.2;
+     private double width = getScreenSize().getWidth() / 3;
+
+
      private PageLoader() {
      }
 
@@ -73,9 +73,6 @@ public class PageLoader {
             currentPath = path;
             currentTitle = StageTitle;
 
-            Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-            double width = screenSize.getWidth() / 3;
-            double height = screenSize.getHeight() / 1.2;
 
             javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 
@@ -144,9 +141,6 @@ public class PageLoader {
     public void loadPopUp(String path, String StageTitle){
         try {
 
-            Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-            double width = screenSize.getWidth() / 3;
-            double height = screenSize.getHeight() / 1.2;
 
             javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 
@@ -174,5 +168,8 @@ public class PageLoader {
         if (currentPath != null && currentTitle != null) {
             loadPage(currentPath, currentTitle);
         }
+    }
+    private Dimension getScreenSize() {
+        return java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     }
 }
