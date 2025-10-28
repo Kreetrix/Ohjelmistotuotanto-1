@@ -61,4 +61,33 @@ public class LocalizationDao {
             ps.executeUpdate();
         }
     }
+
+    // TODO : ADD DOCUMENTATION
+    // added method for fetching localization for a specific entity
+
+    public Localization getLocalizationForEntity(String entityType, int entityId, String languageCode) throws SQLException {
+        String sql = "SELECT * FROM localization WHERE entity_type = ? AND entity_id = ? AND language_code = ?";
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, entityType);
+            ps.setInt(2, entityId);
+            ps.setString(3, languageCode);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Localization localization = new Localization(
+                        rs.getString("entity_type"),
+                        rs.getInt("entity_id"),
+                        rs.getString("language_code"),
+                        rs.getString("translated_text")
+                );
+                localization.setTranslation_id(rs.getInt("translation_id"));
+                return localization;
+            }
+        }
+        return null;
+    }
+
+
+
+
 }

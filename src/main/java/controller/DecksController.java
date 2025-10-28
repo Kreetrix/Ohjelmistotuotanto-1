@@ -9,7 +9,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.dao.DecksDao;
+import model.dao.LocalizationDao;
 import model.entity.Decks;
+import model.entity.Localization;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,6 +25,7 @@ public class DecksController {
 
     @FXML
     private ScrollPane scrollPane;
+    private final LocalizationDao localizationDao = new LocalizationDao();
 
     @FXML
     private VBox decksContainer;
@@ -45,7 +49,6 @@ public class DecksController {
         try {
             DecksDao decksDao = new DecksDao();
             List<Decks> allDecks = decksDao.getAllDecks();
-
             decksContainer.getChildren().clear();
 
             if (allDecks.isEmpty()) {
@@ -54,29 +57,43 @@ public class DecksController {
                 emptyMessage.setMainText("No Decks Found");
                 decksContainer.getChildren().add(emptyMessage);
             } else {
+                String currentLang = Session.getInstance().getLanguage();
+
                 for (Decks deck : allDecks) {
                     MenuItemButton deckButton = new MenuItemButton();
                     deckButton.setIcon("book");
-                    deckButton.setMainText(deck.getDeck_name());
 
-                    String subText = deck.getDescription();
-                    if (subText == null || subText.trim().isEmpty()) {
-                        subText = "No description";
+                    String deckName = deck.getDeck_name();
+                    try {
+                        Localization nameTranslation = localizationDao.getLocalizationForEntity("deck", deck.getDeck_id(), currentLang);
+                        if (nameTranslation != null) {
+                            deckName = nameTranslation.getTranslated_text();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-                    if (subText.length() > 50) {
-                        subText = subText.substring(0, 47) + "...";
+                    deckButton.setMainText(deckName);
+
+                    String deckDescription = deck.getDescription();
+                    if (deckDescription == null || deckDescription.trim().isEmpty()) {
+                        deckDescription = "No description"; // fallback
+                    } else {
+                        try {
+                            Localization descTranslation = localizationDao.getLocalizationForEntity("deck_description", deck.getDeck_id(), currentLang);
+                            if (descTranslation != null) {
+                                deckDescription = descTranslation.getTranslated_text();
+                            }
+                        } catch (SQLException ignored) {}
                     }
-                    deckButton.setSubText(subText);
+                    deckButton.setSubText(deckDescription);
 
                     deckButton.setOnAction(e -> openDeck(deck));
-
                     decksContainer.getChildren().add(deckButton);
                 }
             }
-        } catch (SQLException ex) {
-            System.err.println("Error loading decks: " + ex.getMessage());
-            ex.printStackTrace();
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             MenuItemButton errorMessage = new MenuItemButton();
             errorMessage.setIcon("loading");
             errorMessage.setMainText("Error Loading Decks");

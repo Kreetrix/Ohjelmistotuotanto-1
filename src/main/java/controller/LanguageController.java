@@ -7,6 +7,8 @@ import util.I18n;
 import java.util.List;
 import java.util.Locale;
 
+// TODO : ADD DOCUMENTATION
+
 
 public class LanguageController {
     List<String> availableLanguages = List.of("en", "ru", "ja");
