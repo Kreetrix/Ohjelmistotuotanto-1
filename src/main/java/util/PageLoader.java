@@ -1,11 +1,9 @@
 package util;
 
-import controller.Session;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 
 import java.awt.*;
 
@@ -20,40 +18,41 @@ import java.awt.*;
  * path and title so the current page can be reloaded using {@link #reloadCurrentPage()}.
  */
 public class PageLoader {
+
     /**
      * Singleton instance.
      */
-     private static PageLoader instance = null;
+    private static PageLoader instance = null;
 
     /**
      * The last loaded FXML resource path (as passed to {@link #loadPage}).
      */
-     private String currentPath = null;
+    private String currentPath = null;
 
     /**
      * The last set window title (as passed to {@link #loadPage}).
      */
-     private String currentTitle = null;
+    private String currentTitle = null;
 
     /**
      * The reusable stage used by {@link #loadPage}. If null, a new Stage will be created
      * when first loading a page.
      */
-     private Stage currentStage = null;
+    private Stage currentStage = null;
 
-     private double height = getScreenSize().getHeight() / 1.2;
-     private double width = getScreenSize().getWidth() / 3;
+    private final double height = getScreenSize().getHeight() / 1.2;
+    private final double width = getScreenSize().getWidth() / 3;
 
 
-     private PageLoader() {
-     }
+    private PageLoader() {
+    }
 
     /**
      * Returns the singleton instance of PageLoader, creating it if necessary.
      *
      * @return the singleton PageLoader
      */
-    public static  PageLoader getInstance() {
+    public static PageLoader getInstance() {
         if (instance == null) {
             instance = new PageLoader();
         }
@@ -65,10 +64,11 @@ public class PageLoader {
      * subsequently reused for future calls to this method. The method computes a default
      * scene size based on the current screen dimensions.
      *
-     * @param path the classpath resource path to the FXML file (e.g. "/fxml/main.fxml")
+     * @param path       the classpath resource path to the FXML file (e.g. "/fxml/main.fxml")
      * @param StageTitle the title to display on the Stage window
      */
     public void loadPage(String path, String StageTitle) {
+
         try {
             currentPath = path;
             currentTitle = StageTitle;
@@ -99,11 +99,11 @@ public class PageLoader {
      * the provided error prefix is printed before the exception message. This allows
      * callers to supply contextual text that will appear in the error log.
      *
-     * @param path the classpath resource path to the FXML file
+     * @param path       the classpath resource path to the FXML file
      * @param StageTitle the title to display on the Stage window
-     * @param er a custom error-prefix string that will be prepended to any exception message
+     * @param er         a custom error-prefix string that will be prepended to any exception message
      */
-    public void loadPage(String path, String StageTitle,String er) {
+    public void loadPage(String path, String StageTitle, String er) {
         try {
             currentPath = path;
             currentTitle = StageTitle;
@@ -135,10 +135,10 @@ public class PageLoader {
      * Loads an FXML page into a new pop-up stage. A fresh Stage is created on each call.
      * The method computes a default scene size based on the current screen dimensions.
      *
-     * @param path the classpath resource path to the FXML file
+     * @param path       the classpath resource path to the FXML file
      * @param StageTitle the title to display on the pop-up Stage
      */
-    public void loadPopUp(String path, String StageTitle){
+    public void loadPopUp(String path, String StageTitle) {
         try {
 
 
@@ -169,6 +169,7 @@ public class PageLoader {
             loadPage(currentPath, currentTitle);
         }
     }
+
     private Dimension getScreenSize() {
         return java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     }
