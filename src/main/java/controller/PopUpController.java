@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import model.dao.CardsDao;
 import model.entity.Cards;
 import model.entity.Decks;
+import util.I18n;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -60,26 +61,26 @@ public class PopUpController {
         PopUpContainer.getChildren().clear();
 
         // Title
-        Label titleLabel = new Label("Study Deck?");
+        Label titleLabel = new Label(I18n.get("myDecks.popup.title"));
         titleLabel.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 24; -fx-padding: 20;");
 
         // Deck info
-        Label deckInfoLabel = new Label("Do you want to study: " + selectedDeck.getDeck_name() + "?");
+        Label deckInfoLabel = new Label(I18n.get("myDecks.popup.deckInfo") + selectedDeck.getDeck_name() + "?");
         deckInfoLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 16; -fx-padding: 10;");
         deckInfoLabel.setWrapText(true);
 
         // Confirm button
         MenuItemButton confirmButton = new MenuItemButton();
         confirmButton.setIcon("check");
-        confirmButton.setMainText("Start Study");
-        confirmButton.setSubText("Begin studying this deck");
+        confirmButton.setMainText(I18n.get("myDecks.popup.confirm"));
+        confirmButton.setSubText(I18n.get("myDecks.popup.confirm.sub"));
         confirmButton.setOnAction(e -> startStudySession());
 
         // Cancel button
         MenuItemButton cancelButton = new MenuItemButton();
         cancelButton.setIcon("arrowup");
-        cancelButton.setMainText("Cancel");
-        cancelButton.setSubText("Go back to deck list");
+        cancelButton.setMainText(I18n.get("myDecks.popup.cancel"));
+        cancelButton.setSubText(I18n.get("myDecks.popup.cancel.sub"));
         cancelButton.setOnAction(e -> closePopup());
 
         PopUpContainer.getChildren().addAll(titleLabel, deckInfoLabel, confirmButton, cancelButton);
