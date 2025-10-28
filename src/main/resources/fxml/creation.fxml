@@ -16,15 +16,15 @@
             
     <top>
         <VBox style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #333333; -fx-border-width: 0 0 1 0;">
-            <Label text="Content Management" style="-fx-text-fill: #a9a9a9; -fx-font-size: 28; -fx-font-weight: bold;"/>
-            <Label text="Create, edit and manage your decks and cards" style="-fx-text-fill: #757575; -fx-font-size: 16;"/>
+            <Label fx:id="pageTitle" text="Content Management" style="-fx-text-fill: #a9a9a9; -fx-font-size: 28; -fx-font-weight: bold;"/>
+            <Label fx:id="pageSub" text="Create, edit and manage your decks and cards" style="-fx-text-fill: #757575; -fx-font-size: 16;"/>
         </VBox>
     </top>
             
     <center>
         <TabPane fx:id="tabPane" style="-fx-background-color: #202020;" tabClosingPolicy="UNAVAILABLE">
             
-            <Tab text="Decks" style="-fx-background-color: #a9a9a9;">
+            <Tab fx:id="deckFilter" text="Decks" style="-fx-background-color: #a9a9a9;">
                 <BorderPane style="-fx-background-color: #202020;">
                     <top>
                         <HBox style="-fx-padding: 10; -fx-spacing: 10; -fx-alignment: CENTER_LEFT;">
@@ -41,14 +41,14 @@
             </Tab>
             
 
-            <Tab text="Cards" style="-fx-background-color: #a9a9a9;">
+            <Tab fx:id="cardFilter" text="Cards" style="-fx-background-color: #a9a9a9;">
                 <BorderPane style="-fx-background-color: #202020;">
                     <top>
                         <VBox style="-fx-padding: 10; -fx-spacing: 10;">
                             <HBox style="-fx-spacing: 10; -fx-alignment: CENTER_LEFT;">
                                 <Button fx:id="createCardButton" text="Create New Card" 
                                         style="-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 8 16;"/>
-                                <Label text="Filter by deck:" style="-fx-text-fill: #757575;"/>
+                                <Label fx:id="filterByDeckLabel" text="Filter by deck:" style="-fx-text-fill: #757575;"/>
                                 <javafx.scene.control.ComboBox fx:id="deckFilterComboBox" 
                                         style="-fx-background-color: #333333; -fx-text-fill: white;" 
                                         prefWidth="200"/>
