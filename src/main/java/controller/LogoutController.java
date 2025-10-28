@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import util.I18n;
+import util.PageLoader;
 
 import java.util.Locale;
 import java.awt.*;
@@ -18,6 +19,7 @@ import java.util.List;
  * Manages session cleanup and navigation back to login screen.
  */
 public class LogoutController {
+
     Session session = Session.getInstance();
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     double width = screenSize.getWidth() / 3;
@@ -48,11 +50,6 @@ public class LogoutController {
         I18n.setLocale(Locale.ENGLISH);
         session.setLanguage("en");
 
-        FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
-        Parent loginRoot = loginLoader.load();
-        Stage loginStage = new Stage();
-        loginStage.setScene(new Scene(loginRoot, width, height));
-        loginStage.setTitle("Login");
-        loginStage.show();
+        PageLoader.getInstance().loadPage("/fxml/loginView.fxml", "Login");
     }
 }

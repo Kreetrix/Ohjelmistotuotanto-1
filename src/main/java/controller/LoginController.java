@@ -1,8 +1,8 @@
 package controller;
 
-import datasource.PasswordUtil;
+import util.PageLoader;
+import util.PasswordUtil;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +25,7 @@ import java.io.IOException;
  * Manages login process, validation, and navigation to main application.
  */
 public class LoginController {
+
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     double width = screenSize.getWidth() / 3;
     double height = screenSize.getHeight() / 1.2;
@@ -80,15 +81,7 @@ public class LoginController {
      * Redirects to the main application view.
      */
     private void redirectToMain() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) loginBtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle(I18n.get("app.title"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        PageLoader.getInstance().loadPage("/fxml/main.fxml", I18n.get("app.title"));
     }
 
     /**
@@ -108,18 +101,10 @@ public class LoginController {
                 errorLabel.setText(I18n.get("login.userNotFound"));
             } else {
                 if(username.equals(user.getUsername()) && PasswordUtil.checkPassword(password,user.getPassword_hash())){
-                    try {
-                        Session.getInstance().setCurrentUser(user);
-                        user.setIs_active(1);
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-                        Parent root = loader.load();
-                        Stage stage = (Stage) loginBtn.getScene().getWindow();
 
-                        stage.setScene(new Scene(root,width,height));
-                        stage.setTitle(I18n.get("app.title"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    PageLoader.getInstance().loadPage("/fxml/main.fxml", I18n.get("app.title"));
+                    user.setIs_active(1);
+
                 }else {
                     errorLabel.setText(I18n.get("login.invalidCredentials"));
                 }
@@ -133,14 +118,7 @@ public class LoginController {
      * Navigates to the registration view.
      */
     public void toRegister() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/registerView.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) loginBtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle(I18n.get("register.title"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        PageLoader.getInstance().loadPage(("/fxml/registerView.fxml"), I18n.get("register.title"));
     }
 }
