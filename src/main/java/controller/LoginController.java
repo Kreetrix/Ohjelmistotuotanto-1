@@ -56,21 +56,17 @@ public class LoginController {
     protected void initialize() {
         try {
             loginTitleLabel.textProperty().bind(
-                    Bindings.createStringBinding(() -> I18n.get("login.title"), I18n.localeProperty())
-            );
+                    Bindings.createStringBinding(() -> I18n.get("login.title"), I18n.localeProperty()));
             loginBtn.textProperty().bind(
-                    Bindings.createStringBinding(() -> I18n.get("login.loginBtn"), I18n.localeProperty())
-            );
-        registerBtn.textProperty().bind(
-            Bindings.createStringBinding(() -> I18n.get("login.registerBtn"), I18n.localeProperty())
-        );
+                    Bindings.createStringBinding(() -> I18n.get("login.loginBtn"), I18n.localeProperty()));
+            registerBtn.textProperty().bind(
+                    Bindings.createStringBinding(() -> I18n.get("login.registerBtn"), I18n.localeProperty()));
             usernameField.promptTextProperty().bind(
-                    Bindings.createStringBinding(() -> I18n.get("login.username"), I18n.localeProperty())
-            );
+                    Bindings.createStringBinding(() -> I18n.get("login.username"), I18n.localeProperty()));
             passwordField.promptTextProperty().bind(
-                    Bindings.createStringBinding(() -> I18n.get("login.password"), I18n.localeProperty())
-            );
-        } catch (Exception ignored) {}
+                    Bindings.createStringBinding(() -> I18n.get("login.password"), I18n.localeProperty()));
+        } catch (Exception ignored) {
+        }
 
         if (Session.getInstance().getCurrentUser() != null) {
             Platform.runLater(() -> redirectToMain());
@@ -100,16 +96,19 @@ public class LoginController {
             if (user == null) {
                 errorLabel.setText(I18n.get("login.userNotFound"));
             } else {
-                if(username.equals(user.getUsername()) && PasswordUtil.checkPassword(password,user.getPassword_hash())){
+                if (username.equals(user.getUsername())
+                        && PasswordUtil.checkPassword(password, user.getPassword_hash())) {
+
+                    Session.getInstance().setCurrentUser(user);
 
                     PageLoader.getInstance().loadPage("/fxml/main.fxml", I18n.get("app.title"));
                     user.setIs_active(1);
 
-                }else {
+                } else {
                     errorLabel.setText(I18n.get("login.invalidCredentials"));
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
