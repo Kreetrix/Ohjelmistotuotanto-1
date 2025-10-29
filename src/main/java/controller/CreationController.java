@@ -20,6 +20,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import util.I18n;
+
 import java.io.IOException;
 
 /**
@@ -28,7 +30,12 @@ import java.io.IOException;
  */
 public class CreationController {
 
-    
+
+    public Label pageTitle;
+    public Label pageSub;
+    public Tab deckFilter;
+    public Tab cardFilter;
+    public Label filterByDeckLabel;
     @FXML private TabPane tabPane;
     @FXML private Button createDeckButton;
     @FXML private Button createCardButton;
@@ -48,6 +55,14 @@ public class CreationController {
      */
     @FXML
     public void initialize(){
+        pageTitle.setText(I18n.get("editor.title"));
+        pageSub.setText(I18n.get("editor.subtext"));
+        createDeckButton.setText(I18n.get("editor.createDeckBtn"));
+        createCardButton.setText(I18n.get("editor.createCardBtn"));
+        deckFilter.setText(I18n.get("editor.filterByDeck"));
+        cardFilter.setText(I18n.get("editor.filterByCard"));
+        filterByDeckLabel.setText(I18n.get("editor.filterByDeckLabel"));
+
         decksDao = new DecksDao();
         cardsDao = new CardsDao();
 
@@ -76,7 +91,7 @@ public class CreationController {
             deckFilterComboBox.getItems().clear();
 
             // Create "All Decks" option
-            Decks allDecksOption = new Decks(0, "All Decks", "", 0, "private", false, null);
+            Decks allDecksOption = new Decks(0, I18n.get("editor.allDecks"), "", 0, "private", false, null);
             allDecksOption.setDeck_id(-1);
             deckFilterComboBox.getItems().add(allDecksOption);
 

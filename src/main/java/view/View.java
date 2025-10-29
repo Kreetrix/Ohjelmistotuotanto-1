@@ -6,12 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import util.PageLoader;
 
 /**
  * Main application class for the Memory Master flashcard application.
  * Handles application startup and initial window configuration.
  */
 public final class View extends Application {
+    PageLoader pageLoader = PageLoader.getInstance();
 
     /**
      * Main entry point for the JavaFX application.
@@ -25,12 +27,14 @@ public final class View extends Application {
         double height = screenSize.getHeight() / 1.2;
 
         // Start with login screen
+        pageLoader.loadPage("/fxml/loginView.fxml", "Login");
+        /*
         FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
         Parent loginRoot = loginLoader.load();
         Stage loginStage = new Stage();
         loginStage.setScene(new Scene(loginRoot, width, height));
         loginStage.setTitle("Login");
-        loginStage.show();
+        loginStage.show();*/
     }
 
     /**

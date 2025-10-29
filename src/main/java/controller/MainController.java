@@ -6,12 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.awt.Dimension;
+import util.I18n;
+import util.PageLoader;
+
 
 /**
  * Controller for the main application dashboard.
  * Handles navigation to different sections of the application.
  */
 public class MainController {
+
+    PageLoader pageLoader = PageLoader.getInstance();
 
     Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     double width = screenSize.getWidth() / 3;
@@ -29,13 +34,13 @@ public class MainController {
      */
     public void initialize() {
         deckBtn.setIcon("book");
-        deckBtn.setMainText("My Decks");
-        deckBtn.setSubText("Browse decks");
+        deckBtn.setMainText(I18n.get("main.myDecks"));
+        deckBtn.setSubText(I18n.get("main.browseDecks"));
         deckBtn.setOnAction(e -> renderAllDecks());
 
         createBtn.setIcon("loading");
-        createBtn.setMainText("edit and create cards/decks");
-        createBtn.setSubText("SO MUCH FUN!");
+        createBtn.setMainText(I18n.get("main.editor"));
+        createBtn.setSubText(I18n.get("main.editorSub"));
         createBtn.setOnAction(e -> renderCardDeckCreation());
     }
 
@@ -43,7 +48,9 @@ public class MainController {
      * Opens the card and deck creation interface in a new window.
      */
     private void renderCardDeckCreation() {
-        try {
+
+        pageLoader.loadPopUp("/fxml/creation.fxml", "Memory Master - Create Cards and Decks");
+        /*try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/creation.fxml"));
             Scene scene = new Scene(loader.load(), width, height);
 
@@ -54,7 +61,7 @@ public class MainController {
         } catch (Exception ex) {
             System.err.println("Error opening creation window: " + ex.getMessage());
             ex.printStackTrace();
-        }
+        }*/
     }
 
     /**

@@ -1,4 +1,4 @@
-package datasource;
+package util;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**

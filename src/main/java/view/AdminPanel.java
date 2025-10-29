@@ -1,6 +1,8 @@
 package view;
 
+import controller.Session;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,23 +17,27 @@ import model.dao.AppUsersDao;
 import model.dao.DecksDao;
 import model.entity.AppUsers;
 import model.entity.Decks;
+import util.I18n;
+import util.PageLoader;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Locale;
 
 public class AdminPanel extends Application {
 
     private static Stage currentStage = null;
     private static boolean isOpen = false;
 
-    private AppUsersDao usersDao = new AppUsersDao();
-    private DecksDao decksDao = new DecksDao();
-    
-    private TableView<AppUsers> usersTable = new TableView<>();
-    private TableView<Decks> decksTable = new TableView<>();
-    
-    private ObservableList<AppUsers> usersList = FXCollections.observableArrayList();
-    private ObservableList<Decks> decksList = FXCollections.observableArrayList();
+    private final AppUsersDao usersDao = new AppUsersDao();
+    private final DecksDao decksDao = new DecksDao();
+
+    private final TableView<AppUsers> usersTable = new TableView<>();
+    private final TableView<Decks> decksTable = new TableView<>();
+
+    private final ObservableList<AppUsers> usersList = FXCollections.observableArrayList();
+    private final ObservableList<Decks> decksList = FXCollections.observableArrayList();
 
     public static boolean isAdminPanelOpen() {
         return isOpen;
@@ -48,29 +54,64 @@ public class AdminPanel extends Application {
         currentStage = primaryStage;
         isOpen = true;
 
-        primaryStage.setTitle("Admin Panel");
+        HBox langBox = new HBox(10);
+        langBox.setAlignment(Pos.CENTER_RIGHT);
+        langBox.setPadding(new Insets(10));
+
+        Label langLabel = new Label();
+        langLabel.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("label.lang"), I18n.localeProperty()));
+
+        ComboBox<String> langCombo = new ComboBox<>();
+        List<String> availableLanguages = List.of("en", "ru", "ja");
+        langCombo.getItems().addAll(availableLanguages);
+
+        String currentLang = Session.getInstance().getLanguage();
+        if (currentLang == null || currentLang.isEmpty()) {
+            currentLang = I18n.getLocale().getLanguage();
+        }
+        langCombo.setValue(currentLang);
+
+        langCombo.setOnAction(e -> {
+            String selected = langCombo.getValue();
+            if (selected != null) {
+                I18n.setLocale(new Locale(selected));
+                Session.getInstance().setLanguage(selected);
+                PageLoader.getInstance().reloadCurrentPage();
+            }
+        });
+
+        langBox.getChildren().addAll(langLabel, langCombo);
 
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        Tab studentsTab = new Tab("Students");
+        Tab studentsTab = new Tab();
+        studentsTab.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.studentsTab"), I18n.localeProperty()));
         studentsTab.setContent(createStudentsPanel());
 
-        Tab decksTab = new Tab("Decks");
+        Tab decksTab = new Tab();
+        decksTab.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.decksTab"), I18n.localeProperty()));
         decksTab.setContent(createDecksPanel());
 
         tabPane.getTabs().addAll(studentsTab, decksTab);
 
-        Scene scene = new Scene(tabPane, 1000, 600);
+        VBox mainLayout = new VBox(langBox, tabPane);
+        VBox.setVgrow(tabPane, Priority.ALWAYS);
+
+        Scene scene = new Scene(mainLayout, 1000, 600);
+        primaryStage.titleProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.title"), I18n.localeProperty()));
         primaryStage.setScene(scene);
-        
+
         primaryStage.setOnCloseRequest(e -> {
             isOpen = false;
             currentStage = null;
         });
-        
-        primaryStage.show();
 
+        primaryStage.show();
         loadData();
     }
 
@@ -78,7 +119,9 @@ public class AdminPanel extends Application {
         VBox vbox = new VBox(10);
         vbox.setPadding(new Insets(10));
 
-        Label title = new Label("Student Management");
+        Label title = new Label();
+        title.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.studentManagement"), I18n.localeProperty()));
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         setupUsersTable();
@@ -86,16 +129,24 @@ public class AdminPanel extends Application {
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
-        Button refreshBtn = new Button("Refresh");
+        Button refreshBtn = new Button();
+        refreshBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.refresh"), I18n.localeProperty()));
         refreshBtn.setOnAction(e -> loadUsers());
 
-        Button toggleActiveBtn = new Button("Toggle Active/Inactive");
+        Button toggleActiveBtn = new Button();
+        toggleActiveBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.toggleActive"), I18n.localeProperty()));
         toggleActiveBtn.setOnAction(e -> toggleUserActive());
 
-        Button updateBtn = new Button("Update Student");
+        Button updateBtn = new Button();
+        updateBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.updateStudent"), I18n.localeProperty()));
         updateBtn.setOnAction(e -> updateStudent());
 
-        Button deleteBtn = new Button("Delete Student");
+        Button deleteBtn = new Button();
+        deleteBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.deleteStudent"), I18n.localeProperty()));
         deleteBtn.setStyle("-fx-background-color: #ff4444; -fx-text-fill: white;");
         deleteBtn.setOnAction(e -> deleteStudent());
 
@@ -111,7 +162,9 @@ public class AdminPanel extends Application {
         VBox vbox = new VBox(10);
         vbox.setPadding(new Insets(10));
 
-        Label title = new Label("Deck Management");
+        Label title = new Label();
+        title.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.deckManagement"), I18n.localeProperty()));
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         setupDecksTable();
@@ -119,13 +172,19 @@ public class AdminPanel extends Application {
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
 
-        Button refreshBtn = new Button("Refresh");
+        Button refreshBtn = new Button();
+        refreshBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.refresh"), I18n.localeProperty()));
         refreshBtn.setOnAction(e -> loadDecks());
 
-        Button updateBtn = new Button("Update Deck");
+        Button updateBtn = new Button();
+        updateBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.updateDeck"), I18n.localeProperty()));
         updateBtn.setOnAction(e -> updateDeck());
 
-        Button deleteBtn = new Button("Delete Deck");
+        Button deleteBtn = new Button();
+        deleteBtn.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("admin.deleteDeck"), I18n.localeProperty()));
         deleteBtn.setStyle("-fx-background-color: #ff4444; -fx-text-fill: white;");
         deleteBtn.setOnAction(e -> deleteDeck());
 
@@ -155,8 +214,8 @@ public class AdminPanel extends Application {
         roleCol.setPrefWidth(100);
 
         TableColumn<AppUsers, String> activeCol = new TableColumn<>("Active");
-        activeCol.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getIs_active() == 1 ? "Yes" : "No"));
+        activeCol.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().getIs_active() == 1 ? "Yes" : "No"));
         activeCol.setPrefWidth(80);
 
         TableColumn<AppUsers, Timestamp> createdCol = new TableColumn<>("Created At");
@@ -193,8 +252,8 @@ public class AdminPanel extends Application {
         versionCol.setPrefWidth(80);
 
         TableColumn<Decks, String> deletedCol = new TableColumn<>("Deleted");
-        deletedCol.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().isIs_deleted() ? "Yes" : "No"));
+        deletedCol.setCellValueFactory(
+                cellData -> new SimpleStringProperty(cellData.getValue().isIs_deleted() ? "Yes" : "No"));
         deletedCol.setPrefWidth(80);
 
         decksTable.getColumns().addAll(idCol, nameCol, descCol, userIdCol, visibilityCol, versionCol, deletedCol);
@@ -211,7 +270,7 @@ public class AdminPanel extends Application {
             usersList.clear();
             usersList.addAll(usersDao.getAllUsers());
         } catch (SQLException e) {
-            showError("Failed to load users", e.getMessage());
+            showError(I18n.get("admin.failed"), e.getMessage());
         }
     }
 
@@ -220,39 +279,39 @@ public class AdminPanel extends Application {
             decksList.clear();
             decksList.addAll(decksDao.getAllDecks());
         } catch (SQLException e) {
-            showError("Failed to load decks", e.getMessage());
+            showError(I18n.get("admin.failed"), e.getMessage());
         }
     }
 
     private void toggleUserActive() {
         AppUsers selected = usersTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("No Selection", "Please select a student to toggle active status.");
+            showWarning(I18n.get("admin.noSelection"), I18n.get("admin.selectStudent"));
             return;
         }
 
         try {
             boolean newStatus = selected.getIs_active() == 0;
             usersDao.setActive(newStatus, selected.getUser_id());
-            showInfo("Success", "Student status updated successfully.");
+            showInfo(I18n.get("admin.success"), I18n.get("admin.toggleActive"));
             loadUsers();
         } catch (SQLException e) {
-            showError("Update Failed", e.getMessage());
+            showError(I18n.get("admin.failed"), e.getMessage());
         }
     }
 
     private void updateStudent() {
         AppUsers selected = usersTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("No Selection", "Please select a student to update.");
+            showWarning(I18n.get("admin.noSelection"), I18n.get("admin.selectStudent"));
             return;
         }
 
         Dialog<AppUsers> dialog = new Dialog<>();
-        dialog.setTitle("Update Student");
-        dialog.setHeaderText("Update student information");
+        dialog.setTitle(I18n.get("admin.updateStudent"));
+        dialog.setHeaderText(I18n.get("admin.updateStudent"));
 
-        ButtonType updateButtonType = new ButtonType("Update", ButtonBar.ButtonData.OK_DONE);
+        ButtonType updateButtonType = new ButtonType(I18n.get("admin.updateStudent"), ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(updateButtonType, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
@@ -288,10 +347,10 @@ public class AdminPanel extends Application {
         dialog.showAndWait().ifPresent(user -> {
             try {
                 usersDao.updateUser(user);
-                showInfo("Success", "Student updated successfully.");
+                showInfo(I18n.get("admin.success"), I18n.get("admin.updateStudent"));
                 loadUsers();
             } catch (SQLException e) {
-                showError("Update Failed", e.getMessage());
+                showError(I18n.get("admin.failed"), e.getMessage());
             }
         });
     }
@@ -299,24 +358,23 @@ public class AdminPanel extends Application {
     private void deleteStudent() {
         AppUsers selected = usersTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("No Selection", "Please select a student to delete.");
+            showWarning(I18n.get("admin.noSelection"), I18n.get("admin.selectStudent"));
             return;
         }
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirm Deletion");
-        confirm.setHeaderText("Delete Student");
-        confirm.setContentText("Are you sure you want to deactivate this student?\n" +
-                "Username: " + selected.getUsername());
+        confirm.setTitle(I18n.get("admin.deleteStudent"));
+        confirm.setHeaderText(I18n.get("admin.deleteStudent"));
+        confirm.setContentText(selected.getUsername());
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
                     usersDao.setActive(false, selected.getUser_id());
-                    showInfo("Success", "Student deactivated successfully.");
+                    showInfo(I18n.get("admin.success"), I18n.get("admin.deleteStudent"));
                     loadUsers();
                 } catch (SQLException e) {
-                    showError("Deletion Failed", e.getMessage());
+                    showError(I18n.get("admin.failed"), e.getMessage());
                 }
             }
         });
@@ -325,15 +383,15 @@ public class AdminPanel extends Application {
     private void updateDeck() {
         Decks selected = decksTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("No Selection", "Please select a deck to update.");
+            showWarning(I18n.get("admin.noSelection"), I18n.get("admin.selectDeck"));
             return;
         }
 
         Dialog<Decks> dialog = new Dialog<>();
-        dialog.setTitle("Update Deck");
-        dialog.setHeaderText("Update deck information");
+        dialog.setTitle(I18n.get("admin.updateDeck"));
+        dialog.setHeaderText(I18n.get("admin.updateDeck"));
 
-        ButtonType updateButtonType = new ButtonType("Update", ButtonBar.ButtonData.OK_DONE);
+        ButtonType updateButtonType = new ButtonType(I18n.get("admin.updateDeck"), ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(updateButtonType, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
@@ -370,10 +428,10 @@ public class AdminPanel extends Application {
         dialog.showAndWait().ifPresent(deck -> {
             try {
                 decksDao.updateDeck(deck);
-                showInfo("Success", "Deck updated successfully.");
+                showInfo(I18n.get("admin.success"), I18n.get("admin.updateDeck"));
                 loadDecks();
             } catch (SQLException e) {
-                showError("Update Failed", e.getMessage());
+                showError(I18n.get("admin.failed"), e.getMessage());
             }
         });
     }
@@ -381,24 +439,23 @@ public class AdminPanel extends Application {
     private void deleteDeck() {
         Decks selected = decksTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showWarning("No Selection", "Please select a deck to delete.");
+            showWarning(I18n.get("admin.noSelection"), I18n.get("admin.selectDeck"));
             return;
         }
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirm Deletion");
-        confirm.setHeaderText("Delete Deck");
-        confirm.setContentText("Are you sure you want to delete this deck?\n" +
-                "Deck Name: " + selected.getDeck_name());
+        confirm.setTitle(I18n.get("admin.deleteDeck"));
+        confirm.setHeaderText(I18n.get("admin.deleteDeck"));
+        confirm.setContentText(selected.getDeck_name());
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
                     decksDao.isDeleted(true, selected.getDeck_id());
-                    showInfo("Success", "Deck deleted successfully.");
+                    showInfo(I18n.get("admin.success"), I18n.get("admin.deleteDeck"));
                     loadDecks();
                 } catch (SQLException e) {
-                    showError("Deletion Failed", e.getMessage());
+                    showError(I18n.get("admin.failed"), e.getMessage());
                 }
             }
         });

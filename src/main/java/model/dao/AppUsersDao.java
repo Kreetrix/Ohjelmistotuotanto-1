@@ -1,7 +1,7 @@
 package model.dao;
 
 import datasource.MariaDbJpaConnection;
-import datasource.PasswordUtil;
+import util.PasswordUtil;
 import model.entity.AppUsers;
 
 import java.sql.*;

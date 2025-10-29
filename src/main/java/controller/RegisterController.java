@@ -15,6 +15,7 @@ import util.I18n;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import util.PageLoader;
 
 
 /**
@@ -22,6 +23,9 @@ import javafx.scene.control.Button;
  * Handles new user registration with role selection and validation.
  */
 public class RegisterController {
+
+    @FXML
+    public Button backBtn;
     @FXML
     private ComboBox<String> roleComboBox;
     @FXML
@@ -45,6 +49,7 @@ public class RegisterController {
     private Label registerTitleLabel;
 
     AppUsersDao dao = new AppUsersDao();
+    PageLoader pageLoader = PageLoader.getInstance();
 
     // TODO: ADD ADMIN PANEL FOR UPDATING/DELETING USERS
 
@@ -53,6 +58,8 @@ public class RegisterController {
      * Sets up the role selection combo box.
      */
     public void initialize(){
+
+
         roleComboBox.getItems().clear();
         roleComboBox.getItems().addAll("student", "teacher", "admin");
 
@@ -136,5 +143,8 @@ public class RegisterController {
         else{
             errorLabel.setText(I18n.get("register.passwordMismatch"));
         }
+    }
+    public void onBack() {
+        pageLoader.loadPage(("/fxml/loginView.fxml"), I18n.get("login.title"));
     }
 }

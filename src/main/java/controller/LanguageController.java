@@ -3,6 +3,7 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import util.I18n;
+import util.PageLoader;
 
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,7 @@ import java.util.Locale;
 public class LanguageController {
     List<String> availableLanguages = List.of("en", "ru", "ja");
     Session session = Session.getInstance();
+    PageLoader pageLoader = PageLoader.getInstance();
 
 
     @FXML private ComboBox<String> languageCombo;
@@ -42,6 +44,7 @@ public class LanguageController {
         if (selectedLanguage == null) return;
         I18n.setLocale(new Locale(selectedLanguage));
         session.setLanguage(selectedLanguage);
+        pageLoader.reloadCurrentPage();
     }
     
 }
