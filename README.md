@@ -76,6 +76,6 @@ The localization system is handled by two main classes:
 ## Resource Bundle Location
 
 All translation files are stored in: 
-[HERE](src/main/resources/languages/)
+[HERE](src/main/resources/Languages/)
 
 
