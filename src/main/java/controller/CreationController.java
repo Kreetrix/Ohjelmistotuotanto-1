@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.I18n;
+import javafx.beans.binding.Bindings;
 
 import java.io.IOException;
 
@@ -230,7 +231,8 @@ public class CreationController {
 
         // Add Card button - only show if user can create cards in this deck
         if (canCreateCardsInDeck(deck)) {
-            Button addCardButton = new Button("Add Card");
+            Button addCardButton = new Button();
+            addCardButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("editor.addCardBtn"), I18n.localeProperty()));
             addCardButton.setStyle("-fx-background-color: #107c10; -fx-text-fill: white; -fx-padding: 5 10;");
             addCardButton.setOnAction(e -> createCardForDeck(deck));
             buttonBox.getChildren().add(addCardButton);
@@ -238,7 +240,8 @@ public class CreationController {
 
         // Edit button - only show if user can edit this deck
         if (hasEditPermission(deck)) {
-            Button editButton = new Button("Edit");
+            Button editButton = new Button();
+            editButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("action.edit"), I18n.localeProperty()));
             editButton.setStyle("-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 5 10;");
             editButton.setOnAction(e -> editDeck(deck));
             buttonBox.getChildren().add(editButton);
@@ -246,7 +249,8 @@ public class CreationController {
 
         // Delete button - only show if user can delete this deck
         if (hasDeletePermission()) {
-            Button deleteButton = new Button("Delete");
+            Button deleteButton = new Button();
+            deleteButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("action.delete"), I18n.localeProperty()));
             deleteButton.setStyle("-fx-background-color: #d13438; -fx-text-fill: white; -fx-padding: 5 10;");
             deleteButton.setOnAction(e -> deleteDeck(deck));
             buttonBox.getChildren().add(deleteButton);
@@ -309,7 +313,8 @@ public class CreationController {
 
         
         if (hasEditCardPermission(card)) {
-            Button editButton = new Button("Edit");
+            Button editButton = new Button();
+            editButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("action.edit"), I18n.localeProperty()));
             editButton.setStyle("-fx-background-color: #0078d4; -fx-text-fill: white; -fx-padding: 5 10;");
             editButton.setOnAction(e -> editCard(card));
             buttonBox.getChildren().add(editButton);
@@ -317,7 +322,8 @@ public class CreationController {
 
        
         if (hasDeleteCardPermission(card)) {
-            Button deleteButton = new Button("Delete");
+            Button deleteButton = new Button();
+            deleteButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("action.delete"), I18n.localeProperty()));
             deleteButton.setStyle("-fx-background-color: #d13438; -fx-text-fill: white; -fx-padding: 5 10;");
             deleteButton.setOnAction(e -> deleteCard(card));
             buttonBox.getChildren().add(deleteButton);
