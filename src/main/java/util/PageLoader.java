@@ -68,29 +68,9 @@ public class PageLoader {
      * @param StageTitle the title to display on the Stage window
      */
     public void loadPage(String path, String StageTitle) {
-
-        try {
-            currentPath = path;
-            currentTitle = StageTitle;
+        loadPage(path, StageTitle, "Error loading page: ");
 
 
-            javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root, width, height);
-
-            if (currentStage == null) {
-                currentStage = new Stage();
-            }
-            currentStage.setScene(scene);
-            currentStage.setTitle(StageTitle);
-            currentStage.show();
-
-        } catch (Exception ex) {
-            System.err.println("Error opening creation window: " + ex.getMessage());
-            ex.printStackTrace();
-        }
     }
 
     /**
