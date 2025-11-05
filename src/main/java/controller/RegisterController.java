@@ -59,7 +59,7 @@ public class RegisterController {
      */
     public void initialize(){
 
-
+        backBtn.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("register.backbtn")));
         roleComboBox.getItems().clear();
         roleComboBox.getItems().addAll("student", "teacher", "admin");
 

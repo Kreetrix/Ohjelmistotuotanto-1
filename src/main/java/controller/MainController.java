@@ -56,7 +56,7 @@ public class MainController {
 
             Stage creationStage = new Stage();
             creationStage.setScene(scene);
-            creationStage.setTitle("Memory Master - Create Cards and Decks");
+            creationStage.setTitle("Card Memo - Create Cards and Decks");
             creationStage.show();
         } catch (Exception ex) {
             System.err.println("Error opening creation window: " + ex.getMessage());
@@ -74,7 +74,7 @@ public class MainController {
 
             Stage decksStage = new Stage();
             decksStage.setScene(scene);
-            decksStage.setTitle("Memory Master - Decks");
+            decksStage.setTitle("Card Memo - Decks");
             decksStage.show();
 
         } catch (Exception ex) {

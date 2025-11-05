@@ -3,27 +3,28 @@ package controller;
 import model.entity.AppUsers;
 
 /**
- * Singleton class for managing session information, including the current user and their role.
+ * Singleton class for managing session information, including the current user
+ * and their role.
  */
 public class Session {
     private String language;
     private static Session instance;
     private AppUsers currentUser;
 
-    private Session() {}
-
+    private Session() {
+    }
 
     public void setLanguage(String lan) {
         this.language = lan;
     }
 
-    
     public String getLanguage() {
         return language;
     }
 
     /**
-     * Returns the singleton instance of the session. If no session exists, a new one is created.
+     * Returns the singleton instance of the session. If no session exists, a new
+     * one is created.
      *
      * @return the singleton Session instance
      */
@@ -67,7 +68,8 @@ public class Session {
      * @return the user's role, or null if no user is set
      */
     public String getRole() {
-        return currentUser != null ? currentUser.getRole() : null;
+        System.out.println(this.currentUser);
+        return this.currentUser != null ? this.currentUser.getRole() : null;
     }
 
     /**

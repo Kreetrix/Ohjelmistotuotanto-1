@@ -49,3 +49,33 @@ Card Memo is a flashcard-based learning app that helps users remember informatio
 
 - Weekly sprint reports and reviews
 - Final project report at completion
+
+## Localization
+
+Currently supported language codes:
+
+- `en` — English  
+- `ru` — Russian  
+- `ja` — Japanese
+
+Choose language by using lanugage dropdown buttons that can be found across the app.
+![Image of language switch button](/public/languageSwitch.png)
+
+# Localization Setup
+
+This project includes a simple internationalization (i18n) system using JavaFX and `ResourceBundle`.  
+It allows switching between multiple languages at runtime.
+
+## Overview
+
+The localization system is handled by two main classes:
+
+- **`util.I18n`** — manages the current `Locale` and loads language resource bundles.
+- **`LanguageController`** — provides a UI control (`ComboBox`) to select the language and updates the interface dynamically.
+
+## Resource Bundle Location
+
+All translation files are stored in: 
+[HERE](src/main/resources/Languages/)
+
+

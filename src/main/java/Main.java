@@ -12,11 +12,12 @@ import view.View;
 
 /**
  * The main entry point of the application.
- * Initializes DAOs for users, cards, and decks, retrieves all records from the database,
- * and prints them to the console. If the application is not running in headless mode,
+ * Initializes DAOs for users, cards, and decks, retrieves all records from the
+ * database,
+ * and prints them to the console. If the application is not running in headless
+ * mode,
  * launches the JavaFX view.
  */
-
 
 public class Main {
 
@@ -29,7 +30,7 @@ public class Main {
         // null));
         // cardsDao.persist(new Cards(1, "testi", "testi", null, null, false));
         // decksDao.persist(new Decks(2, "testi", "testi", 1, true, false, null));
-//
+        //
         List<Cards> cards = cardsDao.getAllCards();
         List<AppUsers> users = usersDao.getAllUsers();
         List<Decks> decks = decksDao.getAllDecks();
