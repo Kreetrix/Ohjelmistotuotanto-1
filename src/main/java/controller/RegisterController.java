@@ -107,6 +107,9 @@ public class RegisterController {
         confirmPasswordField.promptTextProperty().bind(
             Bindings.createStringBinding(() -> I18n.get("register.confirmPassword"), I18n.localeProperty())
         );
+        backBtn.textProperty().bind(
+                Bindings.createStringBinding(() -> I18n.get("register.backBtn"), I18n.localeProperty())
+        );
     } catch (Exception ignored) {}
     }
 
