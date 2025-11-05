@@ -50,36 +50,13 @@ public class MainController {
     private void renderCardDeckCreation() {
 
         pageLoader.loadPopUp("/fxml/creation.fxml", "Memory Master - Create Cards and Decks");
-        /*try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/creation.fxml"));
-            Scene scene = new Scene(loader.load(), width, height);
-
-            Stage creationStage = new Stage();
-            creationStage.setScene(scene);
-            creationStage.setTitle("Card Memo - Create Cards and Decks");
-            creationStage.show();
-        } catch (Exception ex) {
-            System.err.println("Error opening creation window: " + ex.getMessage());
-            ex.printStackTrace();
-        }*/
     }
 
     /**
      * Opens the decks browsing interface in a new window.
      */
     private void renderAllDecks() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/decks.fxml"));
-            Scene scene = new Scene(loader.load(), width, height);
 
-            Stage decksStage = new Stage();
-            decksStage.setScene(scene);
-            decksStage.setTitle("Card Memo - Decks");
-            decksStage.show();
-
-        } catch (Exception ex) {
-            System.err.println("Error opening decks window: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+        pageLoader.loadPopUp("/fxml/decks.fxml", "Card Memo - Decks");
     }
 }
