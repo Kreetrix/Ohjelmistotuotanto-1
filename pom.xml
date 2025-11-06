@@ -128,7 +128,7 @@
                         <include>**/*Test.java</include>
                     </includes>
 
-                    <!--     i added this for removing gui tests from jacoco report-->
+                    <!--   removing TestFx tests from jacoco report-->
                     <excludes>
                         <exclude>**/FrontendTests/**</exclude>
                     </excludes>
@@ -154,7 +154,7 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
- <!--     i added this for removing gui tests from jacoco report-->
+ <!--    removing TestFx tests from jacoco report-->
                             <excludes>
                                 <exclude>**/FrontendTests/**</exclude>
                             </excludes>
