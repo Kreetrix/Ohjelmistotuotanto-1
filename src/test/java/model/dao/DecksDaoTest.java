@@ -1,9 +1,7 @@
-//DecksDaoTest.java
 package model.dao;
 
 import model.entity.Decks;
 import org.junit.jupiter.api.*;
-
 import java.sql.*;
 import java.util.List;
 
@@ -22,7 +20,15 @@ public class DecksDaoTest {
     @Test
     void testGetAllDecksReturnsInsertedDeck() throws SQLException {
         // Create test deck and insert into db
-        Decks testDeck = new Decks(1, "Test Deck", "Test Description", 1, "private", false, new Timestamp(System.currentTimeMillis()));
+        Decks testDeck = new Decks(
+                1,
+                "Test Deck",
+                "Test Description",
+                1,
+                "private",
+                false,
+                new Timestamp(System.currentTimeMillis())
+        );
         dao.persist(testDeck);
 
         // Fetch all decks and test if test deck is in there
@@ -30,25 +36,38 @@ public class DecksDaoTest {
         assertNotNull(decks);
         assertTrue(decks.stream().anyMatch(d ->
                 d.getDeck_name().equals("Test Deck") &&
-                d.getDescription().equals("Test Description")
+                        d.getDescription().equals("Test Description")
         ));
 
-
-        //delete test deck from db
+        // Clean up: safely delete test deck (disable FK checks)
         try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "DELETE FROM decks WHERE deck_name = ? AND description = ?")) {
-            ps.setString(1, "Test Deck");
-            ps.setString(2, "Test Description");
-            ps.executeUpdate();
-        }
+             Statement stmt = conn.createStatement()) {
 
+            stmt.execute("SET FOREIGN_KEY_CHECKS=0");
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM decks WHERE deck_name = ? AND description = ?")) {
+                ps.setString(1, "Test Deck");
+                ps.setString(2, "Test Description");
+                ps.executeUpdate();
+            }
+
+            stmt.execute("SET FOREIGN_KEY_CHECKS=1");
+        }
     }
 
     @Test
     void testIsDeleted() throws SQLException {
         // Create test deck with is_deleted = false
-        Decks testDeck = new Decks(1, "Delete Test Deck", "Delete Test Description", 1, "private", false, new Timestamp(System.currentTimeMillis()));
+        Decks testDeck = new Decks(
+                1,
+                "Delete Test Deck",
+                "Delete Test Description",
+                1,
+                "private",
+                false,
+                new Timestamp(System.currentTimeMillis())
+        );
         dao.persist(testDeck);
 
         // Get the deck ID
@@ -60,6 +79,8 @@ public class DecksDaoTest {
                 break;
             }
         }
+
+        assertTrue(deckId > 0, "Deck ID should be assigned after persist()");
 
         // Test setting is_deleted to true
         dao.isDeleted(true, deckId);
@@ -81,13 +102,20 @@ public class DecksDaoTest {
         assertNotNull(updatedDeck);
         assertFalse(updatedDeck.isIs_deleted());
 
-        // Clean up - delete test deck from db
+        // Clean up safely (disable FK checks)
         try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "DELETE FROM decks WHERE deck_name = ? AND description = ?")) {
-            ps.setString(1, "Delete Test Deck");
-            ps.setString(2, "Delete Test Description");
-            ps.executeUpdate();
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute("SET FOREIGN_KEY_CHECKS=0");
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM decks WHERE deck_name = ? AND description = ?")) {
+                ps.setString(1, "Delete Test Deck");
+                ps.setString(2, "Delete Test Description");
+                ps.executeUpdate();
+            }
+
+            stmt.execute("SET FOREIGN_KEY_CHECKS=1");
         }
     }
 }

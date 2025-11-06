@@ -27,18 +27,26 @@ public class CardsDaoTest {
         // fetch all cards and sees if the created card is in the list of all cards in db
         List<Cards> cards = dao.getAllCards();
         assertNotNull(cards);
-        assertTrue(cards.stream().anyMatch(c -> 
+        assertTrue(cards.stream().anyMatch(c ->
                 c.getFront_text().equals("Front Test") &&
-                c.getBack_text().equals("Back Test")
+                        c.getBack_text().equals("Back Test")
         ));
 
-        // deletes test card from db
-        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "DELETE FROM cards WHERE front_text = ? AND back_text = ?")) {
-            ps.setString(1, "Front Test");
-            ps.setString(2, "Back Test");
-            ps.executeUpdate();
+        // cleanup — remove linked sessionresults first, then the test card
+        try (Connection conn = datasource.MariaDbJpaConnection.getConnection()) {
+            try (PreparedStatement ps1 = conn.prepareStatement(
+                    "DELETE FROM sessionresults WHERE card_id IN (SELECT card_id FROM cards WHERE front_text = ? AND back_text = ?)")) {
+                ps1.setString(1, "Front Test");
+                ps1.setString(2, "Back Test");
+                ps1.executeUpdate();
+            }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(
+                    "DELETE FROM cards WHERE front_text = ? AND back_text = ?")) {
+                ps2.setString(1, "Front Test");
+                ps2.setString(2, "Back Test");
+                ps2.executeUpdate();
+            }
         }
     }
 
@@ -78,13 +86,19 @@ public class CardsDaoTest {
         assertNotNull(updatedCard);
         assertFalse(updatedCard.isIs_deleted());
 
-        // Clean up - delete test card from db
-        try (Connection conn = datasource.MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "DELETE FROM cards WHERE front_text = ? AND back_text = ?")) {
-            ps.setString(1, "Delete Front Test");
-            ps.setString(2, "Delete Back Test");
-            ps.executeUpdate();
+        //  Cleanup — remove linked sessionresults first, then card
+        try (Connection conn = datasource.MariaDbJpaConnection.getConnection()) {
+            try (PreparedStatement ps1 = conn.prepareStatement(
+                    "DELETE FROM sessionresults WHERE card_id = ?")) {
+                ps1.setInt(1, cardId);
+                ps1.executeUpdate();
+            }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(
+                    "DELETE FROM cards WHERE card_id = ?")) {
+                ps2.setInt(1, cardId);
+                ps2.executeUpdate();
+            }
         }
     }
 }

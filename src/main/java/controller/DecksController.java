@@ -10,9 +10,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.dao.DecksDao;
-import model.dao.LocalizationDao;
+import model.dao.DeckTranslationDao;
 import model.entity.Decks;
-import model.entity.Localization;
 import util.I18n;
 
 import java.io.IOException;
@@ -27,14 +26,16 @@ public class DecksController {
 
     public Label myDecksLabel;
     public Label myDecksSubLabel;
+
     @FXML
     private ScrollPane scrollPane;
-    private final LocalizationDao localizationDao = new LocalizationDao();
 
     @FXML
     private VBox decksContainer;
 
     private Stage currentPopupStage;
+
+    private final DeckTranslationDao deckTranslationDao = new DeckTranslationDao();
 
     /**
      * Initializes the controller after FXML loading.
@@ -70,27 +71,32 @@ public class DecksController {
                     deckButton.setIcon("book");
 
                     String deckName = deck.getDeck_name();
-                    try {
-                        Localization nameTranslation = localizationDao.getLocalizationForEntity("deck", deck.getDeck_id(), currentLang);
-                        if (nameTranslation != null) {
-                            deckName = nameTranslation.getTranslated_text();
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    deckButton.setMainText(deckName);
-
                     String deckDescription = deck.getDescription();
-                    if (deckDescription == null || deckDescription.trim().isEmpty()) {
-                        deckDescription = "No description"; // fallback
-                    } else {
-                        try {
-                            Localization descTranslation = localizationDao.getLocalizationForEntity("deck_description", deck.getDeck_id(), currentLang);
-                            if (descTranslation != null) {
-                                deckDescription = descTranslation.getTranslated_text();
-                            }
-                        } catch (SQLException ignored) {}
+
+                    // 🌐 Try to get translations
+                    try {
+                        String translatedName = deckTranslationDao.getTranslatedDeckName(deck.getDeck_id(), currentLang);
+                        if (translatedName != null && !translatedName.isEmpty()) {
+                            deckName = translatedName;
+                        }
+
+                        String translatedDesc = deckTranslationDao.getTranslatedDescription(deck.getDeck_id(), currentLang);
+                        if (translatedDesc != null && !translatedDesc.isEmpty()) {
+                            deckDescription = translatedDesc;
+                        }
+
+                    } catch (SQLException e) {
+                        System.err.println("Translation fetch failed: " + e.getMessage());
                     }
+
+                    // fallback defaults
+                    if (deckDescription == null || deckDescription.trim().isEmpty()) {
+                        deckDescription = "No description";
+                    } else if (deckDescription.length() > 50) {
+                        deckDescription = deckDescription.substring(0, 47) + "...";
+                    }
+
+                    deckButton.setMainText(deckName);
                     deckButton.setSubText(deckDescription);
 
                     deckButton.setOnAction(e -> openDeck(deck));
@@ -115,7 +121,6 @@ public class DecksController {
      */
     private void openDeck(Decks deck) {
         try {
-            // Close existing popup if open
             if (currentPopupStage != null && currentPopupStage.isShowing()) {
                 currentPopupStage.close();
                 return;
