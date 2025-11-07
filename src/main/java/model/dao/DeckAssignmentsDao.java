@@ -15,6 +15,7 @@ public class DeckAssignmentsDao {
 
     /**
      * Retrieves all deck assignments from the database.
+     *
      * @return List of all DeckAssignments entities
      * @throws SQLException if database access error occurs
      */
@@ -43,6 +44,7 @@ public class DeckAssignmentsDao {
 
     /**
      * Saves a new deck assignment to the database.
+     *
      * @param assignment the DeckAssignments entity to persist
      * @throws SQLException if database access error occurs
      */

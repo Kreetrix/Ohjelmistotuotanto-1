@@ -4,6 +4,8 @@ import datasource.MariaDbJpaConnection;
 
 import java.sql.*;
 
+// TODO : ADD JAVADOC cpmmens
+
 public class DeckTranslationDao {
 
     public String getTranslatedDeckName(int deckId, String languageCode) throws SQLException {

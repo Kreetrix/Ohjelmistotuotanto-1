@@ -7,19 +7,26 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.beans.binding.Bindings;
 import util.I18n;
+
 import java.text.MessageFormat;
+
 import model.dao.GameSessionsDao;
 import model.dao.SessionResultsDao;
+import model.dao.CardTranslationDao;
 import model.entity.Cards;
 import model.entity.Decks;
 import model.entity.GameSessions;
-import java.sql.Timestamp;
 
+import java.sql.Timestamp;
 import java.util.List;
+
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 import javafx.scene.transform.Rotate;
 import model.entity.SessionResults;
+
+// TODO : ADD JAVADOC cpmmens
+
 
 /**
  * Controller for the study session view.
@@ -51,8 +58,9 @@ public class StudyController {
     @FXML
     private Button didntKnowButton;
 
-    GameSessionsDao gameSessionsDao = new GameSessionsDao();
-    private SessionResultsDao sessionResultsDao = new SessionResultsDao();
+    private final GameSessionsDao gameSessionsDao = new GameSessionsDao();
+    private final SessionResultsDao sessionResultsDao = new SessionResultsDao();
+    private final CardTranslationDao cardTranslationDao = new CardTranslationDao(); // 🆕 для переводов
 
     private Decks deck;
     private List<Cards> cards;
@@ -60,11 +68,6 @@ public class StudyController {
     private int score = 0;
     private boolean showingFront = true;
 
-    /**
-     * Sets up the study session with the selected deck and cards.
-     * @param deck the deck being studied
-     * @param cards the list of cards in the deck
-     */
     public void setDeck(Decks deck, List<Cards> cards) {
         this.deck = deck;
         this.cards = cards;
@@ -79,22 +82,6 @@ public class StudyController {
         showCard();
     }
 
-    /**
-     * Displays the current card or shows results if all cards are completed.
-     */
-    private void showCard() {
-        if (currentIndex < cards.size()) {
-            Cards currentCard = cards.get(currentIndex);
-            cardLabel.setText(currentCard.getFront_text());
-            showingFront = true;
-            knewButton.setVisible(false);
-            didntKnowButton.setVisible(false);
-            cardLabel.setOnMouseClicked(e -> flipCard(currentCard));
-        } else {
-            showResult();
-        }
-    }
-
     @FXML
     public void initialize() {
         studyTitleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.title"), I18n.localeProperty()));
@@ -107,12 +94,40 @@ public class StudyController {
         cardLabel.setText(I18n.get("study.cardPlaceholder"));
     }
 
-    // TODO: Add method for showing additional info from database
-
     /**
-     * Flips the card to show the back side with flip animation.
-     * @param card the current card being flipped
+     * Shows the current card (with translation if available).
      */
+    private void showCard() {
+        if (currentIndex < cards.size()) {
+            Cards currentCard = cards.get(currentIndex);
+
+            String lang = Session.getInstance().getLanguage();
+
+            try {
+                String translatedFront = cardTranslationDao.getTranslatedFront(currentCard.getCard_id(), lang);
+                if (translatedFront != null && !translatedFront.isEmpty()) {
+                    currentCard.setFront_text(translatedFront);
+                }
+
+                String translatedBack = cardTranslationDao.getTranslatedBack(currentCard.getCard_id(), lang);
+                if (translatedBack != null && !translatedBack.isEmpty()) {
+                    currentCard.setBack_text(translatedBack);
+                }
+
+            } catch (Exception e) {
+                System.err.println("Translation fetch failed for card " + currentCard.getCard_id() + ": " + e.getMessage());
+            }
+
+            cardLabel.setText(currentCard.getFront_text());
+            showingFront = true;
+            knewButton.setVisible(false);
+            didntKnowButton.setVisible(false);
+            cardLabel.setOnMouseClicked(e -> flipCard(currentCard));
+        } else {
+            showResult();
+        }
+    }
+
     private void flipCard(Cards card) {
         if (showingFront) {
             RotateTransition rotateOut = new RotateTransition(Duration.millis(200), cardLabel);
@@ -137,9 +152,6 @@ public class StudyController {
         }
     }
 
-    /**
-     * Handles when user indicates they knew the card answer.
-     */
     @FXML
     private void onKnew() {
         score++;
@@ -147,38 +159,17 @@ public class StudyController {
         nextCard();
     }
 
-    /**
-     * Closes the study session window.
-     */
-    @FXML
-    private void onClose() {
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
-
-    /**
-     * Handles when user indicates they didn't know the card answer.
-     */
     @FXML
     private void onDidntKnow() {
         saveCardResult(cards.get(currentIndex), false, 0);
         nextCard();
     }
 
-    /**
-     * Advances to the next card in the study session.
-     */
     private void nextCard() {
         currentIndex++;
         showCard();
     }
 
-    /**
-     * Saves the result for the current card.
-     * @param card the card being evaluated
-     * @param isCorrect whether the user knew the answer
-     * @param responseTime time taken to respond (not currently used)
-     */
     private void saveCardResult(Cards card, boolean isCorrect, int responseTime) {
         try {
             sessionResultsDao.persist(
@@ -189,9 +180,6 @@ public class StudyController {
         }
     }
 
-    /**
-     * Displays the final results of the study session.
-     */
     private void showResult() {
         endTime = new Timestamp(System.currentTimeMillis());
         String formatted = MessageFormat.format(I18n.get("study.gameOver"), score, cards.size());
@@ -202,14 +190,17 @@ public class StudyController {
         saveResults();
     }
 
-    /**
-     * Saves the final session results to the database.
-     */
     private void saveResults() {
         try {
             gameSessionsDao.persist(new GameSessions(Session.getInstance().getUserId(), deck.getDeck_id(), startTime, endTime));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void onClose() {
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
     }
 }
