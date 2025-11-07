@@ -128,6 +128,9 @@ public class LoginController {
         PageLoader.getInstance().loadPage(("/fxml/registerView.fxml"), I18n.get("register.title"));
     }
 
+    /**
+     * Changes the login language to Hebrew and sets the node orientation to right-to-left.
+     */
     public void toHebrew() {
         I18n.setLocale(new Locale("he"));
         rootBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
