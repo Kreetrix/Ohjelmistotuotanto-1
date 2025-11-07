@@ -10,6 +10,7 @@ import javafx.beans.binding.Bindings;
 import util.I18n;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import model.entity.AppUsers;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Controller for the Login view handling user authentication.
@@ -47,6 +49,11 @@ public class LoginController {
 
     @FXML
     private Label loginTitleLabel;
+
+    @FXML
+    private Button hebrew;
+
+    @FXML private VBox rootBox;
 
     /**
      * Initializes the controller after FXML loading.
@@ -119,5 +126,16 @@ public class LoginController {
     public void toRegister() {
 
         PageLoader.getInstance().loadPage(("/fxml/registerView.fxml"), I18n.get("register.title"));
+    }
+
+    public void toHebrew() {
+        I18n.setLocale(new Locale("he"));
+        rootBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        usernameField.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        passwordField.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        errorLabel.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        loginTitleLabel.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        loginBtn.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        registerBtn.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
     }
 }
