@@ -11,15 +11,10 @@ import util.I18n;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
-
+import util.AudioPlayer;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -51,9 +46,10 @@ public class LoginController {
     private Label loginTitleLabel;
 
     @FXML
-    private Button hebrew;
+    private Button hebrewBtn;
 
-    @FXML private VBox rootBox;
+    @FXML
+    private VBox rootBox;
 
     /**
      * Initializes the controller after FXML loading.
@@ -129,9 +125,11 @@ public class LoginController {
     }
 
     /**
-     * Changes the login language to Hebrew and sets the node orientation to right-to-left.
+     * Changes the login language to Hebrew and sets the node orientation to
+     * right-to-left.
      */
     public void toHebrew() {
+        AudioPlayer.play("/music/Hebrew.mp3", 6000);
         I18n.setLocale(new Locale("he"));
         rootBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         usernameField.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
