@@ -15,7 +15,8 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests that the login view updates its texts when the application locale changes
+ * Tests that the login view updates its texts when the application locale
+ * changes
  * and that selecting Hebrew switches layout to right-to-left.
  */
 public class LanguageChangeTest extends ApplicationTest {
@@ -40,18 +41,26 @@ public class LanguageChangeTest extends ApplicationTest {
     void englishTextsAreShown() throws Exception {
         interact(() -> I18n.setLocale(Locale.ENGLISH));
         interact(() -> {
-            try { reloadLogin(); } catch (Exception e) { throw new RuntimeException(e); }
+            try {
+                reloadLogin();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
-    assertThat(lookup("#loginBtn").queryButton()).hasText("Log In");
-    assertEquals("Username", lookup("#usernameField").queryTextInputControl().getPromptText());
+        assertThat(lookup("#loginBtn").queryButton()).hasText("Log In");
+        assertEquals("Username", lookup("#usernameField").queryTextInputControl().getPromptText());
     }
 
     @Test
     void russianTextsAreShown() throws Exception {
         interact(() -> I18n.setLocale(new Locale("ru")));
         interact(() -> {
-            try { reloadLogin(); } catch (Exception e) { throw new RuntimeException(e); }
+            try {
+                reloadLogin();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         assertThat(lookup("#loginBtn").queryButton()).hasText("Войти");
@@ -62,18 +71,26 @@ public class LanguageChangeTest extends ApplicationTest {
     void japaneseTextsAreShown() throws Exception {
         interact(() -> I18n.setLocale(new Locale("ja")));
         interact(() -> {
-            try { reloadLogin(); } catch (Exception e) { throw new RuntimeException(e); }
+            try {
+                reloadLogin();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
-    assertThat(lookup("#loginBtn").queryButton()).hasText("ログイン");
-    assertEquals("ユーザー名", lookup("#usernameField").queryTextInputControl().getPromptText());
+        assertThat(lookup("#loginBtn").queryButton()).hasText("ログイン");
+        assertEquals("ユーザー名", lookup("#usernameField").queryTextInputControl().getPromptText());
     }
 
     @Test
     void hebrewButtonSwitchesToHebrewAndRtl() throws Exception {
         interact(() -> I18n.setLocale(Locale.ENGLISH));
         interact(() -> {
-            try { reloadLogin(); } catch (Exception e) { throw new RuntimeException(e); }
+            try {
+                reloadLogin();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         clickOn("#hebrewBtn");
         assertThat(lookup("#loginTitleLabel").queryLabeled()).hasText("התחברות!");
