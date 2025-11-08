@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.dao.CardsDao;
+import model.dao.DeckTranslationDao;
 import model.entity.Cards;
 import model.entity.Decks;
 import util.I18n;
@@ -16,6 +17,9 @@ import util.I18n;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+
+
+// TODO : ADD JAVADOC
 
 /**
  * Controller for the study confirmation popup window.
@@ -29,30 +33,19 @@ public class PopUpController {
     private Decks selectedDeck;
     private Stage popupStage;
 
-    /**
-     * Initializes the popup controller after FXML loading.
-     */
+    private final DeckTranslationDao deckTranslationDao = new DeckTranslationDao();
+
     public void initialize() {
     }
 
-    /**
-     * Sets the deck to be studied.
-     * @param deck the deck selected for study
-     */
     public void setDeck(Decks deck) {
         this.selectedDeck = deck;
         setupStudyConfirmation();
     }
 
-    /**
-     * Sets the stage for this popup window.
-     * @param stage the popup stage
-     */
     public void setStage(Stage stage) {
         this.popupStage = stage;
     }
-
-    // TODO: ADD SAVING RESULTS FOR USERS IN DB
 
     /**
      * Sets up the study confirmation interface with deck info and action buttons.
@@ -60,12 +53,25 @@ public class PopUpController {
     private void setupStudyConfirmation() {
         PopUpContainer.getChildren().clear();
 
+        String currentLang = Session.getInstance().getLanguage();
+        String deckName = selectedDeck.getDeck_name();
+
+        // 🌐 Попробуем получить перевод имени колоды
+        try {
+            String translatedName = deckTranslationDao.getTranslatedDeckName(selectedDeck.getDeck_id(), currentLang);
+            if (translatedName != null && !translatedName.isEmpty()) {
+                deckName = translatedName;
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to load translation: " + e.getMessage());
+        }
+
         // Title
         Label titleLabel = new Label(I18n.get("myDecks.popup.title"));
         titleLabel.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 24; -fx-padding: 20;");
 
-        // Deck info
-        Label deckInfoLabel = new Label(I18n.get("myDecks.popup.deckInfo") + selectedDeck.getDeck_name() + "?");
+        // Deck info (с переводом)
+        Label deckInfoLabel = new Label(I18n.get("myDecks.popup.deckInfo") + deckName + "?");
         deckInfoLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 16; -fx-padding: 10;");
         deckInfoLabel.setWrapText(true);
 
@@ -114,9 +120,6 @@ public class PopUpController {
         }
     }
 
-    /**
-     * Closes the popup window.
-     */
     private void closePopup() {
         if (popupStage != null) {
             popupStage.close();

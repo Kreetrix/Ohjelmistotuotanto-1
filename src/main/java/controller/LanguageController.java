@@ -12,7 +12,7 @@ import java.util.Locale;
 // TODO : ADD DOCUMENTATION
 
 public class LanguageController {
-    List<String> availableLanguages = List.of("en", "ru", "ja");
+    List<String> availableLanguages = List.of("en", "ru", "ja","fi");
     Session session = Session.getInstance();
     PageLoader pageLoader = PageLoader.getInstance();
 
