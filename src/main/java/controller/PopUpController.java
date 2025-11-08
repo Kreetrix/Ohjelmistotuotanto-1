@@ -56,7 +56,6 @@ public class PopUpController {
         String currentLang = Session.getInstance().getLanguage();
         String deckName = selectedDeck.getDeck_name();
 
-        // 🌐 Попробуем получить перевод имени колоды
         try {
             String translatedName = deckTranslationDao.getTranslatedDeckName(selectedDeck.getDeck_id(), currentLang);
             if (translatedName != null && !translatedName.isEmpty()) {
