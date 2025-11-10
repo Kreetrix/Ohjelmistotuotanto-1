@@ -2,9 +2,6 @@ package view;
 
 import java.awt.Dimension;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import util.PageLoader;
 
@@ -28,13 +25,6 @@ public final class View extends Application {
 
         // Start with login screen
         pageLoader.loadPage("/fxml/loginView.fxml", "Login");
-        /*
-        FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
-        Parent loginRoot = loginLoader.load();
-        Stage loginStage = new Stage();
-        loginStage.setScene(new Scene(loginRoot, width, height));
-        loginStage.setTitle("Login");
-        loginStage.show();*/
     }
 
     /**
