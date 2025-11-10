@@ -2,13 +2,9 @@ package controller;
 
 import datasource.MariaDbJpaConnection;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
 import util.I18n;
@@ -124,24 +120,16 @@ public class RegisterController {
         String role = roleComboBox.getValue();
         String email = emailField.getText();
 
-        if (password.equals(confirmPassword)){
+        if (password.equals(confirmPassword)) {
             AppUsers user = new AppUsers(username, email, password, role, 1, null);
-            try{
+            try {
                 dao.persist(user);
 
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) registerBtn.getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.setTitle(I18n.get("app.title"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+                pageLoader.loadPage("/fxml/loginView.fxml", I18n.get("app.title"));
 
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
         else{
             errorLabel.setText(I18n.get("register.passwordMismatch"));
