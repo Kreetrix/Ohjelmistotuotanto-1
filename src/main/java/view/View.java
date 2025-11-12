@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Dimension;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import util.PageLoader;
@@ -19,10 +18,6 @@ public final class View extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth() / 3;
-        double height = screenSize.getHeight() / 1.2;
-
         // Start with login screen
         pageLoader.loadPage("/fxml/loginView.fxml", "Login");
     }

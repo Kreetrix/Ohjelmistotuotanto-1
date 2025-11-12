@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  * ({@link #loadPage(String, String, String)}). The class keeps track of the last loaded
  * path and title so the current page can be reloaded using {@link #reloadCurrentPage()}.
  */
-public class PageLoader {
+public final class PageLoader {
 
     /**
      * Singleton instance.
@@ -84,10 +84,6 @@ public class PageLoader {
         try {
             currentPath = path;
             currentTitle = stageTitle;
-
-            Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-            double width = screenSize.getWidth() / 3;
-            double height = screenSize.getHeight() / 1.2;
 
             javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 
