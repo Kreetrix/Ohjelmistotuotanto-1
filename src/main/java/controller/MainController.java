@@ -18,9 +18,6 @@ public class MainController {
 
     PageLoader pageLoader = PageLoader.getInstance();
 
-    Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    double width = screenSize.getWidth() / 3;
-    double height = screenSize.getHeight() / 1.2;
 
     @FXML
     private MenuItemButton deckBtn;
