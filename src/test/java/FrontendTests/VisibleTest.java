@@ -12,7 +12,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-public class visibleTest extends ApplicationTest {
+public class VisibleTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
