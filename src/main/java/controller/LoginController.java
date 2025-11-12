@@ -23,9 +23,6 @@ import java.util.Locale;
  */
 public class LoginController {
 
-    Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    double width = screenSize.getWidth() / 3;
-    double height = screenSize.getHeight() / 1.2;
 
     @FXML
     private TextField usernameField;

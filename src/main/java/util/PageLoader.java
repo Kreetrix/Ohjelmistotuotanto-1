@@ -1,9 +1,11 @@
 package util;
 
+import controller.PopUpController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.entity.Decks;
 
 import java.awt.*;
 
@@ -69,8 +71,6 @@ public class PageLoader {
      */
     public void loadPage(String path, String StageTitle) {
         loadPage(path, StageTitle, "Error loading page: ");
-
-
     }
 
     /**
@@ -83,7 +83,7 @@ public class PageLoader {
      * @param StageTitle the title to display on the Stage window
      * @param er         a custom error-prefix string that will be prepended to any exception message
      */
-    public void loadPage(String path, String StageTitle, String er) {
+    public Stage loadPage(String path, String StageTitle, String er) {
         try {
             currentPath = path;
             currentTitle = StageTitle;
@@ -109,6 +109,11 @@ public class PageLoader {
             System.err.println(er + ex.getMessage());
             ex.printStackTrace();
         }
+        return currentStage;
+    }
+
+    public Stage loadPopUp(String path, String StageTitle) {
+        return loadPopUp(path,StageTitle,this.width,this.height);
     }
 
     /**
@@ -117,27 +122,30 @@ public class PageLoader {
      *
      * @param path       the classpath resource path to the FXML file
      * @param StageTitle the title to display on the pop-up Stage
-     */
-    public void loadPopUp(String path, String StageTitle) {
+     * @param width the width of the popup
+     * @param height the height of the popup
+     **/
+
+
+    public Stage loadPopUp(String path, String StageTitle, double width, double height) {
         try {
 
 
             javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 
             Parent root = loader.load();
-
             Scene scene = new Scene(root, width, height);
 
-            Stage Stage = new Stage();
-            Stage.setScene(scene);
-            Stage.setTitle(StageTitle);
-            Stage.show();
-
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle(StageTitle);
+            stage.showAndWait();
+            return stage;
         } catch (Exception ex) {
             System.err.println("Error opening creation window: " + ex.getMessage());
             ex.printStackTrace();
         }
-
+        return null;
     }
 
     /**

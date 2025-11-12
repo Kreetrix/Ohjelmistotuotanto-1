@@ -1,8 +1,5 @@
 package controller;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import util.I18n;
@@ -21,9 +18,6 @@ import java.util.List;
 public class LogoutController {
 
     Session session = Session.getInstance();
-    Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    double width = screenSize.getWidth() / 3;
-    double height = screenSize.getHeight() / 1.2;
 
     /**
      * Handles the logout process.
