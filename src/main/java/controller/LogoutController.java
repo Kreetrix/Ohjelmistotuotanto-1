@@ -4,6 +4,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import util.I18n;
 import util.PageLoader;
+import view.AdminPanel;
 
 import java.util.Locale;
 import java.awt.*;
@@ -25,9 +26,7 @@ public class LogoutController {
      * @throws IOException if login view FXML cannot be loaded
      */
     public void onLogout() throws IOException {
-        if (session.getCurrentUser() != null) {
-            session.getCurrentUser().setIs_active(0);
-        }
+
         session.clear();
 
         List<Window> windows = new ArrayList<>(Window.getWindows());
@@ -43,6 +42,7 @@ public class LogoutController {
         }
         I18n.setLocale(Locale.ENGLISH);
         session.setLanguage("en");
+        AdminPanel.setClosed();
 
         PageLoader.getInstance().loadPage("/fxml/loginView.fxml", "Login");
     }

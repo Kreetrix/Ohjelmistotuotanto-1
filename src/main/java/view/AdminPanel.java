@@ -485,6 +485,11 @@ public class AdminPanel extends Application {
         alert.showAndWait();
     }
 
+    public static void setClosed() {
+        isOpen = false;
+    }
+
+
     public static void main(String[] args) {
         launch(args);
     }

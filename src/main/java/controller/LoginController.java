@@ -102,7 +102,6 @@ public class LoginController {
                     Session.getInstance().setCurrentUser(user);
 
                     PageLoader.getInstance().loadPage("/fxml/main.fxml", I18n.get("app.title"));
-                    user.setIs_active(1);
 
                 } else {
                     errorLabel.setText(I18n.get("login.invalidCredentials"));
