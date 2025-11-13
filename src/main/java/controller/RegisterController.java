@@ -120,7 +120,7 @@ public class RegisterController {
         String role = roleComboBox.getValue();
         String email = emailField.getText();
         //todo error localization
-        if( !password.isEmpty() && !username.isEmpty() && !confirmPassword.isEmpty() && !email.isEmpty()) {
+        if(fieldVerification()) {
             if (password.equals(confirmPassword)) {
                 AppUsers user = new AppUsers(username, email, password, role, 1, null);
                 try {
@@ -140,5 +140,14 @@ public class RegisterController {
     }
     public void onBack() {
         pageLoader.loadPage(("/fxml/loginView.fxml"), I18n.get("login.title"));
+    }
+    private boolean fieldVerification(){
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+        String email = emailField.getText();
+        return(!password.isEmpty() && !username.isEmpty() && !confirmPassword.isEmpty() && !email.isEmpty());
+
+
     }
 }
