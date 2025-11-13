@@ -51,7 +51,7 @@ public final class PageLoader {
      *
      * @return the singleton PageLoader
      */
-    public static PageLoader getInstance() {
+    public static synchronized PageLoader getInstance() {
         if (instance == null) {
             instance = new PageLoader();
         }
