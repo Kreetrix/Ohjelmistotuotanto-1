@@ -55,7 +55,7 @@ public class DecksController {
     private void loadDecks() {
         try {
             DecksDao decksDao = new DecksDao();
-            List<Decks> allDecks = decksDao.getAllDecks();
+            List<Decks> allDecks = decksDao.getAllNotDeletedDecks();
             decksContainer.getChildren().clear();
 
             if (allDecks.isEmpty()) {

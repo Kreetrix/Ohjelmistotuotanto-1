@@ -164,4 +164,30 @@ public class DecksDao {
         }
         return decks;
     }
+    public List<Decks> getAllNotDeletedDecks() throws SQLException {
+        List<Decks> decks = new ArrayList<>();
+        String sql = "SELECT * FROM decks WHERE is_deleted = 0";
+
+        try (Connection conn = MariaDbJpaConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                int deck_id = rs.getInt("deck_id");
+                int user_id = rs.getInt("user_id");
+                String deck_name = rs.getString("deck_name");
+                String description = rs.getString("description");
+                int version = rs.getInt("version");
+                String visibility = rs.getString("visibility");
+                boolean is_deleted = rs.getBoolean("is_deleted");
+                Timestamp created_at = rs.getTimestamp("created_at");
+
+                Decks deck = new Decks(user_id, deck_name, description, version, visibility, is_deleted, created_at);
+                deck.setDeck_id(deck_id);
+                decks.add(deck);
+            }
+        }
+
+        return decks;
+    }
 }
