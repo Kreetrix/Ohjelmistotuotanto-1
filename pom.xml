@@ -199,7 +199,34 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- code analysis -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <configLocation>google_checks.xml</configLocation>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.21.0</version>
+                <configuration>
+                <printFailingErrors>true</printFailingErrors>
+                <failOnViolation>true</failOnViolation>
 
+                <rulesets>
+                    <ruleset>category/java/design.xml</ruleset>
+                    <ruleset>category/java/bestpractices.xml</ruleset>
+                    <ruleset>category/java/errorprone.xml</ruleset>
+                    <ruleset>category/java/codestyle.xml</ruleset>
+                </rulesets>
+            </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
