@@ -24,7 +24,7 @@
 
     <Button text="Register" fx:id="registerBtn" onAction="#toRegister"
             style="-fx-background-color: #00ffff; -fx-text-fill: #130e0e; -fx-font-size: 18; -fx-background-radius: 10;"/>
-    <Button text = "✡" fx:id="hebrewBtn" onAction="#toHebrew"
+    <Button text = "Hebrew" fx:id="hebrewBtn" onAction="#toHebrew"
             style="-fx-background-color: #00ffff; -fx-text-fill: #130e0e; -fx-font-size: 18; -fx-background-radius: 10;"/>
 
     <Label fx:id="errorLabel" text="" style="-fx-text-fill: red; -fx-font-size: 14;"/>
