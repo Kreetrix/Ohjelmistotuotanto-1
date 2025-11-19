@@ -80,40 +80,65 @@ All translation files are stored in:
 
 # Localization System
 
-This project includes a database-based localization system that enables multi-language support for various entities (such as cards and decks). The system is prepared but will be fully integrated in OTP2.
+This project uses a database-driven localization system that allows decks and cards to support multiple languages. Translations are stored in separate tables, keeping the database clean, scalable, and easy to extend.
 
 ## Overview
 
-Instead of storing language-specific columns (such as name_en, name_es, etc.) inside each entity table, this system uses a dedicated localization table. This keeps the database normalized and makes it easy to add new languages without modifying the schema.
+Instead of storing fields like `name_en` or `text_es` in main tables, translations are kept in dedicated translation tables.  
+Each entity (deck, card, etc.) stores its original content, and any additional languages are added as separate translation records.
 
-## Why This Method
+## Why This Design?
 
-- Scales to any number of languages  
-- Works for all entity types  
-- Requires no schema changes when adding languages  
-- Keeps the database clean and maintainable  
-- Allows easy expansion in OTP2
+- Unlimited language support  
+- No schema changes when adding new languages  
+- Works for any translatable entity  
+- Keeps core tables clean and normalized  
+- Easy to manage and extend in OTP2  
 
-## Database Schema
+## Database Structure
 
-Table: `localization`
+### `languages`
+Stores all supported languages.
 
-| Column          | Type        | Description                      |
-|-----------------|-------------|----------------------------------|
-| translation_id  | INT PK AI   | Unique translation entry         |
-| entity_type     | VARCHAR     | Type of entity (e.g., card)      |
-| entity_id       | INT         | ID of the entity                 |
-| language_code   | VARCHAR(5)  | ISO code (e.g., en, es, fr)      |
-| translated_text | TEXT        | The translated content           |
+| Column      | Type        |
+|-------------|-------------|
+| code        | VARCHAR(5)  |
+| name        | VARCHAR(50) |
+| native_name | VARCHAR(50) |
 
-Planned Usage (OTP2)
+## Card Translations — `card_translations`
 
-Backend will fetch localized text when the ?lang=<code> parameter is used
+| Column         | Type        |
+|----------------|-------------|
+| id             | INT PK AI   |
+| card_id        | INT         |
+| language_code  | VARCHAR(5)  |
+| front_text     | TEXT        |
+| back_text      | TEXT        |
+| extra_info     | TEXT        |
+| updated_at     | TIMESTAMP   |
 
-Fallback to default language when translation is missing
-
-CRUD operations for translation management will be introduced
-
-API responses will automatically include translated content when available
+Each row = translation of one card in one language.
 
 
+## Deck Translations — `deck_translations`
+
+| Column         | Type        |
+|----------------|-------------|
+| id             | INT PK AI   |
+| deck_id        | INT         |
+| language_code  | VARCHAR(5)  |
+| deck_name      | TEXT        |
+| description    | TEXT        |
+| updated_at     | TIMESTAMP   |
+
+Each row = translation of one deck in one language.
+
+---
+
+## OTP2 Features (Planned)
+
+- `?lang=<code>` parameter for API requests  
+- Automatic fallback to default language  
+- Tools for adding/editing translations  
+- Unified translation handling for decks, cards, and future entities  
