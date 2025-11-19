@@ -2,12 +2,10 @@ package util;
 
 import java.awt.*;
 
-import controller.PopUpController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.entity.Decks;
 
 
 /**
@@ -101,9 +99,6 @@ public final class PageLoader {
 
             Scene scene = new Scene(root, width, height);
 
-//            if (mainStage == null) {
-//                mainStage = new Stage();
-//            }
 
             mainStage.setScene(scene);
             mainStage.setTitle(stageTitle);
@@ -111,6 +106,7 @@ public final class PageLoader {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.out.println(er);
         }
         return mainStage;
     }

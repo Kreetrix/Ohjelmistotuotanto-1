@@ -6,6 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class PasswordUtil {
 
+
     /**
      * Hashes a raw password using BCrypt.
      *
