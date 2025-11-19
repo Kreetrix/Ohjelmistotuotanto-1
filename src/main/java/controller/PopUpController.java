@@ -28,7 +28,7 @@ import java.util.List;
 public class PopUpController {
 
     @FXML
-    private VBox PopUpContainer;
+    private VBox popUpContainer;
 
     private Decks selectedDeck;
     private Stage popupStage;
@@ -51,7 +51,7 @@ public class PopUpController {
      * Sets up the study confirmation interface with deck info and action buttons.
      */
     private void setupStudyConfirmation() {
-        PopUpContainer.getChildren().clear();
+        popUpContainer.getChildren().clear();
 
         String currentLang = Session.getInstance().getLanguage();
         String deckName = selectedDeck.getDeck_name();
@@ -88,7 +88,7 @@ public class PopUpController {
         cancelButton.setSubText(I18n.get("myDecks.popup.cancel.sub"));
         cancelButton.setOnAction(e -> closePopup());
 
-        PopUpContainer.getChildren().addAll(titleLabel, deckInfoLabel, confirmButton, cancelButton);
+        popUpContainer.getChildren().addAll(titleLabel, deckInfoLabel, confirmButton, cancelButton);
     }
 
     /**

@@ -13,7 +13,7 @@
             
     <center>
         <ScrollPane fx:id="scrollPane" style="-fx-background: #202020; -fx-background-color: #202020;" fitToWidth="true">
-            <VBox fx:id="PopUpContainer" spacing="0" style="-fx-background-color: #202020;"/>
+            <VBox fx:id="popUpContainer" spacing="0" style="-fx-background-color: #202020;"/>
         </ScrollPane>
     </center>
 
