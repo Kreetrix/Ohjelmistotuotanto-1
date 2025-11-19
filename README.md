@@ -78,4 +78,42 @@ The localization system is handled by two main classes:
 All translation files are stored in: 
 [HERE](src/main/resources/Languages/)
 
+# Localization System
+
+This project includes a database-based localization system that enables multi-language support for various entities (such as cards and decks). The system is prepared but will be fully integrated in OTP2.
+
+## Overview
+
+Instead of storing language-specific columns (such as name_en, name_es, etc.) inside each entity table, this system uses a dedicated localization table. This keeps the database normalized and makes it easy to add new languages without modifying the schema.
+
+## Why This Method
+
+- Scales to any number of languages  
+- Works for all entity types  
+- Requires no schema changes when adding languages  
+- Keeps the database clean and maintainable  
+- Allows easy expansion in OTP2
+
+## Database Schema
+
+Table: `localization`
+
+| Column          | Type        | Description                      |
+|-----------------|-------------|----------------------------------|
+| translation_id  | INT PK AI   | Unique translation entry         |
+| entity_type     | VARCHAR     | Type of entity (e.g., card)      |
+| entity_id       | INT         | ID of the entity                 |
+| language_code   | VARCHAR(5)  | ISO code (e.g., en, es, fr)      |
+| translated_text | TEXT        | The translated content           |
+
+Planned Usage (OTP2)
+
+Backend will fetch localized text when the ?lang=<code> parameter is used
+
+Fallback to default language when translation is missing
+
+CRUD operations for translation management will be introduced
+
+API responses will automatically include translated content when available
+
 
