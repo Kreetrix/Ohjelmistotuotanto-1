@@ -19,6 +19,7 @@ public final class View extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Start with login screen
+        pageLoader.initialize(stage);
         pageLoader.loadPage("/fxml/loginView.fxml", "Login");
     }
 

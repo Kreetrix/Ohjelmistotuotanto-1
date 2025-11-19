@@ -1,12 +1,13 @@
 package util;
 
 import java.awt.*;
+
+import controller.PopUpController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-
+import model.entity.Decks;
 
 
 /**
@@ -40,10 +41,19 @@ public final class PageLoader {
      * The reusable stage used by {@link #loadPage}. If null, a new Stage will be created
      * when first loading a page.
      */
-    private Stage currentStage;
+    private Stage mainStage;
 
 
     private PageLoader() {
+    }
+
+    public void initialize(Stage stage) {
+        if(mainStage != null) {
+            return;
+        }
+        this.mainStage = stage;
+        mainStage.setResizable(true);
+        mainStage.setTitle("Memory Master - Login");
     }
 
     /**
@@ -51,7 +61,7 @@ public final class PageLoader {
      *
      * @return the singleton PageLoader
      */
-    public static synchronized PageLoader getInstance() {
+    public static PageLoader getInstance() {
         if (instance == null) {
             instance = new PageLoader();
         }
@@ -91,17 +101,18 @@ public final class PageLoader {
 
             Scene scene = new Scene(root, width, height);
 
-            if (currentStage == null) {
-                currentStage = new Stage();
-            }
-            currentStage.setScene(scene);
-            currentStage.setTitle(stageTitle);
-            currentStage.show();
+//            if (mainStage == null) {
+//                mainStage = new Stage();
+//            }
+
+            mainStage.setScene(scene);
+            mainStage.setTitle(stageTitle);
+            mainStage.show();
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return currentStage;
+        return mainStage;
     }
 
     public Stage loadPopUp(String path, String stageTitle) {
@@ -122,14 +133,13 @@ public final class PageLoader {
     public Stage loadPopUp(String path, String stageTitle, double width, double height) {
         try {
 
-
             javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-
             Parent root = loader.load();
             Scene scene = new Scene(root, width, height);
 
             Stage stage = new Stage();
             stage.setScene(scene);
+            stage.initOwner(mainStage);
             stage.setTitle(stageTitle);
             stage.showAndWait();
             return stage;
@@ -138,6 +148,8 @@ public final class PageLoader {
         }
         return null;
     }
+
+
 
     /**
      * Reloads the most recently loaded page (if any) by calling {@link #loadPage(String, String)}
