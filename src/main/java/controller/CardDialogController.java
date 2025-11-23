@@ -227,26 +227,15 @@ public class CardDialogController {
      * and closes the dialog if successful.
      */
     private void handleSave() {
-        if (isInputValid()) {
+        if (!isInputValid()) {return;}
             try {
                 if (isEditMode) {
-                    card.setDeck_id(deckComboBox.getValue().getDeck_id());
-                    card.setFront_text(frontTextField.getText().trim());
-                    card.setBack_text(backTextField.getText().trim());
-                    card.setImage_url(imageUrlField.getText() != null && !imageUrlField.getText().trim().isEmpty() ? imageUrlField.getText().trim() : null);
-                    card.setExtra_info(extraInfoField.getText() != null && !extraInfoField.getText().trim().isEmpty() ? extraInfoField.getText().trim() : null);
-
+                    updateExistingCard();
                     cardsDao.updateCard(card);
                     showInfo(I18n.get("card.updated"));
+
                 } else {
-                    Cards newCard = new Cards(
-                            deckComboBox.getValue().getDeck_id(),
-                            frontTextField.getText().trim(),
-                            backTextField.getText().trim(),
-                            imageUrlField.getText() != null && !imageUrlField.getText().trim().isEmpty() ? imageUrlField.getText().trim() : null,
-                            extraInfoField.getText() != null && !extraInfoField.getText().trim().isEmpty() ? extraInfoField.getText().trim() : null,
-                            false
-                    );
+                    Cards newCard = createNewCard();
 
                     cardsDao.persist(newCard);
                     showInfo(I18n.get("card.created"));
@@ -258,7 +247,24 @@ public class CardDialogController {
             } catch (SQLException e) {
             showError(I18n.get("card.dbError") + ": " + e.getMessage());
             }
-        }
+    }
+
+    private void updateExistingCard(){
+        card.setDeck_id(deckComboBox.getValue().getDeck_id());
+        card.setFront_text(frontTextField.getText().trim());
+        card.setBack_text(backTextField.getText().trim());
+        card.setImage_url(imageUrlField.getText() != null && !imageUrlField.getText().trim().isEmpty() ? imageUrlField.getText().trim() : null);
+        card.setExtra_info(extraInfoField.getText() != null && !extraInfoField.getText().trim().isEmpty() ? extraInfoField.getText().trim() : null);
+    }
+    private Cards createNewCard(){
+        return new Cards(
+                deckComboBox.getValue().getDeck_id(),
+                frontTextField.getText().trim(),
+                backTextField.getText().trim(),
+                imageUrlField.getText() != null && !imageUrlField.getText().trim().isEmpty() ? imageUrlField.getText().trim() : null,
+                extraInfoField.getText() != null && !extraInfoField.getText().trim().isEmpty() ? extraInfoField.getText().trim() : null,
+                false
+        );
     }
 
     /**
