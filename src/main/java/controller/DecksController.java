@@ -70,31 +70,11 @@ public class DecksController {
                     MenuItemButton deckButton = new MenuItemButton();
                     deckButton.setIcon("book");
 
-                    String deckName = deck.getDeck_name();
-                    String deckDescription = deck.getDescription();
+
 
                     // 🌐 Try to get translations
-                    try {
-                        String translatedName = deckTranslationDao.getTranslatedDeckName(deck.getDeck_id(), currentLang);
-                        if (translatedName != null && !translatedName.isEmpty()) {
-                            deckName = translatedName;
-                        }
-
-                        String translatedDesc = deckTranslationDao.getTranslatedDescription(deck.getDeck_id(), currentLang);
-                        if (translatedDesc != null && !translatedDesc.isEmpty()) {
-                            deckDescription = translatedDesc;
-                        }
-
-                    } catch (SQLException e) {
-                        System.err.println("Translation fetch failed: " + e.getMessage());
-                    }
-
-                    // fallback defaults
-                    if (deckDescription == null || deckDescription.trim().isEmpty()) {
-                        deckDescription = "No description";
-                    } else if (deckDescription.length() > 50) {
-                        deckDescription = deckDescription.substring(0, 47) + "...";
-                    }
+                    String deckName = getTranslatedName(deck,currentLang);
+                    String deckDescription = getTranslatedDescription(deck,currentLang);
 
                     deckButton.setMainText(deckName);
                     deckButton.setSubText(deckDescription);
@@ -113,6 +93,43 @@ public class DecksController {
             errorMessage.setOnAction(e -> loadDecks());
             decksContainer.getChildren().add(errorMessage);
         }
+    }
+
+    private String getTranslatedName(Decks deck, String lang) {
+        try {
+            String translatedName = deckTranslationDao.getTranslatedDeckName(deck.getDeck_id(), lang);
+            if (translatedName != null && !translatedName.isEmpty()) {
+                return translatedName;
+            }
+
+            return deck.getDeck_name();
+
+        } catch (SQLException e) {
+            System.err.println("Translation fetch failed: " + e.getMessage());
+        }
+
+    }
+    private String getTranslatedDescription(Decks deck, String lang) {
+        String deckDescription = null;
+        try {
+            String translatedDesc = deckTranslationDao.getTranslatedDescription(deck.getDeck_id(), lang);
+            if (translatedDesc != null && !translatedDesc.isEmpty()) {
+                deckDescription =  translatedDesc;
+            }
+
+            if (deckDescription == null || deckDescription.trim().isEmpty()) {
+                return  "No description";
+            } else if (deckDescription.length() > 50) {
+                 return deckDescription.substring(0, 47) + "...";
+            }
+
+            return deckDescription;
+
+        } catch (SQLException e) {
+            System.err.println("Translation fetch failed: " + e.getMessage());
+        }
+
+        return "No description";
     }
 
     /**
