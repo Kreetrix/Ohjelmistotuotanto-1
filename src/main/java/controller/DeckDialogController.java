@@ -105,10 +105,8 @@ public class DeckDialogController {
 
     private void validateInput() {
         boolean valid = true;
-
-        if (deckNameField.getText() == null || deckNameField.getText().trim().isEmpty()) {
-            valid = false;
-        } else if (deckNameField.getText().trim().length() > 100) {
+        String trimmed = (deckNameField.getText() == null) ?  "": deckNameField.getText().trim();
+        if (trimmed.isEmpty() || trimmed.length() > 100) {
             valid = false;
         }
 
