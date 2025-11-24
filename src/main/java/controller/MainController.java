@@ -2,10 +2,6 @@ package controller;
 
 import components.MenuItemButton;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.awt.Dimension;
 import util.I18n;
 import util.PageLoader;
 
