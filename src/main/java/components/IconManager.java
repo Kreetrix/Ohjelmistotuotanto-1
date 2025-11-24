@@ -20,6 +20,8 @@ package components;
  */
  public class IconManager {
 
+     private IconManager(){}
+
      private static Map<String, String> icons;
 
      static {
