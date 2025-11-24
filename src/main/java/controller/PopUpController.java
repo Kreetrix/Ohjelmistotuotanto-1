@@ -35,8 +35,7 @@ public class PopUpController {
 
     private final DeckTranslationDao deckTranslationDao = new DeckTranslationDao();
 
-    public void initialize() {
-    }
+
 
     public void setDeck(Decks deck) {
         this.selectedDeck = deck;
