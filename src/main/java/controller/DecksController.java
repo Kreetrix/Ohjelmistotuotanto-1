@@ -102,12 +102,13 @@ public class DecksController {
                 return translatedName;
             }
 
-            return deck.getDeck_name();
+
 
         } catch (SQLException e) {
             System.err.println("Translation fetch failed: " + e.getMessage());
         }
 
+        return deck.getDeck_name();
     }
     private String getTranslatedDescription(Decks deck, String lang) {
         String deckDescription = null;
