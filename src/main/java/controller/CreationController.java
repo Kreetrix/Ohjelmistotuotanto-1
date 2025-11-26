@@ -561,7 +561,7 @@ public class CreationController {
             return true;
         }
 
-        if ("student".equals(role)) {
+        if ("student".equalsIgnoreCase(role)) {
             try {
                 Decks deck = decksDao.getDeckById(card.getDeck_id());
                 return deck != null && deck.getUser_id() == userId;
