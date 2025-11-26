@@ -99,6 +99,10 @@ public final class PageLoader {
 
             Scene scene = new Scene(root, width, height);
 
+            if(mainStage == null) {
+                mainStage = new Stage();
+            }
+
 
             mainStage.setScene(scene);
             mainStage.setTitle(stageTitle);
