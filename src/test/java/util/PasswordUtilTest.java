@@ -13,8 +13,8 @@ class PasswordUtilTest {
 
     @Test
     void checkPassword() {
-        String testString = "test123";
-        String hashedPassword = PasswordUtil.hashPassword(testString);
-        assertTrue(PasswordUtil.checkPassword(testString, hashedPassword));
+        String test = "test123";
+        String hashedPassword = PasswordUtil.hashPassword(test);
+        assertTrue(PasswordUtil.checkPassword(test, hashedPassword));
     }
 }
