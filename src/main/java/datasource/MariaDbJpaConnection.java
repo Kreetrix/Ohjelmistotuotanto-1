@@ -14,7 +14,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class MariaDbJpaConnection {
 
-    private static Connection conn = null;
+    private static final Connection conn = null;
 
     private MariaDbJpaConnection() {}
 

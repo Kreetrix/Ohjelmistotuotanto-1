@@ -4,7 +4,7 @@ import datasource.MariaDbJpaConnection;
 
 import java.sql.*;
 
-// TODO : ADD JAVADOC cpmmens
+// TODO : ADD JAVADOC comments
 
 public class DeckTranslationDao {
 
