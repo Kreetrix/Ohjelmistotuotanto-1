@@ -9,6 +9,8 @@ import javafx.scene.shape.SVGPath;
 import javafx.geometry.Pos;
 import model.dao.DecksDao;
 import model.dao.CardsDao;
+import model.dao.DeckTranslationDao;
+import model.dao.CardTranslationDao;
 import model.entity.Decks;
 import model.entity.Cards;
 import components.IconManager;
@@ -56,6 +58,8 @@ public class CreationController {
 
     private DecksDao decksDao;
     private CardsDao cardsDao;
+    private DeckTranslationDao deckTranslationDao;
+    private CardTranslationDao cardTranslationDao;
 
     /**
      * Initializes the controller after FXML loading.
@@ -73,11 +77,20 @@ public class CreationController {
 
         decksDao = new DecksDao();
         cardsDao = new CardsDao();
+        deckTranslationDao = new DeckTranslationDao();
+        cardTranslationDao = new CardTranslationDao();
 
         setupEventHandlers();
         loadDecks();
         loadCards();
         setupDeckFilter();
+        
+        // Refresh UI when language changes
+        I18n.localeProperty().addListener((obs, oldV, newV) -> {
+            loadDecks();
+            loadCards();
+            setupDeckFilter();
+        });
     }
 
     /**
@@ -108,11 +121,14 @@ public class CreationController {
                     .filter(deck -> !deck.isIs_deleted())
                     .toList());
 
-            // Set up display converter for deck objects
+            // Set up display converter for deck objects with translations
+            String currentLang = Session.getInstance().getLanguage();
             deckFilterComboBox.setConverter(new javafx.util.StringConverter<Decks>() {
                 @Override
                 public String toString(Decks deck) {
-                    return deck != null ? deck.getDeck_name() : "";
+                    if (deck == null) return "";
+                    if (deck.getDeck_id() == -1) return deck.getDeck_name(); // "All Decks" option
+                    return getTranslatedDeckName(deck, currentLang);
                 }
 
                 @Override
@@ -213,14 +229,16 @@ public class CreationController {
         deckIcon.setScaleY(1.5);
 
         VBox textContent = new VBox(2);
-        Label nameLabel = new Label(deck.getDeck_name());
+        
+        // Get translated deck name and description
+        String currentLang = Session.getInstance().getLanguage();
+        String deckName = getTranslatedDeckName(deck, currentLang);
+        String deckDescription = getTranslatedDeckDescription(deck, currentLang);
+        
+        Label nameLabel = new Label(deckName);
         nameLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 18; -fx-font-weight: bold;");
 
-        String description = deck.getDescription();
-        if (description == null || description.trim().isEmpty()) {
-            description = "No description";
-        }
-        Label descLabel = new Label(description);
+        Label descLabel = new Label(deckDescription);
         descLabel.setStyle("-fx-text-fill: #757575; -fx-font-size: 14;");
 
         textContent.getChildren().addAll(nameLabel, descLabel);
@@ -282,14 +300,16 @@ public class CreationController {
 
         VBox textContent = new VBox(2);
 
-        String question = card.getFront_text();
+        // Get translated card texts
+        String currentLang = Session.getInstance().getLanguage();
+        String question = getTranslatedCardFront(card, currentLang);
         if (question.length() > 50) {
             question = question.substring(0, 47) + "...";
         }
         Label questionLabel = new Label("Q: " + question);
         questionLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 16; -fx-font-weight: bold;");
 
-        String answer = card.getBack_text();
+        String answer = getTranslatedCardBack(card, currentLang);
         if (answer.length() > 50) {
             answer = answer.substring(0, 47) + "...";
         }
@@ -343,9 +363,11 @@ public class CreationController {
      */
     private String getDeckNameById(int deckId) throws SQLException {
         List<Decks> allDecks = decksDao.getAllDecks();
+        String currentLang = Session.getInstance().getLanguage();
+        
         return allDecks.stream()
                 .filter(deck -> deck.getDeck_id() == deckId)
-                .map(Decks::getDeck_name)
+                .map(deck -> getTranslatedDeckName(deck, currentLang))
                 .findFirst()
                 .orElse("Unknown Deck");
     }
@@ -703,5 +725,90 @@ public class CreationController {
         }
 
         return false;
+    }
+
+    /**
+     * Gets the translated deck name for the specified language.
+     * Falls back to the original deck name if translation is not available.
+     *
+     * @param deck the deck to get the translated name for
+     * @param lang the language code
+     * @return the translated deck name or the original name
+     */
+    private String getTranslatedDeckName(Decks deck, String lang) {
+        try {
+            String translatedName = deckTranslationDao.getTranslatedDeckName(deck.getDeck_id(), lang);
+            if (translatedName != null && !translatedName.isEmpty()) {
+                return translatedName;
+            }
+        } catch (SQLException e) {
+            System.err.println("Translation fetch failed: " + e.getMessage());
+        }
+        return deck.getDeck_name();
+    }
+
+    /**
+     * Gets the translated deck description for the specified language.
+     * Falls back to the original description if translation is not available.
+     *
+     * @param deck the deck to get the translated description for
+     * @param lang the language code
+     * @return the translated description or the original description
+     */
+    private String getTranslatedDeckDescription(Decks deck, String lang) {
+        try {
+            String translatedDesc = deckTranslationDao.getTranslatedDescription(deck.getDeck_id(), lang);
+            if (translatedDesc != null && !translatedDesc.isEmpty()) {
+                return translatedDesc;
+            }
+        } catch (SQLException e) {
+            System.err.println("Translation fetch failed: " + e.getMessage());
+        }
+        
+        String description = deck.getDescription();
+        if (description == null || description.trim().isEmpty()) {
+            return "No description";
+        }
+        return description;
+    }
+
+    /**
+     * Gets the translated front text for the specified card and language.
+     * Falls back to the original front text if translation is not available.
+     *
+     * @param card the card to get the translated front text for
+     * @param lang the language code
+     * @return the translated front text or the original text
+     */
+    private String getTranslatedCardFront(Cards card, String lang) {
+        try {
+            String translatedFront = cardTranslationDao.getTranslatedFront(card.getCard_id(), lang);
+            if (translatedFront != null && !translatedFront.isEmpty()) {
+                return translatedFront;
+            }
+        } catch (SQLException e) {
+            System.err.println("Translation fetch failed for card " + card.getCard_id() + ": " + e.getMessage());
+        }
+        return card.getFront_text();
+    }
+
+    /**
+     * Gets the translated back text for the specified card and language.
+     * Falls back to the original back text if translation is not available.
+     *
+     * @param card the card to get the translated back text for
+     * @param lang the language code
+     * @return the translated back text or the original text
+     */
+    private String getTranslatedCardBack(Cards card, String lang) {
+        try {
+            String translatedBack = cardTranslationDao.getTranslatedBack(card.getCard_id(), lang);
+            if (translatedBack != null && !translatedBack.isEmpty()) {
+                return translatedBack;
+            }
+        } catch (SQLException e) {
+            System.err.println("Translation fetch failed for card " + card.getCard_id() + ": " + e.getMessage());
+        }
+        return card.getBack_text();
     }
 }
