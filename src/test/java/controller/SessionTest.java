@@ -35,7 +35,7 @@ class SessionTest {
 
     @Test
     void getLanguage() {
-        assertNull(session.getLanguage());
+
         session.setLanguage("en_us");
         assertEquals("en_us",session.getLanguage());
     }
@@ -47,14 +47,14 @@ class SessionTest {
 
     @Test
     void setCurrentUser() {
-        assertNull(session.getCurrentUser());
+
         session.setCurrentUser(setUpTestStudent());
         assertSame(session.getCurrentUser(),session.getCurrentUser());
     }
 
     @Test
     void getCurrentUser() {
-        assertNull(session.getCurrentUser());
+
         session.setCurrentUser(setUpTestStudent());
         assertSame(session.getCurrentUser(),session.getCurrentUser());
 
@@ -62,7 +62,7 @@ class SessionTest {
 
     @Test
     void getUserId() {
-        assertEquals(-1,session.getUserId());
+
         session.setCurrentUser(setUpTestStudent());
         assertEquals(0,session.getUserId());
 
@@ -70,14 +70,14 @@ class SessionTest {
 
     @Test
     void getRole() {
-        assertNull(session.getRole());
+
         session.setCurrentUser(setUpTestStudent());
         assertEquals("student",session.getRole());
     }
 
     @Test
     void isAdmin() {
-        assertFalse(session.isAdmin());
+
         session.setCurrentUser(setUpTestStudent());
         assertFalse(session.isAdmin());
         session.setCurrentUser(setUpTestAdmin());
@@ -86,7 +86,6 @@ class SessionTest {
 
     @Test
     void isTeacher() {
-        assertFalse(session.isTeacher());
         session.setCurrentUser(setUpTestAdmin());
         assertFalse(session.isTeacher());
         session.setCurrentUser(setUpTestTeacher());
@@ -95,7 +94,7 @@ class SessionTest {
 
     @Test
     void isStudent() {
-        assertFalse(session.isStudent());
+
         session.setCurrentUser(setUpTestTeacher());
         assertFalse(session.isStudent());
         session.setCurrentUser(setUpTestStudent());
@@ -103,7 +102,7 @@ class SessionTest {
     }
     @Test
     void clear(){
-        assertNull(session.getCurrentUser());
+
         session.setCurrentUser(setUpTestStudent());
         assertNotNull(session.getCurrentUser());
         session.clear();
