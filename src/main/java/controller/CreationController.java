@@ -544,11 +544,7 @@ public class CreationController {
             return true;
         }
 
-        if ("student".equals(role) && deck.getUser_id() == userId) {
-            return true;
-        }
-
-        return false;
+        return "student".equals(role) && deck.getUser_id() == userId;
     }
 
     /**

@@ -14,8 +14,8 @@ import java.io.IOException;
  * Handles navigation actions and user logout.
  */
 public class NavbarController {
-    private LogoutController logout = new LogoutController();
-    private Session sessionManager = Session.getInstance();
+    private final LogoutController logout = new LogoutController();
+    private final Session sessionManager = Session.getInstance();
 
     @FXML
     public CustomButton logoutBtn;
