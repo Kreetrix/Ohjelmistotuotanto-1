@@ -205,11 +205,7 @@ public class CardDialogController {
      * Checks for required fields and enables save button only when all required fields are filled.
      */
     private void validateInput() {
-        boolean valid = true;
-
-        if (frontTextField.getText() == null || frontTextField.getText().trim().isEmpty()) {
-            valid = false;
-        }
+        boolean valid = frontTextField.getText() != null && !frontTextField.getText().trim().isEmpty();
 
         if (backTextField.getText() == null || backTextField.getText().trim().isEmpty()) {
             valid = false;
