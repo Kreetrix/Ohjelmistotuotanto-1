@@ -540,7 +540,7 @@ public class CreationController {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
 
-        if ("admin".equals(role) || "teacher".equals(role)) {
+        if ("admin".equalsIgnoreCase(role) || "teacher".equalsIgnoreCase(role)) {
             return true;
         }
 
@@ -557,7 +557,7 @@ public class CreationController {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
 
-        if ("admin".equals(role) || "teacher".equals(role)) {
+        if ("admin".equalsIgnoreCase(role) || "teacher".equalsIgnoreCase(role)) {
             return true;
         }
 
