@@ -544,7 +544,7 @@ public class CreationController {
             return true;
         }
 
-        return "student".equals(role) && deck.getUser_id() == userId;
+        return "student".equalsIgnoreCase(role) && deck.getUser_id() == userId;
     }
 
     /**
@@ -580,7 +580,7 @@ public class CreationController {
      */
     private boolean hasDeletePermission() {
         String role = Session.getInstance().getRole();
-        return "admin".equals(role) || "teacher".equals(role);
+        return "admin".equalsIgnoreCase(role) || "teacher".equalsIgnoreCase(role);
     }
 
     /**
@@ -594,12 +594,12 @@ public class CreationController {
         int userId = Session.getInstance().getUserId();
 
         // Admin and teacher can delete any card
-        if ("admin".equals(role) || "teacher".equals(role)) {
+        if ("admin".equalsIgnoreCase(role) || "teacher".equalsIgnoreCase(role)) {
             return true;
         }
 
         // Student can delete cards in their own decks
-        if ("student".equals(role)) {
+        if ("student".equalsIgnoreCase(role)) {
             try {
                 Decks deck = decksDao.getDeckById(card.getDeck_id());
                 return deck != null && deck.getUser_id() == userId;
@@ -610,6 +610,8 @@ public class CreationController {
 
         return false;
     }
+
+
 
     /**
      * Shows the deck creation/editing dialog.
@@ -692,11 +694,11 @@ public class CreationController {
         String role = Session.getInstance().getRole();
         int userId = Session.getInstance().getUserId();
 
-        if ("admin".equals(role) || "teacher".equals(role)) {
+        if ("admin".equalsIgnoreCase(role) || "teacher".equalsIgnoreCase(role)) {
             return true;
         }
 
-        if ("student".equals(role)) {
+        if ("student".equalsIgnoreCase(role)) {
             return deck.getUser_id() == userId;
         }
 
