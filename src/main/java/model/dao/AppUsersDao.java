@@ -14,7 +14,6 @@ public class AppUsersDao {
     /**
      *
      * @return returns list of every user in database
-     * @throws SQLException
      */
     public List<AppUsers> getAllUsers() throws SQLException {
         List<AppUsers> users = new ArrayList<>();
@@ -83,7 +82,6 @@ public class AppUsersDao {
      *
      * @param SearchName
      * @return User from database
-     * @throws SQLException
      */
     public AppUsers getUserByUsername(String SearchName) throws SQLException {
         String sql = "SELECT * FROM app_users WHERE username = ?";
@@ -115,7 +113,6 @@ public class AppUsersDao {
     /**
      * Updates user information in the database
      * @param user AppUsers object with updated information
-     * @throws SQLException
      */
     public void updateUser(AppUsers user) throws SQLException {
         String sql = "UPDATE app_users SET username = ?, email = ?, role = ? WHERE user_id = ?";
