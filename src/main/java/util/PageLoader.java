@@ -74,8 +74,8 @@ public final class PageLoader {
      * @param path       the classpath resource path to the FXML file (e.g. "/fxml/main.fxml")
      * @param stageTitle the title to display on the Stage window
      */
-    public void loadPage(String path, String stageTitle) {
-        loadPage(path, stageTitle, "Error loading page: ");
+    public Stage loadPage(String path, String stageTitle) {
+        return loadPage(path, stageTitle, "Error loading page: " + path);
     }
 
     /**
@@ -141,7 +141,7 @@ public final class PageLoader {
             stage.setScene(scene);
             stage.initOwner(mainStage);
             stage.setTitle(stageTitle);
-            stage.showAndWait();
+            stage.show();
             return stage;
         } catch (Exception ex) {
             ex.printStackTrace();
