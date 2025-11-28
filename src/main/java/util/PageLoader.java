@@ -1,6 +1,7 @@
 package util;
 
 import java.awt.*;
+import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +20,10 @@ import javafx.stage.Stage;
  * path and title so the current page can be reloaded using {@link #reloadCurrentPage()}.
  */
 public final class PageLoader {
+
+    public record PopUp<T>(Stage stage, T controller) {
+    }
+
 
     /**
      * Singleton instance.
@@ -93,14 +98,12 @@ public final class PageLoader {
             currentPath = path;
             currentTitle = stageTitle;
 
-            javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-
-            Parent root = loader.load();
+            Parent root = loadFXML(path);
 
             Scene scene = new Scene(root, width, height);
 
             if(mainStage == null) {
-                mainStage = new Stage();
+                mainStage = setupStage(stageTitle, scene);
             }
 
 
@@ -109,46 +112,68 @@ public final class PageLoader {
             mainStage.show();
 
         } catch (Exception ex) {
+
             ex.printStackTrace();
             System.out.println(er);
+            loadPage("/fxml/main.fxml", I18n.get("app.title"));
+            throw ex;
         }
         return mainStage;
     }
 
-    public Stage loadPopUp(String path, String stageTitle) {
+    public <T> PopUp<T> loadPopUp(String path, String stageTitle) {
         return loadPopUp(path, stageTitle, this.width, this.height);
     }
-
-    /**
-     * Loads an FXML page into a new pop-up stage. A fresh Stage is created on each call.
-     * The method computes a default scene size based on the current screen dimensions.
-     *
-     * @param path       the classpath resource path to the FXML file
-     * @param stageTitle the title to display on the pop-up Stage
-     * @param width      the width of the popup
-     * @param height     the height of the popup
-     **/
-
-
-    public Stage loadPopUp(String path, String stageTitle, double width, double height) {
-        try {
-
-            javafx.fxml.FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, width, height);
-
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(mainStage);
-            stage.setTitle(stageTitle);
-            stage.show();
-            return stage;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    public <T> PopUp<T> loadPopUp(String path, String stageTitle, double width, double height) {
+        return loadPopUp(path, stageTitle, width, height,mainStage);
     }
 
+
+
+    public <T> PopUp<T> loadPopUp(String path, String stageTitle, double width, double height, Stage owner) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            Parent root = loader.load();
+
+            @SuppressWarnings("unchecked")
+            T controller = (T) loader.getController();
+
+            Scene scene = new Scene(root, width, height);
+            Stage stage = setupStageWithOwner(stageTitle, scene, owner);
+            stage.show();
+
+            return new PopUp<>(stage, controller);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load popup: " + path, e);
+        }
+    }
+
+
+
+    private Parent loadFXML(String path) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            return loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Stage setupStage(String stageTitle, Scene scene) {
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle(stageTitle);
+        return stage;
+    }
+
+
+    private Stage setupStageWithOwner(String stageTitle, Scene scene,Stage owner) {
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle(stageTitle);
+        stage.initOwner(owner);
+        return stage;
+    }
 
 
     /**

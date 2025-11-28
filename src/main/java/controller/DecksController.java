@@ -13,6 +13,7 @@ import model.dao.DecksDao;
 import model.dao.DeckTranslationDao;
 import model.entity.Decks;
 import util.I18n;
+import util.PageLoader;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -144,24 +145,17 @@ public class DecksController {
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/popup.fxml"));
-            Parent root = loader.load();
-
-            PopUpController popupController = loader.getController();
+            PageLoader.PopUp<PopUpController> popup = PageLoader.getInstance().loadPopUp("/fxml/popup.fxml", "Study Deck - " + deck.getDeck_name(), 400.0, 300.0);
+            PopUpController popupController = popup.controller();
             popupController.setDeck(deck);
+            currentPopupStage = popup.stage();
 
-            Stage popupStage = new Stage();
-            popupController.setStage(popupStage);
 
-            popupStage.setTitle("Study Deck - " + deck.getDeck_name());
-            popupStage.setScene(new Scene(root, 400, 300));
-            currentPopupStage = popupStage;
 
-            popupStage.showAndWait();
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Error opening popup: " + e.getMessage());
             e.printStackTrace();
         }
+
     }
 }

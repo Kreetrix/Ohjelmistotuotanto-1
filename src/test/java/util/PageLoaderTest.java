@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PageLoaderTest extends ApplicationTest {
@@ -39,9 +40,28 @@ class PageLoaderTest extends ApplicationTest {
     @Test
     void loadPopUp() {
         interact(() -> {
-            Stage popup = pageLoader.loadPopUp("/fxml/main.fxml", "test");
+            Stage popup = pageLoader.loadPopUp("/fxml/main.fxml", "test").stage();
             assertNotNull(popup);
 
+        });
+    }
+    @Test
+    void loadpageWithWrongPath() {
+
+        interact(() -> {
+            assertThrows(Exception.class, () ->
+                    pageLoader.loadPage("/fxml/not_found.fxml", "test")
+            );
+        });
+    }
+
+    @Test
+    void loadPopupWithWrongPath() {
+
+        interact(() -> {
+            assertThrows(Exception.class, () ->
+                    pageLoader.loadPopUp("/fxml/not_found.fxml", "test")
+            );
         });
     }
 
