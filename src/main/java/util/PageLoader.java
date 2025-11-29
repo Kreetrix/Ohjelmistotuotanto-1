@@ -7,12 +7,16 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * Loads and shows JavaFX pages and pop-up windows.
  */
 public final class PageLoader {
+
+    private static Logger logger =  Logger.getLogger(PageLoader.class.getName());
 
     /**
      * Singleton instance of the page loader.
@@ -105,9 +109,7 @@ public final class PageLoader {
             mainStage.show();
 
         } catch (Exception ex) {
-
-            ex.printStackTrace();
-            System.out.println(er);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
             loadPage(Page.MAIN);
             throw ex;
         }
@@ -164,6 +166,7 @@ public final class PageLoader {
 
             return new PopUp<>(stage, controller);
         } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException("Failed to load popup: " + path, e);
         }
     }
