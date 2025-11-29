@@ -58,7 +58,7 @@ stmt.execute(
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/creation.fxml"));
-        stage.setScene(new Scene(root, 600, 400));
+        stage.setScene(new Scene(root, 600, 800));
         stage.show();
     }
 
@@ -78,10 +78,12 @@ stmt.execute(
 
     @AfterEach
     void cleanUp() throws Exception {
-        try (Connection conn = MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM decks WHERE deck_name = ?")) {
-            ps.setString(1, "English");
-            ps.executeUpdate();
+        try (Connection conn = MariaDbJpaConnection.getConnection()) {
+            try (PreparedStatement ps1 = conn.prepareStatement(
+                    "DELETE FROM gamesessions WHERE deck_id IN (SELECT deck_id FROM decks WHERE deck_name = ?)")) {
+                ps1.setString(1, "English");
+                ps1.executeUpdate();
+            }
         }
 
     }
