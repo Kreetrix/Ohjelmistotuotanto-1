@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * changes
  * and that selecting Hebrew switches layout to right-to-left.
  */
-public class LanguageChangeTest extends ApplicationTest {
+class LanguageChangeTest extends ApplicationTest {
 
     private Stage primaryStage;
 
@@ -38,7 +38,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void englishTextsAreShown() throws Exception {
+    void englishTextsAreShown() {
         interact(() -> I18n.setLocale(Locale.ENGLISH));
         interact(() -> {
             try {
@@ -53,7 +53,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void russianTextsAreShown() throws Exception {
+    void russianTextsAreShown()  {
         interact(() -> I18n.setLocale(new Locale("ru")));
         interact(() -> {
             try {
@@ -68,7 +68,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void japaneseTextsAreShown() throws Exception {
+    void japaneseTextsAreShown() {
         interact(() -> I18n.setLocale(new Locale("ja")));
         interact(() -> {
             try {
@@ -83,7 +83,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void hebrewButtonSwitchesToHebrewAndRtl() throws Exception {
+    void hebrewButtonSwitchesToHebrewAndRtl() {
         interact(() -> I18n.setLocale(Locale.ENGLISH));
         interact(() -> {
             try {
