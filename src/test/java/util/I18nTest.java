@@ -39,5 +39,6 @@ class I18nTest {
     @Test
     void get() {
         assertEquals("EN bundle",I18n.get("test.bundleTest"));
+        assertEquals("test.notExistingKey",I18n.get("test.notExistingKey"));
     }
 }
