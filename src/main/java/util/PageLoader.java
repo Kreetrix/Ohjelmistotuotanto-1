@@ -105,7 +105,7 @@ public final class PageLoader {
 
 
             mainStage.setScene(scene);
-            mainStage.setTitle(stageTitle);
+            mainStage.setTitle(I18n.get(stageTitle));
             mainStage.show();
 
         } catch (Exception ex) {
@@ -158,7 +158,6 @@ public final class PageLoader {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent root = loader.load();
 
-            @SuppressWarnings("unchecked")
             T controller = loader.getController();
 
             Scene scene = new Scene(root, width, height);
@@ -229,7 +228,7 @@ public final class PageLoader {
      * Navigates to the main application page.
      */
     public void goToHomePage() {
-        loadPage("/fxml/main.fxml", I18n.get("app.title"));
+        loadPage(Page.MAIN);
 
     }
 

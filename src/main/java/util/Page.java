@@ -1,7 +1,7 @@
 package util;
 
 public enum Page {
-    LOGIN("/fxml/loginView.fxml", "Login"),
+    LOGIN("/fxml/loginView.fxml", "login.title"),
     REGISTER("/fxml/registerView.fxml", "register.title"),
     MAIN("/fxml/main.fxml", "app.title"),
     DECKS("/fxml/decks.fxml", "Card Memo - Decks"),
