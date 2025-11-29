@@ -3,6 +3,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 /**
@@ -13,6 +16,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 
 public class MariaDbJpaConnection {
+
+    private static final Logger log = Logger.getLogger(MariaDbJpaConnection.class.getName());
 
     private static  Connection conn = null;
 
@@ -40,7 +45,7 @@ public class MariaDbJpaConnection {
         }
 
         String url = String.format("jdbc:mariadb://%s:3306/%s", host, database);
-        System.out.println("Connecting to database: " + url.replace(password, "***"));
+        log.log(Level.INFO, "Connecting to database at " + url.replace(password, "***"));
         conn = DriverManager.getConnection(url, user, password);
         return conn;
     }
@@ -69,7 +74,7 @@ public class MariaDbJpaConnection {
                 conn.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error closing the database connection: " + e.getMessage(), e);
         }
     }
 }

@@ -689,13 +689,7 @@ public class CreationController {
         dialogStage.setResizable(false);
         controller.setDialogStage(dialogStage);
 
-
-
-
-
         controller.setCard(card);
-
-
 
         if (preselectedDeck != null) {
             controller.setPreselectedDeck(preselectedDeck);
