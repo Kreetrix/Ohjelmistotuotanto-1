@@ -36,7 +36,9 @@ public class LanguageController {
         langLabel.textProperty().bind(
             javafx.beans.binding.Bindings.createStringBinding(() -> util.I18n.get("label.lang"), util.I18n.localeProperty())
         );
-    } catch (Exception ignored) {}
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
     }
 
     private void handleLanguageChange() {

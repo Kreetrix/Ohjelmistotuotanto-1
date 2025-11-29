@@ -83,12 +83,14 @@ class DeckTest extends ApplicationTest {
 
     @Test
     void ChooseDeck() {
-        clickOn("#usernameField").write("user");
-        clickOn("#passwordField").write("1234");
-        clickOn("#loginBtn");
-        clickOn("My Decks");
-        clickOn("Biology Basics");
-        clickOn("Start Study");
+        interact( () -> {
+            clickOn("#usernameField").write("user");
+            clickOn("#passwordField").write("1234");
+            clickOn("#loginBtn");
+            clickOn("My Decks");
+            clickOn("Biology Basics");
+            clickOn("Start Study");
+        });
     }
     @AfterAll
     static void cleanUp(){

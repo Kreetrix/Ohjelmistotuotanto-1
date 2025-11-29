@@ -39,7 +39,7 @@ public final class PageLoader {
      *
      * @return shared PageLoader instance
      */
-    public static PageLoader getInstance() {
+    public static synchronized PageLoader getInstance() {
         if (instance == null) {
             instance = new PageLoader();
         }
