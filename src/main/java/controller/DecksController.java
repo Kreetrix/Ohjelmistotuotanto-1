@@ -148,6 +148,7 @@ public class DecksController {
             PageLoader.PopUp<PopUpController> popup = PageLoader.getInstance().loadPopUp("/fxml/popup.fxml", "Study Deck - " + deck.getDeck_name(), 400.0, 300.0);
             PopUpController popupController = popup.controller();
             popupController.setDeck(deck);
+            popup.stage().show();
             currentPopupStage = popup.stage();
 
 

@@ -1,68 +1,39 @@
 package util;
 
-import java.awt.*;
-import java.io.IOException;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.IOException;
+
 
 /**
- * Utility singleton responsible for loading JavaFX pages and pop-up windows from FXML resources.
- *
- * <p>This class provides convenience methods to load an FXML file into a reusable primary
- * stage ({@link #loadPage(String, String)}) or into a fresh pop-up stage
- * ({@link #loadPopUp(String, String)}). An overloaded variant of {@link #loadPage(String, String)}
- * is available that accepts a custom error-prefix string to be included in exception messages
- * ({@link #loadPage(String, String, String)}). The class keeps track of the last loaded
- * path and title so the current page can be reloaded using {@link #reloadCurrentPage()}.
+ * Loads and shows JavaFX pages and pop-up windows.
  */
 public final class PageLoader {
 
-    public record PopUp<T>(Stage stage, T controller) {
-    }
-
-
     /**
-     * Singleton instance.
+     * Singleton instance of the page loader.
      */
     private static PageLoader instance;
     //default sizes for window
     private final double height = getScreenSize().getHeight() / 1.2;
     private final double width = getScreenSize().getWidth() / 3;
+    private Page currentPage;
     /**
-     * The last loaded FXML resource path (as passed to {@link #loadPage}).
-     */
-    private String currentPath;
-    /**
-     * The last set window title (as passed to {@link #loadPage}).
-     */
-    private String currentTitle;
-    /**
-     * The reusable stage used by {@link #loadPage}. If null, a new Stage will be created
-     * when first loading a page.
+     * Main application stage used for standard pages.
      */
     private Stage mainStage;
-
 
     private PageLoader() {
     }
 
-    public void initialize(Stage stage) {
-        if(mainStage != null) {
-            return;
-        }
-        this.mainStage = stage;
-        mainStage.setResizable(true);
-        mainStage.setTitle("Memory Master - Login");
-    }
-
     /**
-     * Returns the singleton instance of PageLoader, creating it if necessary.
+     * Returns the singleton instance of PageLoader.
      *
-     * @return the singleton PageLoader
+     * @return shared PageLoader instance
      */
     public static PageLoader getInstance() {
         if (instance == null) {
@@ -72,37 +43,59 @@ public final class PageLoader {
     }
 
     /**
-     * Loads an FXML page into a reusable stage. The stage is created on first use and
-     * subsequently reused for future calls to this method. The method computes a default
-     * scene size based on the current screen dimensions.
+     * Initializes the main application stage.
      *
-     * @param path       the classpath resource path to the FXML file (e.g. "/fxml/main.fxml")
-     * @param stageTitle the title to display on the Stage window
+     * @param stage primary JavaFX stage
+     */
+    public void initialize(Stage stage) {
+        if (mainStage != null) {
+            return;
+        }
+        this.mainStage = stage;
+        mainStage.setResizable(true);
+        mainStage.setTitle("Memory Master - Login");
+    }
+
+    /**
+     * Loads the given {@link Page} into the main stage.
+     *
+     * @param page page enum to load
+     * @return the main stage showing the page
+     */
+    public Stage loadPage(Page page) {
+        return loadPage(page.getPath(), page.getTitle());
+    }
+
+    /**
+     * Loads an FXML page into the main stage.
+     *
+     * @param path       FXML resource path
+     * @param stageTitle window title
+     * @return the main stage showing the page
      */
     public Stage loadPage(String path, String stageTitle) {
         return loadPage(path, stageTitle, "Error loading page: " + path);
     }
 
     /**
-     * Loads an FXML page into a reusable stage with a custom error-prefix string.
-     * This behaves like {@link #loadPage(String, String)} but, when an exception occurs,
-     * the provided error prefix is printed before the exception message. This allows
-     * callers to supply contextual text that will appear in the error log.
+     * Loads an FXML page with a custom error message prefix.
      *
-     * @param path       the classpath resource path to the FXML file
-     * @param stageTitle the title to display on the Stage window
-     * @param er         a custom error-prefix string that will be prepended to any exception message
+     * @param path       FXML resource path
+     * @param stageTitle window title
+     * @param er         error message prefix
+     * @return the main stage showing the page
      */
     public Stage loadPage(String path, String stageTitle, String er) {
         try {
-            currentPath = path;
-            currentTitle = stageTitle;
+
+            currentPage = Page.pageByPath(path);
+
 
             Parent root = loadFXML(path);
 
             Scene scene = new Scene(root, width, height);
 
-            if(mainStage == null) {
+            if (mainStage == null) {
                 mainStage = setupStage(stageTitle, scene);
             }
 
@@ -115,32 +108,59 @@ public final class PageLoader {
 
             ex.printStackTrace();
             System.out.println(er);
-            loadPage("/fxml/main.fxml", I18n.get("app.title"));
+            loadPage(Page.MAIN);
             throw ex;
         }
         return mainStage;
     }
 
+    /**
+     * Opens a popup window with default size.
+     *
+     * @param path       FXML resource path
+     * @param stageTitle window title
+     * @param <T>        controller type
+     * @return popup wrapper containing stage and controller
+     */
     public <T> PopUp<T> loadPopUp(String path, String stageTitle) {
         return loadPopUp(path, stageTitle, this.width, this.height);
     }
+
+    /**
+     * Opens a popup window with custom size.
+     *
+     * @param path       FXML resource path
+     * @param stageTitle window title
+     * @param width      popup width
+     * @param height     popup height
+     * @param <T>        controller type
+     * @return popup wrapper containing stage and controller
+     */
     public <T> PopUp<T> loadPopUp(String path, String stageTitle, double width, double height) {
-        return loadPopUp(path, stageTitle, width, height,mainStage);
+        return loadPopUp(path, stageTitle, width, height, mainStage);
     }
 
-
-
+    /**
+     * Opens a popup window with custom size and owner stage.
+     *
+     * @param path       FXML resource path
+     * @param stageTitle window title
+     * @param width      popup width
+     * @param height     popup height
+     * @param owner      owner stage for the popup
+     * @param <T>        controller type
+     * @return popup wrapper containing stage and controller
+     */
     public <T> PopUp<T> loadPopUp(String path, String stageTitle, double width, double height, Stage owner) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent root = loader.load();
 
             @SuppressWarnings("unchecked")
-            T controller = (T) loader.getController();
+            T controller = loader.getController();
 
             Scene scene = new Scene(root, width, height);
             Stage stage = setupStageWithOwner(stageTitle, scene, owner);
-            stage.show();
 
             return new PopUp<>(stage, controller);
         } catch (IOException e) {
@@ -148,8 +168,12 @@ public final class PageLoader {
         }
     }
 
-
-
+    /**
+     * Loads an FXML file and returns its root node.
+     *
+     * @param path FXML resource path
+     * @return loaded root node
+     */
     private Parent loadFXML(String path) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
@@ -159,6 +183,13 @@ public final class PageLoader {
         }
     }
 
+    /**
+     * Creates a new stage with the given scene and title.
+     *
+     * @param stageTitle window title
+     * @param scene      JavaFX scene
+     * @return configured stage
+     */
     private Stage setupStage(String stageTitle, Scene scene) {
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -166,8 +197,15 @@ public final class PageLoader {
         return stage;
     }
 
-
-    private Stage setupStageWithOwner(String stageTitle, Scene scene,Stage owner) {
+    /**
+     * Creates a new stage with an owner.
+     *
+     * @param stageTitle window title
+     * @param scene      JavaFX scene
+     * @param owner      owner stage
+     * @return configured stage
+     */
+    private Stage setupStageWithOwner(String stageTitle, Scene scene, Stage owner) {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle(stageTitle);
@@ -175,18 +213,35 @@ public final class PageLoader {
         return stage;
     }
 
-
     /**
-     * Reloads the most recently loaded page (if any) by calling {@link #loadPage(String, String)}
-     * with the stored path and title.
+     * Reloads the most recently shown page.
      */
     public void reloadCurrentPage() {
-        if (currentPath != null && currentTitle != null) {
-            loadPage(currentPath, currentTitle);
+        if (currentPage != null) {
+            loadPage(currentPage);
         }
     }
 
+    /**
+     * Navigates to the main application page.
+     */
+    public void goToHomePage() {
+        loadPage("/fxml/main.fxml", I18n.get("app.title"));
+
+    }
+
+    /**
+     * Returns the primary screen size.
+     *
+     * @return screen dimensions
+     */
     private Dimension getScreenSize() {
         return java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    }
+
+    /**
+     * Simple holder for a popup stage and its controller.
+     */
+    public record PopUp<T>(Stage stage, T controller) {
     }
 }

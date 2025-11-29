@@ -24,6 +24,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.I18n;
 import javafx.beans.binding.Bindings;
+import util.Page;
+import util.PageLoader;
 
 import java.io.IOException;
 
@@ -642,24 +644,20 @@ public class CreationController {
      * @throws IOException if the FXML file cannot be loaded
      */
     private void showDeckDialog(Decks deck) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/deckDialog.fxml"));
-        Parent root = loader.load();
 
-        DeckDialogController controller = loader.getController();
+        String title = deck == null ? "Create New Deck" : "Edit Deck";
 
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle(deck == null ? "Create New Deck" : "Edit Deck");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(createDeckButton.getScene().getWindow());
-        dialogStage.setResizable(false);
+        PageLoader.PopUp<DeckDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDIT.getPath(),
+                title, 400.0, 700.0);
 
-        Scene scene = new Scene(root);
-        dialogStage.setScene(scene);
 
-        controller.setDialogStage(dialogStage);
+        DeckDialogController controller = popUp.controller();
+        popUp.stage().setResizable(false);
+
+        controller.setDialogStage(popUp.stage());
         controller.setDeck(deck);
 
-        dialogStage.showAndWait();
+        popUp.stage().showAndWait();
 
         if (controller.isOkClicked()) {
             loadDecks();
@@ -678,22 +676,26 @@ public class CreationController {
      * @throws IOException if the FXML file cannot be loaded
      */
     private void showCardDialog(Cards card, Decks preselectedDeck) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/cardDialog.fxml"));
-        Parent root = loader.load();
+        String title = card == null ? "Create New Card" : "Edit Card";
 
-        CardDialogController controller = loader.getController();
+        PageLoader.PopUp<CardDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDIT.getPath(),
+                title, 500.0, 800.0);
+        CardDialogController controller = popUp.controller();
+        popUp.stage().setResizable(false);
+        Stage dialogStage = popUp.stage();
 
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle(card == null ? "Create New Card" : "Edit Card");
+
         dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(createCardButton.getScene().getWindow());
         dialogStage.setResizable(false);
-
-        Scene scene = new Scene(root);
-        dialogStage.setScene(scene);
-
         controller.setDialogStage(dialogStage);
+
+
+
+
+
         controller.setCard(card);
+
+
 
         if (preselectedDeck != null) {
             controller.setPreselectedDeck(preselectedDeck);
