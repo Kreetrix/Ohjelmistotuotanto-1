@@ -7,7 +7,6 @@ public enum Page {
     DECKS("/fxml/decks.fxml", "Card Memo - Decks"),
     EDITCARD("/fxml/cardDialog.fxml", "Card Memo - Edit card/deck"),
     EDITOR("/fxml/creation.fxml", "Card Memo - Editor"),
-
     EDITDECK("/fxml/deckDialog.fxml", "Card Memo - Edit card/deck");
 
     private final String path;
