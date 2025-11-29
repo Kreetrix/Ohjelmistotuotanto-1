@@ -150,6 +150,7 @@ public class DecksController {
             popupController.setDeck(deck);
             popup.stage().show();
             currentPopupStage = popup.stage();
+            popupController.setStage(currentPopupStage);
 
 
 
