@@ -74,7 +74,7 @@ public class MariaDbJpaConnection {
                 conn.close();
             }
         } catch (SQLException e) {
-            log.log(Level.SEVERE, "Error closing the database connection: " + e.getMessage(), e);
+            log.log(Level.SEVERE, "Error closing the database connection: {0}", e.getMessage());
         }
     }
 }
