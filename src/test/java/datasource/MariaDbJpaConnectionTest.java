@@ -22,6 +22,14 @@ public class MariaDbJpaConnectionTest {
             fail("Exception occurred while testing the connection: " + e.getMessage());
         }
     }
+    @Test
+    void testTerminateWithoutConnection() {
+        try {
+            MariaDbJpaConnection.terminate();
+        } catch (Exception e) {
+            fail("Exception occurred while terminating without connection: " + e.getMessage());
+        }
+    }
 }
 
 

@@ -14,7 +14,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class MariaDbJpaConnection {
 
-    private static final Connection conn = null;
+    private static  Connection conn = null;
 
     private MariaDbJpaConnection() {}
 
@@ -41,8 +41,8 @@ public class MariaDbJpaConnection {
 
         String url = String.format("jdbc:mariadb://%s:3306/%s", host, database);
         System.out.println("Connecting to database: " + url.replace(password, "***"));
-
-        return DriverManager.getConnection(url, user, password);
+        conn = DriverManager.getConnection(url, user, password);
+        return conn;
     }
 
     private static String getEnvFileName() {
@@ -63,6 +63,7 @@ public class MariaDbJpaConnection {
     }
 
     public static void terminate() {
+
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
