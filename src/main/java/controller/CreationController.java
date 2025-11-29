@@ -647,8 +647,8 @@ public class CreationController {
 
         String title = deck == null ? "Create New Deck" : "Edit Deck";
 
-        PageLoader.PopUp<DeckDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDIT.getPath(),
-                title, 400.0, 700.0);
+        PageLoader.PopUp<DeckDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDITDECK.getPath(),
+                title, 400.0, 400.0);
 
 
         DeckDialogController controller = popUp.controller();
@@ -678,7 +678,7 @@ public class CreationController {
     private void showCardDialog(Cards card, Decks preselectedDeck) throws IOException {
         String title = card == null ? "Create New Card" : "Edit Card";
 
-        PageLoader.PopUp<CardDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDIT.getPath(),
+        PageLoader.PopUp<CardDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDITCARD.getPath(),
                 title, 500.0, 800.0);
         CardDialogController controller = popUp.controller();
         popUp.stage().setResizable(false);

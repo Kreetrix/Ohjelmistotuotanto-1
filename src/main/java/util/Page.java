@@ -5,10 +5,10 @@ public enum Page {
     REGISTER("/fxml/registerView.fxml", "register.title"),
     MAIN("/fxml/main.fxml", "app.title"),
     DECKS("/fxml/decks.fxml", "Card Memo - Decks"),
-    EDIT("/fxml/cardDialog.fxml", "Card Memo - Edit card/deck"),
-    EDITOR("/fxml/creation.fxml", "Card Memo - Editor")
+    EDITCARD("/fxml/cardDialog.fxml", "Card Memo - Edit card/deck"),
+    EDITOR("/fxml/creation.fxml", "Card Memo - Editor"),
 
-    ;
+    EDITDECK("/fxml/deckDialog.fxml", "Card Memo - Edit card/deck");
 
     private final String path;
     private final String title;
