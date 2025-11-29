@@ -64,4 +64,12 @@ class PageLoaderTest extends ApplicationTest {
             );
         });
     }
+    @Test
+    void initialize() {
+        interact(() -> {
+            assertThrows(Exception.class, () -> pageLoader.initialize(null));
+            assertDoesNotThrow( () -> pageLoader.initialize(new Stage()));
+        });
+
+    }
 }

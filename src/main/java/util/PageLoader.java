@@ -52,9 +52,13 @@ public final class PageLoader {
      * @param stage primary JavaFX stage
      */
     public void initialize(Stage stage) {
+        if (stage == null) {
+            throw new IllegalArgumentException("Stage cannot be null");
+        }
         if (mainStage != null) {
             return;
         }
+
         this.mainStage = stage;
         mainStage.setResizable(true);
         mainStage.setTitle("Memory Master - Login");

@@ -1,10 +1,12 @@
 package FrontendTests;
 
+import controller.Session;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.NodeOrientation;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import util.I18n;
@@ -35,6 +37,11 @@ class LanguageChangeTest extends ApplicationTest {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginView.fxml"));
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
+    }
+
+    @AfterAll
+    static void cleanUp(){
+        Session.getInstance().clear();
     }
 
     @Test
@@ -97,4 +104,5 @@ class LanguageChangeTest extends ApplicationTest {
         javafx.scene.Node root = lookup("#rootBox").query();
         assertEquals(NodeOrientation.RIGHT_TO_LEFT, root.getNodeOrientation());
     }
+
 }

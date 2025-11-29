@@ -1,17 +1,19 @@
 package FrontendTests;
 
+import controller.Session;
 import datasource.MariaDbJpaConnection;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import java.sql.*;
 
-public class DeckTest extends ApplicationTest {
+class DeckTest extends ApplicationTest {
 
     @BeforeAll
     static void prepareTestData() throws Exception {
@@ -87,5 +89,9 @@ public class DeckTest extends ApplicationTest {
         clickOn("My Decks");
         clickOn("Biology Basics");
         clickOn("Start Study");
+    }
+    @AfterAll
+    static void cleanUp(){
+        Session.getInstance().clear();
     }
 }
