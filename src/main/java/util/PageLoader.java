@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public final class PageLoader {
 
-    private static Logger logger =  Logger.getLogger(PageLoader.class.getName());
+    private static final Logger logger = Logger.getLogger(PageLoader.class.getName());
 
     /**
      * Singleton instance of the page loader.

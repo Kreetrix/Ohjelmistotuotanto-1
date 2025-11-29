@@ -8,7 +8,8 @@ public enum Page {
     EDITCARD("/fxml/cardDialog.fxml", "Card Memo - Edit card/deck"),
     EDITOR("/fxml/creation.fxml", "Card Memo - Editor"),
     EDITDECK("/fxml/deckDialog.fxml", "Card Memo - Edit card/deck"),
-    STUDY("/fxml/studyView.fxml", "Card Memo - Study"),;
+    STUDY("/fxml/studyView.fxml", "Card Memo - Study"),
+    ;
 
     private final String path;
     private final String title;
@@ -19,12 +20,6 @@ public enum Page {
         this.title = title;
     }
 
-    public String getPath(){
-        return path;
-    }
-    public String getTitle() {
-        return title;
-    }
     public static Page pageByPath(String path) {
         for (Page page : Page.values()) {
             if (page.getPath().equals(path)) {
@@ -32,5 +27,13 @@ public enum Page {
             }
         }
         return null;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
