@@ -31,7 +31,7 @@ public class MariaDbJpaConnection {
 
         if (host == null || user == null || password == null || database == null) {
             String envFileName = getEnvFileName();
-            System.out.println("Using environment file: " + envFileName);
+            log.log(Level.INFO, "Loading database configuration from {0}", envFileName);
 
             Dotenv dotenv = Dotenv.configure()
                     .filename(envFileName)
@@ -45,7 +45,7 @@ public class MariaDbJpaConnection {
         }
 
         String url = String.format("jdbc:mariadb://%s:3306/%s", host, database);
-        log.log(Level.INFO, "Connecting to database at " + url.replace(password, "***"));
+        log.log(Level.INFO, "Connecting to database at {0}", url.replace(password, "***"));
         conn = DriverManager.getConnection(url, user, password);
         return conn;
     }
