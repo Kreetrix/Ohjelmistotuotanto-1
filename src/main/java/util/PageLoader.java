@@ -109,7 +109,7 @@ public final class PageLoader {
             mainStage.show();
 
         } catch (Exception ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            logger.log(Level.SEVERE, ex.getMessage(), er);
             loadPage(Page.MAIN);
             throw ex;
         }

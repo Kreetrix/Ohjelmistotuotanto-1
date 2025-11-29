@@ -7,7 +7,8 @@ public enum Page {
     DECKS("/fxml/decks.fxml", "Card Memo - Decks"),
     EDITCARD("/fxml/cardDialog.fxml", "Card Memo - Edit card/deck"),
     EDITOR("/fxml/creation.fxml", "Card Memo - Editor"),
-    EDITDECK("/fxml/deckDialog.fxml", "Card Memo - Edit card/deck");
+    EDITDECK("/fxml/deckDialog.fxml", "Card Memo - Edit card/deck"),
+    STUDY("/fxml/studyView.fxml", "Card Memo - Study"),;
 
     private final String path;
     private final String title;
@@ -21,7 +22,7 @@ public enum Page {
     public String getPath(){
         return path;
     }
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
     public static Page pageByPath(String path) {

@@ -13,6 +13,9 @@ import model.dao.DeckTranslationDao;
 import model.entity.Cards;
 import model.entity.Decks;
 import util.I18n;
+import util.Page;
+import util.PageLoader;
+import util.PageLoader.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -88,6 +91,7 @@ public class PopUpController {
         cancelButton.setOnAction(e -> closePopup());
 
         popUpContainer.getChildren().addAll(titleLabel, deckInfoLabel, confirmButton, cancelButton);
+
     }
 
     /**
@@ -98,22 +102,22 @@ public class PopUpController {
         closePopup();
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/StudyView.fxml"));
-            Parent root = loader.load();
-
-            StudyController studyController = loader.getController();
+            PageLoader.PopUp<StudyController> popup = PageLoader.getInstance().loadPopUp(Page.STUDY.getPath(), Page.STUDY.getTitle(),
+                    600, 400);
+            StudyController studyController = popup.controller();
 
             CardsDao cardsDao = new CardsDao();
             List<Cards> deckCards = cardsDao.getCardsByDeckId(selectedDeck.getDeck_id());
 
             studyController.setDeck(selectedDeck, deckCards);
 
-            Stage stage = new Stage();
+            Stage stage = popup.stage();
             stage.setTitle("Study Mode - " + selectedDeck.getDeck_name());
-            stage.setScene(new Scene(root));
+
             stage.show();
 
-        } catch (IOException | SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
