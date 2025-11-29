@@ -2,9 +2,6 @@ package controller;
 
 import components.MenuItemButton;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -15,18 +12,21 @@ import model.entity.Decks;
 import util.I18n;
 import util.PageLoader;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller for the Decks view that displays all available flashcard decks.
  * Handles deck loading, display, and navigation to study sessions.
  */
 public class DecksController {
-
-    public Label myDecksLabel;
-    public Label myDecksSubLabel;
+    private static final Logger logger = Logger.getLogger(DecksController.class.getName());
+    @FXML
+    private Label myDecksLabel;
+    @FXML
+    private Label myDecksSubLabel;
 
     @FXML
     private ScrollPane scrollPane;
@@ -106,7 +106,7 @@ public class DecksController {
 
 
         } catch (SQLException e) {
-            System.err.println("Translation fetch failed: " + e.getMessage());
+            logger.log(Level.SEVERE, "Translation fetch failed for deck ID {0} ", deck.getDeck_id() +" " + e);
         }
 
         return deck.getDeck_name();
@@ -128,7 +128,7 @@ public class DecksController {
             return deckDescription;
 
         } catch (SQLException e) {
-            System.err.println("Translation fetch failed: " + e.getMessage());
+            logger.log(Level.SEVERE, "Translation fetch failed for deck ID {0} ", deck.getDeck_id() + " " + e);
         }
 
         return "No description";
@@ -155,8 +155,7 @@ public class DecksController {
 
 
         } catch (Exception e) {
-            System.err.println("Error opening popup: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error opening deck {0} ", deck.getDeck_name() + ": " + e.getMessage());
         }
 
     }
