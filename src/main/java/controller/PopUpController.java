@@ -2,9 +2,6 @@ package controller;
 
 import components.MenuItemButton;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -15,9 +12,7 @@ import model.entity.Decks;
 import util.I18n;
 import util.Page;
 import util.PageLoader;
-import util.PageLoader.*;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 

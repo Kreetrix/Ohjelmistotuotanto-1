@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
 
-import java.awt.*;
+
 import java.util.Locale;
 
 /**
@@ -67,7 +67,7 @@ public class LoginController {
         }
 
         if (Session.getInstance().getCurrentUser() != null) {
-            Platform.runLater(() -> redirectToMain());
+            Platform.runLater(this::redirectToMain);
         }
     }
 
