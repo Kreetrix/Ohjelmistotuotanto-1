@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+import util.PasswordUtil;
 
 import java.sql.*;
 
@@ -48,13 +49,12 @@ class DeckTest extends ApplicationTest {
                 rs.next();
                 if (rs.getInt(1) == 0) {
                     try (PreparedStatement insert = conn.prepareStatement(
-                            "INSERT INTO app_users (username, password, email, phone, role, book_count, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())")) {
-                        insert.setString(1, "user");
-                        insert.setString(2, "1234");
+                            "INSERT INTO app_users (username, password_hash, email, role, created_at) VALUES (?, ?, ?, ?, NOW())")) {
+                        insert.setString(1, "TestUser");
+                        insert.setString(2, PasswordUtil.hashPassword("1234"));
                         insert.setString(3, "user@example.com");
-                        insert.setString(4, "0000000000");
-                        insert.setString(5, "student");
-                        insert.setInt(6, 0);
+                        insert.setString(4, "student");
+                        insert.setInt(5, 0);
                         insert.executeUpdate();
                     }
                 }
@@ -66,7 +66,7 @@ class DeckTest extends ApplicationTest {
                 rs.next();
                 if (rs.getInt(1) == 0) {
                     try (PreparedStatement insertDeck = conn.prepareStatement(
-                            "INSERT INTO decks (user_id, name) VALUES (1, 'Biology Basics')")) {
+                            "INSERT INTO decks (user_id, deck_name) VALUES (1, 'Biology Basics')")) {
                         insertDeck.executeUpdate();
                     }
                 }

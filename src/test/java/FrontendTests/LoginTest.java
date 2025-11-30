@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
+import util.I18n;
+import util.PasswordUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,21 +28,19 @@ class LoginTest extends ApplicationTest {
     static void ensureTestUserExists() throws Exception {
         try (Connection conn = MariaDbJpaConnection.getConnection()) {
             try (PreparedStatement check = conn.prepareStatement("SELECT COUNT(*) FROM app_users WHERE username = ?")) {
-                check.setString(1, "user");
+                check.setString(1, "TestUser");
                 ResultSet rs = check.executeQuery();
                 rs.next();
 
                 if (rs.getInt(1) == 0) {
                     try (PreparedStatement insert = conn.prepareStatement(
-                            "INSERT INTO app_users (username, password, email, phone, role, book_count, created_at) " +
-                                    "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-                        insert.setString(1, "user");
-                        insert.setString(2, "1234");
-                        insert.setString(3, "user@example.com");
-                        insert.setString(4, "0000000000");
-                        insert.setString(5, "student");
-                        insert.setInt(6, 0);
-                        insert.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+                            "INSERT INTO app_users (username, password_hash, email, role, created_at) " +
+                                    "VALUES (?, ?, ?, ?, ?)")) {
+                        insert.setString(1, "TestUser");
+                        insert.setString(2, PasswordUtil.hashPassword("1234"));
+                        insert.setString(3, "Testuser@example.com");
+                        insert.setString(4, "student");
+                        insert.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
                         insert.executeUpdate();
                     }
                 }
@@ -62,12 +62,12 @@ class LoginTest extends ApplicationTest {
 
     @Test
     void wrongPasswordShowsError() {
-        clickOn("#usernameField").write("user");
+        clickOn("#usernameField").write("TestUser");
         clickOn("#passwordField").write("wrongpass");
         clickOn("#loginBtn");
 
         assertThat(lookup("#errorLabel").queryLabeled())
-                .hasText("Invalid username or password");
+                .hasText(I18n.get("login.invalidCredentials"));
     }
 
     @Test

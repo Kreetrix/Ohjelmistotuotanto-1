@@ -16,15 +16,15 @@
     <HBox alignment="CENTER" styleClass="navbar" minHeight="85"
         style="-fx-background-color: #292929; -fx-padding: 20;">
         <children>
-                <CustomButton fx:id="admin" />
+                <CustomButton fx:id="admin" id="admin"/>
             <Region HBox.hgrow="ALWAYS"/>   
-                <CustomButton fx:id="listBtn" />   
-            <Region HBox.hgrow="ALWAYS"/>          
                 <CustomButton fx:id="listBtn" />
+            <Region HBox.hgrow="ALWAYS"/>          
+                <CustomButton fx:id="listBtn"  />
             <Region HBox.hgrow="ALWAYS"/>
                 <CustomButton fx:id="logoutBtn" />
             <Region HBox.hgrow="ALWAYS"/>
-                <CustomButton fx:id="homeButton" />
+                <CustomButton fx:id="homeButton"/>
             <Region HBox.hgrow="ALWAYS"/>
 
             <fx:include source="languageSelector.fxml" />

@@ -71,6 +71,8 @@ public class StudyController {
     private int score = 0;
     private boolean showingFront = true;
 
+    
+
     public void setDeck(Decks deck, List<Cards> cards) {
         this.deck = deck;
         this.cards = cards;

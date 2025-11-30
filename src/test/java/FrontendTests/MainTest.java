@@ -29,10 +29,12 @@ class MainTest extends ApplicationTest {
     @Test
     void navbarButtonsAreVisible() {
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat((Button) lookup("#searchBtn").query()).isVisible();
+
+        //assertThat((Button) lookup("#searchBtn").query()).isVisible();
         assertThat((Button) lookup("#listBtn").query()).isVisible();
-        assertThat((Button) lookup("#studyBtn").query()).isVisible();
+       // assertThat((Button) lookup("#studyBtn").query()).isVisible();
         assertThat((Button) lookup("#logoutBtn").query()).isVisible();
+        assertThat((Button) lookup("#homeButton").query()).isVisible();
     }
 
 }

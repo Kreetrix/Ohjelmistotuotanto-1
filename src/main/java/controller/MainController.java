@@ -42,7 +42,6 @@ public class MainController {
      * Opens the card and deck creation interface in a new window.
      */
     private void renderCardDeckCreation() {
-
         pageLoader.loadPage(Page.EDITOR);
     }
 
