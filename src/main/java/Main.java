@@ -23,13 +23,6 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         boolean headless = Boolean.getBoolean("javafx.headless");
-        AppUsersDao usersDao = new AppUsersDao();
-        CardsDao cardsDao = new CardsDao();
-        DecksDao decksDao = new DecksDao();
-        List<Cards> cards = cardsDao.getAllCards();
-        List<AppUsers> users = usersDao.getAllUsers();
-        List<Decks> decks = decksDao.getAllDecks();
-
         if (!headless) {
             View.launch(View.class);
         }

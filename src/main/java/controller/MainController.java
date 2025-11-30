@@ -3,6 +3,7 @@ package controller;
 import components.MenuItemButton;
 import javafx.fxml.FXML;
 import util.I18n;
+import util.Page;
 import util.PageLoader;
 
 
@@ -42,7 +43,7 @@ public class MainController {
      */
     private void renderCardDeckCreation() {
 
-        pageLoader.loadPopUp("/fxml/creation.fxml", "Memory Master - Create Cards and Decks");
+        pageLoader.loadPage(Page.EDITOR);
     }
 
     /**
@@ -50,6 +51,6 @@ public class MainController {
      */
     private void renderAllDecks() {
 
-        pageLoader.loadPopUp("/fxml/decks.fxml", "Card Memo - Decks");
+        pageLoader.loadPage(Page.DECKS);
     }
 }

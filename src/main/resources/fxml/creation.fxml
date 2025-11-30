@@ -66,4 +66,8 @@
         </TabPane>
     </center>
 
+    <bottom>
+        <fx:include source="navbar.fxml"/>
+    </bottom>
+
 </BorderPane>

@@ -4,6 +4,7 @@ package components;
  import com.fasterxml.jackson.databind.ObjectMapper;
  import java.io.InputStream;
  import java.util.Map;
+ import java.util.logging.Logger;
 
 /**
  * Manages SVG icons by loading their paths from a JSON resource file.
@@ -20,6 +21,8 @@ package components;
  */
  public class IconManager {
 
+     private static final Logger logger = Logger.getLogger(IconManager.class.getName());
+
      private IconManager(){}
 
      private static Map<String, String> icons;
@@ -30,7 +33,8 @@ package components;
              icons = mapper.readValue(is, new TypeReference<Map<String, String>>() {
              });
          } catch (Exception e) {
-             e.printStackTrace();
+            logger.severe("Failed to load icons.json: " + e.getMessage());
+
          }
      }
 

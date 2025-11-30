@@ -1,10 +1,12 @@
 package FrontendTests;
 
+import controller.Session;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.NodeOrientation;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import util.I18n;
@@ -19,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * changes
  * and that selecting Hebrew switches layout to right-to-left.
  */
-public class LanguageChangeTest extends ApplicationTest {
+class LanguageChangeTest extends ApplicationTest {
 
     private Stage primaryStage;
 
@@ -37,8 +39,13 @@ public class LanguageChangeTest extends ApplicationTest {
         primaryStage.show();
     }
 
+    @AfterAll
+    static void cleanUp(){
+        Session.getInstance().clear();
+    }
+
     @Test
-    void englishTextsAreShown() throws Exception {
+    void englishTextsAreShown() {
         interact(() -> I18n.setLocale(Locale.ENGLISH));
         interact(() -> {
             try {
@@ -53,7 +60,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void russianTextsAreShown() throws Exception {
+    void russianTextsAreShown()  {
         interact(() -> I18n.setLocale(new Locale("ru")));
         interact(() -> {
             try {
@@ -68,7 +75,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void japaneseTextsAreShown() throws Exception {
+    void japaneseTextsAreShown() {
         interact(() -> I18n.setLocale(new Locale("ja")));
         interact(() -> {
             try {
@@ -83,7 +90,7 @@ public class LanguageChangeTest extends ApplicationTest {
     }
 
     @Test
-    void hebrewButtonSwitchesToHebrewAndRtl() throws Exception {
+    void hebrewButtonSwitchesToHebrewAndRtl() {
         interact(() -> I18n.setLocale(Locale.ENGLISH));
         interact(() -> {
             try {
@@ -97,4 +104,5 @@ public class LanguageChangeTest extends ApplicationTest {
         javafx.scene.Node root = lookup("#rootBox").query();
         assertEquals(NodeOrientation.RIGHT_TO_LEFT, root.getNodeOrientation());
     }
+
 }

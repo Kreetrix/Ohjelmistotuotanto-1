@@ -10,6 +10,7 @@ import util.I18n;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import util.Page;
 import util.PageLoader;
 
 
@@ -125,7 +126,7 @@ public class RegisterController {
                 try {
                     dao.persist(user);
 
-                    pageLoader.loadPage("/fxml/loginView.fxml", I18n.get("app.title"));
+                    pageLoader.loadPage(Page.LOGIN);
 
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -138,7 +139,7 @@ public class RegisterController {
         }
     }
     public void onBack() {
-        pageLoader.loadPage(("/fxml/loginView.fxml"), I18n.get("login.title"));
+        pageLoader.loadPage(Page.LOGIN);
     }
     private boolean fieldVerification(){
         String username = usernameField.getText();

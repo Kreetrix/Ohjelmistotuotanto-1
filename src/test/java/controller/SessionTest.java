@@ -1,6 +1,7 @@
 package controller;
 
 import model.entity.AppUsers;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -107,5 +108,9 @@ class SessionTest {
         assertNotNull(session.getCurrentUser());
         session.clear();
         assertNull(session.getCurrentUser());
+    }
+    @AfterAll
+    static void tearDown(){
+        session.clear();
     }
 }

@@ -3,6 +3,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 /**
@@ -14,7 +17,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class MariaDbJpaConnection {
 
-    private static final Connection conn = null;
+    private static final Logger log = Logger.getLogger(MariaDbJpaConnection.class.getName());
+
+    private static  Connection conn = null;
 
     private MariaDbJpaConnection() {}
 
@@ -26,7 +31,7 @@ public class MariaDbJpaConnection {
 
         if (host == null || user == null || password == null || database == null) {
             String envFileName = getEnvFileName();
-            System.out.println("Using environment file: " + envFileName);
+            log.log(Level.INFO, "Loading database configuration from {0}", envFileName);
 
             Dotenv dotenv = Dotenv.configure()
                     .filename(envFileName)
@@ -40,9 +45,9 @@ public class MariaDbJpaConnection {
         }
 
         String url = String.format("jdbc:mariadb://%s:3306/%s", host, database);
-        System.out.println("Connecting to database: " + url.replace(password, "***"));
-
-        return DriverManager.getConnection(url, user, password);
+        log.log(Level.INFO, "Connecting to database at {0}", url.replace(password, "***"));
+        conn = DriverManager.getConnection(url, user, password);
+        return conn;
     }
 
     private static String getEnvFileName() {
@@ -63,12 +68,13 @@ public class MariaDbJpaConnection {
     }
 
     public static void terminate() {
+
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error closing the database connection: {0}", e.getMessage());
         }
     }
 }

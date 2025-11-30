@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import util.PageLoader;
 import view.AdminPanel;
 
 import java.io.IOException;
@@ -18,13 +19,16 @@ public class NavbarController {
     private final Session sessionManager = Session.getInstance();
 
     @FXML
-    public CustomButton logoutBtn;
+    private CustomButton logoutBtn;
 
     @FXML
     private CustomButton admin;
 
     @FXML
     private CustomButton listBtn;
+
+    @FXML
+    private CustomButton homeButton;
 
     /**
      * Initializes the navbar controller after FXML loading.
@@ -37,6 +41,8 @@ public class NavbarController {
         listBtn.setTooltipText("List");
         listBtn.setOnAction(e -> System.out.println("List clicked"));
         listBtn.setVisible(false);
+        // Back button
+        setupBackButton();
 
         // Only for admin!!!
         setupAdminButton();
@@ -66,6 +72,16 @@ public class NavbarController {
             admin.setVisible(false);
             admin.setManaged(false);
         }
+    }
+
+    private void setupBackButton() {
+        homeButton.setIcon("/icons/home.png");
+        homeButton.setOnAction(e -> goBack());
+    }
+    private void goBack() {
+        // Implement your back navigation logic here
+        System.out.println("Back button clicked");
+        PageLoader.getInstance().goToHomePage();
     }
 
     private void openAdminPanel() {

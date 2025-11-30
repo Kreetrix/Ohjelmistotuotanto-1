@@ -3,11 +3,11 @@ package controller;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import util.I18n;
+import util.Page;
 import util.PageLoader;
 import view.AdminPanel;
 
 import java.util.Locale;
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +44,6 @@ public class LogoutController {
         session.setLanguage("en");
         AdminPanel.setClosed();
 
-        PageLoader.getInstance().loadPage("/fxml/loginView.fxml", "Login");
+        PageLoader.getInstance().loadPage(Page.LOGIN);
     }
 }

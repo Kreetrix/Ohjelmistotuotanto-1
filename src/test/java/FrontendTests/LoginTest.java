@@ -1,11 +1,13 @@
 package FrontendTests;
 
+import controller.Session;
 import datasource.MariaDbJpaConnection;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-public class LoginTest extends ApplicationTest {
+class LoginTest extends ApplicationTest {
 
     @BeforeAll
     static void ensureTestUserExists() throws Exception {
@@ -44,6 +46,11 @@ public class LoginTest extends ApplicationTest {
                 }
             }
         }
+    }
+
+    @AfterAll
+    static void cleanUp(){
+        Session.getInstance().clear();
     }
 
     @Override

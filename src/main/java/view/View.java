@@ -2,6 +2,7 @@ package view;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import util.Page;
 import util.PageLoader;
 
 /**
@@ -20,7 +21,7 @@ public final class View extends Application {
     public void start(Stage stage) throws Exception {
         // Start with login screen
         pageLoader.initialize(stage);
-        pageLoader.loadPage("/fxml/loginView.fxml", "Login");
+        pageLoader.loadPage(Page.LOGIN);
     }
 
     /**

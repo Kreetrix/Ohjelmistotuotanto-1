@@ -19,6 +19,8 @@ import model.entity.GameSessions;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
@@ -33,6 +35,7 @@ import model.entity.SessionResults;
  * Handles flashcard study sessions with flip animations and progress tracking.
  */
 public class StudyController {
+    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
     private Timestamp startTime;
     private Timestamp endTime;
     private int currentSessionId;
@@ -115,7 +118,7 @@ public class StudyController {
                 }
 
             } catch (Exception e) {
-                System.err.println("Translation fetch failed for card " + currentCard.getCard_id() + ": " + e.getMessage());
+                logger.log(Level.SEVERE, "Translation fetch failed for card {0}", currentCard.getCard_id() + ": " + e.getMessage());
             }
 
             cardLabel.setText(currentCard.getFront_text());

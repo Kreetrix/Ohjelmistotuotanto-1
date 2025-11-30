@@ -1,20 +1,18 @@
 package controller;
 
-import util.PageLoader;
-import util.PasswordUtil;
+import util.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.beans.binding.Bindings;
-import util.I18n;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
-import util.AudioPlayer;
-import java.awt.*;
+
+
 import java.util.Locale;
 
 /**
@@ -69,7 +67,7 @@ public class LoginController {
         }
 
         if (Session.getInstance().getCurrentUser() != null) {
-            Platform.runLater(() -> redirectToMain());
+            Platform.runLater(this::redirectToMain);
         }
     }
 
@@ -77,7 +75,7 @@ public class LoginController {
      * Redirects to the main application view.
      */
     private void redirectToMain() {
-        PageLoader.getInstance().loadPage("/fxml/main.fxml", I18n.get("app.title"));
+        PageLoader.getInstance().loadPage(Page.MAIN);
     }
 
     /**
@@ -101,7 +99,7 @@ public class LoginController {
 
                     Session.getInstance().setCurrentUser(user);
 
-                    PageLoader.getInstance().loadPage("/fxml/main.fxml", I18n.get("app.title"));
+                    PageLoader.getInstance().loadPage(Page.MAIN);
 
                 } else {
                     errorLabel.setText(I18n.get("login.invalidCredentials"));
@@ -116,8 +114,7 @@ public class LoginController {
      * Navigates to the registration view.
      */
     public void toRegister() {
-
-        PageLoader.getInstance().loadPage(("/fxml/registerView.fxml"), I18n.get("register.title"));
+        PageLoader.getInstance().loadPage((Page.REGISTER));
     }
 
     /**
