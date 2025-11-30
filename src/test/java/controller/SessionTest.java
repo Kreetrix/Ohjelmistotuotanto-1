@@ -29,16 +29,12 @@ class SessionTest {
     }
 
     @Test
-    void setLanguage() {
+    void languageSessionTest() {
         session.setLanguage("en_us");
         assertEquals("en_us",session.getLanguage());
-    }
 
-    @Test
-    void getLanguage() {
-
-        session.setLanguage("en_us");
-        assertEquals("en_us",session.getLanguage());
+        session.setLanguage("fi_fi");
+        assertEquals("fi_fi", session.getLanguage());
     }
 
     @Test
@@ -47,23 +43,16 @@ class SessionTest {
     }
 
     @Test
-    void setCurrentUser() {
+    void userToSessionTest() {
 
         session.setCurrentUser(setUpTestStudent());
         assertSame(session.getCurrentUser(),session.getCurrentUser());
-    }
-
-    @Test
-    void getCurrentUser() {
-
-        session.setCurrentUser(setUpTestStudent());
-        assertSame(session.getCurrentUser(),session.getCurrentUser());
-
     }
 
     @Test
     void getUserId() {
 
+        assertNull(session.getCurrentUser());
         session.setCurrentUser(setUpTestStudent());
         assertEquals(0,session.getUserId());
 

@@ -76,11 +76,9 @@ public class NavbarController {
 
     private void setupBackButton() {
         homeButton.setIcon("/icons/home.png");
-        homeButton.setOnAction(e -> goBack());
+        homeButton.setOnAction(e -> goHomepage());
     }
-    private void goBack() {
-        // Implement your back navigation logic here
-        System.out.println("Back button clicked");
+    private void goHomepage() {
         PageLoader.getInstance().goToHomePage();
     }
 
