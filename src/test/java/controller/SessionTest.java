@@ -3,6 +3,7 @@ package controller;
 import model.entity.AppUsers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
@@ -27,6 +28,10 @@ class SessionTest {
         return new AppUsers("testUser","test@email.com", "test1","teacher",1,new Timestamp(System.currentTimeMillis()));
 
     }
+    @BeforeEach
+    void clearBeforeEach() {
+        Session.getInstance().clear();
+    }
 
     @Test
     void languageSessionTest() {
@@ -46,15 +51,16 @@ class SessionTest {
     void userToSessionTest() {
 
         session.setCurrentUser(setUpTestStudent());
-        assertSame(session.getCurrentUser(),session.getCurrentUser());
+        assertEquals(session.getCurrentUser(),session.getCurrentUser());
     }
 
     @Test
     void getUserId() {
-
         assertNull(session.getCurrentUser());
         session.setCurrentUser(setUpTestStudent());
         assertEquals(0,session.getUserId());
+        session.clear();
+        assertEquals(-1,session.getUserId());
 
     }
 
