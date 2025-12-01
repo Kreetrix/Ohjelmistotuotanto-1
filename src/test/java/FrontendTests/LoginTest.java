@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class LoginTest extends ApplicationTest {
@@ -77,5 +78,17 @@ class LoginTest extends ApplicationTest {
         clickOn("#loginBtn");
 
 
+    }
+    @Test
+    void onLoginEmptyFields() {
+        clickOn("#loginBtn");
+        assertEquals(I18n.get("login.invalidCredentials"), lookup("#errorLabel").queryLabeled().getText());
+    }
+    @Test
+    void onLoginNonExistentUser() {
+        clickOn("#usernameField").write("NonExistentUser");
+        clickOn("#passwordField").write("somepassword");
+        clickOn("#loginBtn");
+        assertEquals(I18n.get("login.userNotFound"), lookup("#errorLabel").queryLabeled().getText());
     }
 }

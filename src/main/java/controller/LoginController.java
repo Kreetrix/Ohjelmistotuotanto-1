@@ -86,8 +86,12 @@ public class LoginController {
     private void onLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-
+        if (username.isEmpty() || password.isEmpty()) {
+            errorLabel.setText(I18n.get("login.invalidCredentials"));
+            return;
+        }
         AppUsersDao appUsersDao = new AppUsersDao();
+
         try {
             AppUsers user = appUsersDao.getUserByUsername(username);
 
