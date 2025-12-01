@@ -122,20 +122,14 @@ public class RegisterController {
         //todo error localization
         if(fieldVerification()) {
             if (password.equals(confirmPassword)) {
-                AppUsers user = new AppUsers(username, email, password, role, 1, null);
-                try {
-                    dao.persist(user);
-
-                    pageLoader.loadPage(Page.LOGIN);
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                AppUsers newUser = new AppUsers(username, email, password, role, 1, null);
+                registerNewUser(newUser);
+                pageLoader.loadPage(Page.LOGIN);
             } else {
                 errorLabel.setText(I18n.get("register.passwordMismatch"));
             }
         }else{
-            errorLabel.setText(I18n.get("register.fillFieldsError"));
+            errorLabel.setText(I18n.get("register.error.emptyfields"));
         }
     }
     public void onBack() {
@@ -147,7 +141,12 @@ public class RegisterController {
         String confirmPassword = confirmPasswordField.getText();
         String email = emailField.getText();
         return(!password.isEmpty() && !username.isEmpty() && !confirmPassword.isEmpty() && !email.isEmpty());
-
-
+    }
+    private void registerNewUser(AppUsers user) {
+        try {
+            dao.persist(user);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
