@@ -49,11 +49,9 @@ public class NavbarController {
 
         logoutBtn.setIcon("/icons/logout.png");
         logoutBtn.setOnAction(e -> {
-            try {
+
                 logout.onLogout();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+
         });
 
         admin.setSvgIcon("admin", Color.LIGHTBLUE.toString(), 2);
