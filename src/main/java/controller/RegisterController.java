@@ -119,17 +119,18 @@ public class RegisterController {
         String confirmPassword = confirmPasswordField.getText();
         String role = roleComboBox.getValue();
         String email = emailField.getText();
-        //todo error localization
-        if(fieldVerification()) {
-            if (password.equals(confirmPassword)) {
-                AppUsers newUser = new AppUsers(username, email, password, role, 1, null);
-                registerNewUser(newUser);
-                pageLoader.loadPage(Page.LOGIN);
-            } else {
-                errorLabel.setText(I18n.get("register.passwordMismatch"));
-            }
-        }else{
+
+        if(!fieldVerification()) {
             errorLabel.setText(I18n.get("register.error.emptyfields"));
+            return;
+        }
+        if (!password.equals(confirmPassword)) {
+            errorLabel.setText(I18n.get("register.passwordMismatch"));
+            return;
+        }
+        AppUsers newUser = new AppUsers(username, email, password, role, 1, null);
+        if(registerNewUser(newUser)) {
+            pageLoader.loadPage(Page.LOGIN);
         }
     }
     public void onBack() {
@@ -142,11 +143,13 @@ public class RegisterController {
         String email = emailField.getText();
         return(!password.isEmpty() && !username.isEmpty() && !confirmPassword.isEmpty() && !email.isEmpty());
     }
-    private void registerNewUser(AppUsers user) {
+    private boolean registerNewUser(AppUsers user) {
         try {
             dao.persist(user);
+            return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return false;
         }
     }
 }
