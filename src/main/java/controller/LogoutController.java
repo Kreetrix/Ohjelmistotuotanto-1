@@ -8,7 +8,6 @@ import util.PageLoader;
 import view.AdminPanel;
 
 import java.util.Locale;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +22,20 @@ public class LogoutController {
     /**
      * Handles the logout process.
      * Clears user session and navigates to login screen.
-     * @throws IOException if login view FXML cannot be loaded
      */
-    public void onLogout() throws IOException {
+    public void onLogout() {
 
         session.clear();
 
+        closeWindows();
+
+        I18n.setLocale(Locale.ENGLISH);
+        session.setLanguage("en");
+        AdminPanel.setClosed();
+
+        PageLoader.getInstance().loadPage(Page.LOGIN);
+    }
+    private void closeWindows()  {
         List<Window> windows = new ArrayList<>(Window.getWindows());
         for (Window w : windows) {
             try {
@@ -40,10 +47,5 @@ public class LogoutController {
             } catch (Exception ignored) {
             }
         }
-        I18n.setLocale(Locale.ENGLISH);
-        session.setLanguage("en");
-        AdminPanel.setClosed();
-
-        PageLoader.getInstance().loadPage(Page.LOGIN);
     }
 }
