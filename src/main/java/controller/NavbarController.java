@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class NavbarController {
     private final LogoutController logout = new LogoutController();
     private final Session sessionManager = Session.getInstance();
-    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
+    private static final Logger logger = Logger.getLogger(NavbarController.class.getName());
 
     @FXML
     private CustomButton logoutBtn;
@@ -40,7 +40,6 @@ public class NavbarController {
 
         listBtn.setIcon("/icons/list.png");
         listBtn.setTooltipText("List");
-        listBtn.setOnAction(e -> System.out.println("List clicked"));
         listBtn.setVisible(false);
         // Back button
         setupBackButton();
@@ -49,11 +48,7 @@ public class NavbarController {
         setupAdminButton();
 
         logoutBtn.setIcon("/icons/logout.png");
-        logoutBtn.setOnAction(e -> {
-
-            logout.onLogout();
-
-        });
+        logoutBtn.setOnAction(e -> logout.onLogout());
 
         admin.setSvgIcon("admin", Color.LIGHTBLUE.toString(), 2);
         admin.setTooltipText("Admin");
@@ -61,7 +56,6 @@ public class NavbarController {
     }
 
     private void setupAdminButton() {
-        System.out.println(sessionManager.toString());
         if (sessionManager.isAdmin()) {
 
             admin.setVisible(true);
@@ -98,10 +92,7 @@ public class NavbarController {
             AdminPanel adminPanel = new AdminPanel();
             Stage adminStage = new Stage();
 
-            adminStage.setOnHidden(e -> {
-                admin.setDisable(false);
-                System.out.println("Admin panel closed, button re-enabled");
-            });
+            adminStage.setOnHidden(e -> admin.setDisable(false));
 
             adminPanel.start(adminStage);
         } catch (Exception e) {

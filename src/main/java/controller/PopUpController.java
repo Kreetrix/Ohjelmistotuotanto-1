@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * Handles deck selection confirmation and navigation to study sessions.
  */
 public class PopUpController {
-    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
+    private static final Logger logger = Logger.getLogger(PopUpController.class.getName());
 
     @FXML
     private VBox popUpContainer;

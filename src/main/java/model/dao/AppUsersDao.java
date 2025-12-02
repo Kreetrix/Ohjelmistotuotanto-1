@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import controller.StudyController;
-
 public class AppUsersDao {
-    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
+    private static final Logger logger = Logger.getLogger(AppUsersDao.class.getName());
 
     /**
      *

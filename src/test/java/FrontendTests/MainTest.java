@@ -21,8 +21,9 @@ class MainTest extends ApplicationTest {
         stage.setScene(new Scene(root, 600, 400));
         stage.show();
     }
+
     @AfterAll
-    static void cleanUp(){
+    static void cleanUp() {
         Session.getInstance().clear();
     }
 
@@ -30,9 +31,7 @@ class MainTest extends ApplicationTest {
     void navbarButtonsAreVisible() {
         WaitForAsyncUtils.waitForFxEvents();
 
-        //assertThat((Button) lookup("#searchBtn").query()).isVisible();
         assertThat((Button) lookup("#listBtn").query()).isVisible();
-       // assertThat((Button) lookup("#studyBtn").query()).isVisible();
         assertThat((Button) lookup("#logoutBtn").query()).isVisible();
         assertThat((Button) lookup("#homeButton").query()).isVisible();
     }

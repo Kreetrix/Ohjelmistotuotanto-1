@@ -7,14 +7,12 @@ import datasource.MariaDbJpaConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import controller.StudyController;
-
 /**
  * Data Access Object for Cards entity.
  * Handles database operations for flashcard management.
  */
 public class CardsDao {
-    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
+    private static final Logger logger = Logger.getLogger(CardsDao.class.getName());
 
     /**
      * Retrieves all cards from the database.

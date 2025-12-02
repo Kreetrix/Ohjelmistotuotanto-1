@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.slf4j.LoggerFactory;
-
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 import javafx.scene.transform.Rotate;
@@ -185,8 +183,7 @@ public class StudyController {
             sessionResultsDao.persist(
                     new SessionResults(currentSessionId, card.getCard_id(), isCorrect, responseTime));
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Failed to persist session results for card {} in session {}",
-                    card.getCard_id() + ": " + e.getMessage());
+            logger.log(Level.SEVERE, "Failed to persist session results for card");
         }
     }
 

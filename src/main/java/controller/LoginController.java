@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * Manages login process, validation, and navigation to main application.
  */
 public class LoginController {
-    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
+    private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
     @FXML
     private TextField usernameField;
