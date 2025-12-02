@@ -2,6 +2,5 @@
 .env.docker
 /target/
 dependency-reduced-pom.xml
-sonar-project.properties
 .vscode
 .scannerwork
