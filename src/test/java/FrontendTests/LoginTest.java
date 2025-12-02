@@ -72,14 +72,6 @@ class LoginTest extends ApplicationTest {
     }
 
     @Test
-    void correctLoginSwitchesScene() {
-        clickOn("#usernameField").write("user");
-        clickOn("#passwordField").write("1234");
-        clickOn("#loginBtn");
-
-
-    }
-    @Test
     void onLoginEmptyFields() {
         clickOn("#loginBtn");
         assertEquals(I18n.get("login.invalidCredentials"), lookup("#errorLabel").queryLabeled().getText());
@@ -91,4 +83,15 @@ class LoginTest extends ApplicationTest {
         clickOn("#loginBtn");
         assertEquals(I18n.get("login.userNotFound"), lookup("#errorLabel").queryLabeled().getText());
     }
+
+    @Test
+    void correctLoginSwitchesScene() {
+        clickOn("#usernameField").write("user");
+        clickOn("#passwordField").write("1234");
+        clickOn("#loginBtn");
+        clickOn("#logoutBtn");
+
+
+    }
+
 }
