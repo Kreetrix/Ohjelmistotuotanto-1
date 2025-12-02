@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 import util.PageLoader;
 import view.AdminPanel;
 
-import java.io.IOException;
-
 /**
  * Controller for the navigation bar component.
  * Handles navigation actions and user logout.

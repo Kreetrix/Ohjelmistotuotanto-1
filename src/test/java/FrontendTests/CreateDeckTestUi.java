@@ -6,9 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.dao.DecksDao;
 import model.entity.AppUsers;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,7 @@ import java.sql.*;
 
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-public class CreateDeckTestUi extends ApplicationTest {
+class CreateDeckTest extends ApplicationTest {
 
     @BeforeAll
     static void prepareTestData() throws Exception {

@@ -17,9 +17,6 @@ import components.IconManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.I18n;
@@ -36,11 +33,11 @@ import java.io.IOException;
  */
 public class CreationController {
 
-    public Label pageTitle;
-    public Label pageSub;
-    public Tab deckFilter;
-    public Tab cardFilter;
-    public Label filterByDeckLabel;
+    private Label pageTitle;
+    private Label pageSub;
+    private Tab deckFilter;
+    private Tab cardFilter;
+    private Label filterByDeckLabel;
     @FXML
     private TabPane tabPane;
     @FXML
@@ -86,7 +83,7 @@ public class CreationController {
         loadDecks();
         loadCards();
         setupDeckFilter();
-        
+
         // Refresh UI when language changes
         I18n.localeProperty().addListener((obs, oldV, newV) -> {
             loadDecks();
@@ -128,8 +125,10 @@ public class CreationController {
             deckFilterComboBox.setConverter(new javafx.util.StringConverter<Decks>() {
                 @Override
                 public String toString(Decks deck) {
-                    if (deck == null) return "";
-                    if (deck.getDeck_id() == -1) return deck.getDeck_name(); // "All Decks" option
+                    if (deck == null)
+                        return "";
+                    if (deck.getDeck_id() == -1)
+                        return deck.getDeck_name(); // "All Decks" option
                     return getTranslatedDeckName(deck, currentLang);
                 }
 
@@ -231,12 +230,12 @@ public class CreationController {
         deckIcon.setScaleY(1.5);
 
         VBox textContent = new VBox(2);
-        
+
         // Get translated deck name and description
         String currentLang = Session.getInstance().getLanguage();
         String deckName = getTranslatedDeckName(deck, currentLang);
         String deckDescription = getTranslatedDeckDescription(deck, currentLang);
-        
+
         Label nameLabel = new Label(deckName);
         nameLabel.setStyle("-fx-text-fill: #a9a9a9; -fx-font-size: 18; -fx-font-weight: bold;");
 
@@ -366,7 +365,7 @@ public class CreationController {
     private String getDeckNameById(int deckId) throws SQLException {
         List<Decks> allDecks = decksDao.getAllDecks();
         String currentLang = Session.getInstance().getLanguage();
-        
+
         return allDecks.stream()
                 .filter(deck -> deck.getDeck_id() == deckId)
                 .map(deck -> getTranslatedDeckName(deck, currentLang))
@@ -635,8 +634,6 @@ public class CreationController {
         return false;
     }
 
-
-
     /**
      * Shows the deck creation/editing dialog.
      *
@@ -649,7 +646,6 @@ public class CreationController {
 
         PageLoader.PopUp<DeckDialogController> popUp = PageLoader.getInstance().loadPopUp(Page.EDITDECK.getPath(),
                 title, 400.0, 400.0);
-
 
         DeckDialogController controller = popUp.controller();
         popUp.stage().setResizable(false);
@@ -683,7 +679,6 @@ public class CreationController {
         CardDialogController controller = popUp.controller();
         popUp.stage().setResizable(false);
         Stage dialogStage = popUp.stage();
-
 
         dialogStage.initModality(Modality.WINDOW_MODAL);
         dialogStage.setResizable(false);
@@ -760,7 +755,7 @@ public class CreationController {
         } catch (SQLException e) {
             System.err.println("Translation fetch failed: " + e.getMessage());
         }
-        
+
         String description = deck.getDescription();
         if (description == null || description.trim().isEmpty()) {
             return "No description";
