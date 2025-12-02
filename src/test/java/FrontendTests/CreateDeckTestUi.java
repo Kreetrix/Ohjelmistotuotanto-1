@@ -6,7 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.dao.DecksDao;
 import model.entity.AppUsers;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,7 @@ stmt.execute(
                 );            }
         }
     }
+
 
     @BeforeAll
     static void loginTestUser() throws Exception {
@@ -83,6 +86,13 @@ stmt.execute(
                     "DELETE FROM gamesessions WHERE deck_id IN (SELECT deck_id FROM decks WHERE deck_name = ?)")) {
                 ps1.setString(1, "English");
                 ps1.executeUpdate();
+
+
+            }
+            try (PreparedStatement ps2 = conn.prepareStatement(
+                    "DELETE FROM decks WHERE deck_name = ?")) {
+                ps2.setString(1, "English");
+                ps2.executeUpdate();
             }
         }
 
