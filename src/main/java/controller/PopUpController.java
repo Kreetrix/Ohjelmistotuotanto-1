@@ -15,7 +15,8 @@ import util.PageLoader;
 
 import java.sql.SQLException;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 // TODO : ADD JAVADOC
 
@@ -24,6 +25,7 @@ import java.util.List;
  * Handles deck selection confirmation and navigation to study sessions.
  */
 public class PopUpController {
+    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
 
     @FXML
     private VBox popUpContainer;
@@ -32,8 +34,6 @@ public class PopUpController {
     private Stage popupStage;
 
     private final DeckTranslationDao deckTranslationDao = new DeckTranslationDao();
-
-
 
     public void setDeck(Decks deck) {
         this.selectedDeck = deck;
@@ -97,7 +97,8 @@ public class PopUpController {
         closePopup();
 
         try {
-            PageLoader.PopUp<StudyController> popup = PageLoader.getInstance().loadPopUp(Page.STUDY.getPath(), Page.STUDY.getTitle(),
+            PageLoader.PopUp<StudyController> popup = PageLoader.getInstance().loadPopUp(Page.STUDY.getPath(),
+                    Page.STUDY.getTitle(),
                     600, 400);
             StudyController studyController = popup.controller();
 
@@ -111,9 +112,8 @@ public class PopUpController {
 
             stage.show();
 
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error in startStudySession");
         }
     }
 

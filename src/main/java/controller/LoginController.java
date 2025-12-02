@@ -12,15 +12,16 @@ import javafx.scene.layout.VBox;
 import model.dao.AppUsersDao;
 import model.entity.AppUsers;
 
-
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller for the Login view handling user authentication.
  * Manages login process, validation, and navigation to main application.
  */
 public class LoginController {
-
+    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
 
     @FXML
     private TextField usernameField;
@@ -110,7 +111,7 @@ public class LoginController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error in onLogin");
         }
     }
 

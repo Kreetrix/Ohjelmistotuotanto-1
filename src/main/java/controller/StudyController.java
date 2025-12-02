@@ -22,13 +22,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
+
 import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 import javafx.scene.transform.Rotate;
 import model.entity.SessionResults;
 
 // TODO : ADD JAVADOC cpmmens
-
 
 /**
  * Controller for the study session view.
@@ -71,8 +72,6 @@ public class StudyController {
     private int score = 0;
     private boolean showingFront = true;
 
-    
-
     public void setDeck(Decks deck, List<Cards> cards) {
         this.deck = deck;
         this.cards = cards;
@@ -81,7 +80,7 @@ public class StudyController {
         try {
             currentSessionId = gameSessionsDao.persist(session);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error in setDeck");
         }
 
         showCard();
@@ -89,12 +88,17 @@ public class StudyController {
 
     @FXML
     public void initialize() {
-        studyTitleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.title"), I18n.localeProperty()));
-        studySubtitleLabel.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.instruction"), I18n.localeProperty()));
+        studyTitleLabel.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("study.title"), I18n.localeProperty()));
+        studySubtitleLabel.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("study.instruction"), I18n.localeProperty()));
 
-        knewButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.knewBtn"), I18n.localeProperty()));
-        didntKnowButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.didntKnowBtn"), I18n.localeProperty()));
-        closeButton.textProperty().bind(Bindings.createStringBinding(() -> I18n.get("study.closeBtn"), I18n.localeProperty()));
+        knewButton.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("study.knewBtn"), I18n.localeProperty()));
+        didntKnowButton.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("study.didntKnowBtn"), I18n.localeProperty()));
+        closeButton.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18n.get("study.closeBtn"), I18n.localeProperty()));
 
         cardLabel.setText(I18n.get("study.cardPlaceholder"));
     }
@@ -120,7 +124,8 @@ public class StudyController {
                 }
 
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Translation fetch failed for card {0}", currentCard.getCard_id() + ": " + e.getMessage());
+                logger.log(Level.SEVERE, "Translation fetch failed for card {0}",
+                        currentCard.getCard_id() + ": " + e.getMessage());
             }
 
             cardLabel.setText(currentCard.getFront_text());
@@ -178,10 +183,10 @@ public class StudyController {
     private void saveCardResult(Cards card, boolean isCorrect, int responseTime) {
         try {
             sessionResultsDao.persist(
-                    new SessionResults(currentSessionId, card.getCard_id(), isCorrect, responseTime)
-            );
+                    new SessionResults(currentSessionId, card.getCard_id(), isCorrect, responseTime));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to persist session results for card {} in session {}",
+                    card.getCard_id() + ": " + e.getMessage());
         }
     }
 
@@ -197,9 +202,10 @@ public class StudyController {
 
     private void saveResults() {
         try {
-            gameSessionsDao.persist(new GameSessions(Session.getInstance().getUserId(), deck.getDeck_id(), startTime, endTime));
+            gameSessionsDao.persist(
+                    new GameSessions(Session.getInstance().getUserId(), deck.getDeck_id(), startTime, endTime));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error in saveResults");
         }
     }
 

@@ -71,11 +71,9 @@ public class DecksController {
                     MenuItemButton deckButton = new MenuItemButton();
                     deckButton.setIcon("book");
 
-
-
                     // 🌐 Try to get translations
-                    String deckName = getTranslatedName(deck,currentLang);
-                    String deckDescription = getTranslatedDescription(deck,currentLang);
+                    String deckName = getTranslatedName(deck, currentLang);
+                    String deckDescription = getTranslatedDescription(deck, currentLang);
 
                     deckButton.setMainText(deckName);
                     deckButton.setSubText(deckDescription);
@@ -86,7 +84,7 @@ public class DecksController {
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Error in loadDecks");
             MenuItemButton errorMessage = new MenuItemButton();
             errorMessage.setIcon("loading");
             errorMessage.setMainText("Error Loading Decks");
@@ -103,26 +101,25 @@ public class DecksController {
                 return translatedName;
             }
 
-
-
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Translation fetch failed for deck ID {0} ", deck.getDeck_id() +" " + e);
+            logger.log(Level.SEVERE, "Translation fetch failed for deck ID {0} ", deck.getDeck_id() + " " + e);
         }
 
         return deck.getDeck_name();
     }
+
     private String getTranslatedDescription(Decks deck, String lang) {
         String deckDescription = null;
         try {
             String translatedDesc = deckTranslationDao.getTranslatedDescription(deck.getDeck_id(), lang);
             if (translatedDesc != null && !translatedDesc.isEmpty()) {
-                deckDescription =  translatedDesc;
+                deckDescription = translatedDesc;
             }
 
             if (deckDescription == null || deckDescription.trim().isEmpty()) {
-                return  "No description";
+                return "No description";
             } else if (deckDescription.length() > 50) {
-                 return deckDescription.substring(0, 47) + "...";
+                return deckDescription.substring(0, 47) + "...";
             }
 
             return deckDescription;
@@ -136,6 +133,7 @@ public class DecksController {
 
     /**
      * Opens a deck in a study popup window.
+     * 
      * @param deck the deck to open for studying
      */
     private void openDeck(Decks deck) {
@@ -145,14 +143,13 @@ public class DecksController {
                 return;
             }
 
-            PageLoader.PopUp<PopUpController> popup = PageLoader.getInstance().loadPopUp("/fxml/popup.fxml", "Study Deck - " + deck.getDeck_name(), 400.0, 350.0);
+            PageLoader.PopUp<PopUpController> popup = PageLoader.getInstance().loadPopUp("/fxml/popup.fxml",
+                    "Study Deck - " + deck.getDeck_name(), 400.0, 350.0);
             PopUpController popupController = popup.controller();
             popupController.setDeck(deck);
             popup.stage().show();
             currentPopupStage = popup.stage();
             popupController.setStage(currentPopupStage);
-
-
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error opening deck {0} ", deck.getDeck_name() + ": " + e.getMessage());

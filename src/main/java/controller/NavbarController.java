@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import util.PageLoader;
 import view.AdminPanel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller for the navigation bar component.
@@ -15,6 +17,7 @@ import view.AdminPanel;
 public class NavbarController {
     private final LogoutController logout = new LogoutController();
     private final Session sessionManager = Session.getInstance();
+    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
 
     @FXML
     private CustomButton logoutBtn;
@@ -48,7 +51,7 @@ public class NavbarController {
         logoutBtn.setIcon("/icons/logout.png");
         logoutBtn.setOnAction(e -> {
 
-                logout.onLogout();
+            logout.onLogout();
 
         });
 
@@ -74,6 +77,7 @@ public class NavbarController {
         homeButton.setIcon("/icons/home.png");
         homeButton.setOnAction(e -> goHomepage());
     }
+
     private void goHomepage() {
         PageLoader.getInstance().goToHomePage();
     }
@@ -101,7 +105,7 @@ public class NavbarController {
 
             adminPanel.start(adminStage);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error in openAdminPanel");
             admin.setDisable(false);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

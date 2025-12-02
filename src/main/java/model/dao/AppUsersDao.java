@@ -7,9 +7,13 @@ import model.entity.AppUsers;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import controller.StudyController;
 
 public class AppUsersDao {
-
+    private static final Logger logger = Logger.getLogger(StudyController.class.getName());
 
     /**
      *
@@ -20,8 +24,8 @@ public class AppUsersDao {
         String sql = "SELECT * FROM app_users";
 
         try (Connection conn = MariaDbJpaConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 int user_id = rs.getInt("user_id");
@@ -43,16 +47,16 @@ public class AppUsersDao {
 
     /**
      *
-     * @param value     Boolean
-     * @param id        User ID
+     * @param value Boolean
+     * @param id    User ID
      * @throws SQLException
      */
-    // switches app_users value to active or not active 
+    // switches app_users value to active or not active
     public void setActive(boolean value, int id) throws SQLException {
         String sql = "UPDATE app_users SET is_active = ? WHERE user_id = ?";
 
         try (Connection conn = MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, value ? 1 : 0);
             ps.setInt(2, id);
             ps.executeUpdate();
@@ -61,13 +65,14 @@ public class AppUsersDao {
 
     /**
      * inserts user into database
+     * 
      * @param user
      * @throws SQLException
      */
     public void persist(AppUsers user) throws SQLException {
         String sql = "INSERT INTO app_users (username, email, password_hash, role, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, PasswordUtil.hashPassword(user.getPassword_hash()));
@@ -78,7 +83,8 @@ public class AppUsersDao {
         }
     }
 
-    /** Searches and returns user from database by username
+    /**
+     * Searches and returns user from database by username
      *
      * @param SearchName
      * @return User from database
@@ -86,7 +92,7 @@ public class AppUsersDao {
     public AppUsers getUserByUsername(String SearchName) throws SQLException {
         String sql = "SELECT * FROM app_users WHERE username = ?";
         try (Connection conn = MariaDbJpaConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, SearchName);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -103,7 +109,7 @@ public class AppUsersDao {
                     return user;
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Error in getUserByUsername");
             }
         }
 
@@ -112,12 +118,13 @@ public class AppUsersDao {
 
     /**
      * Updates user information in the database
+     * 
      * @param user AppUsers object with updated information
      */
     public void updateUser(AppUsers user) throws SQLException {
         String sql = "UPDATE app_users SET username = ?, email = ?, role = ? WHERE user_id = ?";
         try (Connection conn = MariaDbJpaConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getRole());
