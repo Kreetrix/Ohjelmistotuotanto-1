@@ -47,7 +47,6 @@ public class AppUsersDao {
      *
      * @param value Boolean
      * @param id    User ID
-     * @throws SQLException
      */
     // switches app_users value to active or not active
     public void setActive(boolean value, int id) throws SQLException {

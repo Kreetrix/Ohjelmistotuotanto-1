@@ -15,7 +15,7 @@ import javafx.scene.shape.SVGPath;
 ///TODO Replace PNG with SVG
 public class CustomButton extends Button {
 
-    private ImageView imageView;
+    private final ImageView imageView;
 
     /**
      * Constructs a new CustomButton with transparent background and default styling.
