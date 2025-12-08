@@ -33,10 +33,15 @@ import java.io.IOException;
  */
 public class CreationController {
 
+    @FXML
     private Label pageTitle;
+    @FXML
     private Label pageSub;
+    @FXML
     private Tab deckFilter;
+    @FXML
     private Tab cardFilter;
+    @FXML
     private Label filterByDeckLabel;
     @FXML
     private TabPane tabPane;
