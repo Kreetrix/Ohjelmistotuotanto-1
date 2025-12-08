@@ -71,6 +71,7 @@ public class CreationController {
      */
     @FXML
     public void initialize() {
+        initializeLanguage();
         pageTitle.setText(I18n.get("editor.title"));
         pageSub.setText(I18n.get("editor.subtext"));
         createDeckButton.setText(I18n.get("editor.createDeckBtn"));
@@ -123,10 +124,11 @@ public class CreationController {
             // Add active (non-deleted) decks
             deckFilterComboBox.getItems().addAll(allDecks.stream()
                     .filter(deck -> !deck.isIs_deleted())
+                    .filter(deck -> !isHiddenForStudent(deck))
                     .toList());
 
             // Set up display converter for deck objects with translations
-            String currentLang = Session.getInstance().getLanguage();
+            String currentLang = getCurrentLanguage();
             deckFilterComboBox.setConverter(new javafx.util.StringConverter<Decks>() {
                 @Override
                 public String toString(Decks deck) {
@@ -165,7 +167,7 @@ public class CreationController {
             } else {
 
                 for (Decks deck : allDecks) {
-                    if (!deck.isIs_deleted()) {
+                    if (!deck.isIs_deleted() && !isHiddenForStudent(deck)) {
                         VBox deckItem = createDeckItem(deck);
                         decksContainer.getChildren().add(deckItem);
                     }
@@ -199,6 +201,7 @@ public class CreationController {
 
         List<Cards> activeCards = cards.stream()
                 .filter(card -> !card.isIs_deleted())
+                .filter(this::isCardVisibleForStudent)
                 .toList();
 
         if (activeCards.isEmpty()) {
@@ -237,7 +240,7 @@ public class CreationController {
         VBox textContent = new VBox(2);
 
         // Get translated deck name and description
-        String currentLang = Session.getInstance().getLanguage();
+        String currentLang = getCurrentLanguage();
         String deckName = getTranslatedDeckName(deck, currentLang);
         String deckDescription = getTranslatedDeckDescription(deck, currentLang);
 
@@ -307,7 +310,7 @@ public class CreationController {
         VBox textContent = new VBox(2);
 
         // Get translated card texts
-        String currentLang = Session.getInstance().getLanguage();
+        String currentLang = getCurrentLanguage();
         String question = getTranslatedCardFront(card, currentLang);
         if (question.length() > 50) {
             question = question.substring(0, 47) + "...";
@@ -369,7 +372,7 @@ public class CreationController {
      */
     private String getDeckNameById(int deckId) throws SQLException {
         List<Decks> allDecks = decksDao.getAllDecks();
-        String currentLang = Session.getInstance().getLanguage();
+        String currentLang = getCurrentLanguage();
 
         return allDecks.stream()
                 .filter(deck -> deck.getDeck_id() == deckId)
@@ -724,6 +727,34 @@ public class CreationController {
     }
 
     /**
+     * Returns true when the deck is private and current user is a student.
+     */
+    private boolean isHiddenForStudent(Decks deck) {
+        String role = Session.getInstance().getRole();
+        return "student".equalsIgnoreCase(role) && "private".equalsIgnoreCase(deck.getVisibility());
+    }
+
+    /**
+     * Returns true when the card should be visible to the current user.
+     * Students cannot see cards belonging to private decks.
+     */
+    private boolean isCardVisibleForStudent(Cards card) {
+        String role = Session.getInstance().getRole();
+        if (!"student".equalsIgnoreCase(role)) {
+            return true;
+        }
+        try {
+            Decks deck = decksDao.getDeckById(card.getDeck_id());
+            if (deck == null) {
+                return true;
+            }
+            return !"private".equalsIgnoreCase(deck.getVisibility());
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    /**
      * Gets the translated deck name for the specified language.
      * Falls back to the original deck name if translation is not available.
      *
@@ -806,5 +837,32 @@ public class CreationController {
             System.err.println("Translation fetch failed for card " + card.getCard_id() + ": " + e.getMessage());
         }
         return card.getBack_text();
+    }
+
+    /**
+     * Gets the current language from session, defaulting to "en" if not set.
+     *
+     * @return the current language code (never null)
+     */
+    private String getCurrentLanguage() {
+        String lang = Session.getInstance().getLanguage();
+        if (lang == null || lang.isEmpty()) {
+            lang = "en";
+        }
+        return lang;
+    }
+
+    /**
+     * Initializes the language in the session if not already set.
+     */
+    private void initializeLanguage() {
+        String currentLang = Session.getInstance().getLanguage();
+        if (currentLang == null || currentLang.isEmpty()) {
+            String defaultLang = I18n.getLocale().getLanguage();
+            if (defaultLang == null || defaultLang.isEmpty()) {
+                defaultLang = "en";
+            }
+            Session.getInstance().setLanguage(defaultLang);
+        }
     }
 }

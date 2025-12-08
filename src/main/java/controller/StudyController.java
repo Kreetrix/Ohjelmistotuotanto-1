@@ -86,6 +86,7 @@ public class StudyController {
 
     @FXML
     public void initialize() {
+        initializeLanguage();
         studyTitleLabel.textProperty()
                 .bind(Bindings.createStringBinding(() -> I18n.get("study.title"), I18n.localeProperty()));
         studySubtitleLabel.textProperty()
@@ -108,7 +109,7 @@ public class StudyController {
         if (currentIndex < cards.size()) {
             Cards currentCard = cards.get(currentIndex);
 
-            String lang = Session.getInstance().getLanguage();
+            String lang = getCurrentLanguage();
 
             try {
                 String translatedFront = cardTranslationDao.getTranslatedFront(currentCard.getCard_id(), lang);
@@ -210,5 +211,32 @@ public class StudyController {
     private void onClose() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Gets the current language from session, defaulting to "en" if not set.
+     *
+     * @return the current language code (never null)
+     */
+    private String getCurrentLanguage() {
+        String lang = Session.getInstance().getLanguage();
+        if (lang == null || lang.isEmpty()) {
+            lang = "en";
+        }
+        return lang;
+    }
+
+    /**
+     * Initializes the language in the session if not already set.
+     */
+    private void initializeLanguage() {
+        String currentLang = Session.getInstance().getLanguage();
+        if (currentLang == null || currentLang.isEmpty()) {
+            String defaultLang = I18n.getLocale().getLanguage();
+            if (defaultLang == null || defaultLang.isEmpty()) {
+                defaultLang = "en";
+            }
+            Session.getInstance().setLanguage(defaultLang);
+        }
     }
 }

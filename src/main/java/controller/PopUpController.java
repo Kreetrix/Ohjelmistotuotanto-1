@@ -50,7 +50,7 @@ public class PopUpController {
     private void setupStudyConfirmation() {
         popUpContainer.getChildren().clear();
 
-        String currentLang = Session.getInstance().getLanguage();
+        String currentLang = getCurrentLanguage();
         String deckName = selectedDeck.getDeck_name();
 
         try {
@@ -121,5 +121,18 @@ public class PopUpController {
         if (popupStage != null) {
             popupStage.close();
         }
+    }
+
+    /**
+     * Gets the current language from session, defaulting to "en" if not set.
+     *
+     * @return the current language code (never null)
+     */
+    private String getCurrentLanguage() {
+        String lang = Session.getInstance().getLanguage();
+        if (lang == null || lang.isEmpty()) {
+            lang = "en";
+        }
+        return lang;
     }
 }

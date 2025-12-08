@@ -44,6 +44,7 @@ public class DecksController {
      */
     @FXML
     public void initialize() {
+        initializeLanguage();
         myDecksLabel.setText(I18n.get("myDecks.title"));
         myDecksSubLabel.setText(I18n.get("myDecks.subText"));
         loadDecks();
@@ -65,9 +66,12 @@ public class DecksController {
                 emptyMessage.setMainText("No Decks Found");
                 decksContainer.getChildren().add(emptyMessage);
             } else {
-                String currentLang = Session.getInstance().getLanguage();
+                String currentLang = getCurrentLanguage();
 
                 for (Decks deck : allDecks) {
+                    if (isHiddenForStudent(deck)) {
+                        continue;
+                    }
                     MenuItemButton deckButton = new MenuItemButton();
                     deckButton.setIcon("book");
 
@@ -155,5 +159,37 @@ public class DecksController {
             logger.log(Level.SEVERE, "Error opening deck {0} ", deck.getDeck_name() + ": " + e.getMessage());
         }
 
+    }
+
+    /**
+     * Gets the current language from session, defaulting to "en" if not set.
+     *
+     * @return the current language code (never null)
+     */
+    private String getCurrentLanguage() {
+        String lang = Session.getInstance().getLanguage();
+        if (lang == null || lang.isEmpty()) {
+            lang = "en";
+        }
+        return lang;
+    }
+
+    /**
+     * Initializes the language in the session if not already set.
+     */
+    private void initializeLanguage() {
+        String currentLang = Session.getInstance().getLanguage();
+        if (currentLang == null || currentLang.isEmpty()) {
+            String defaultLang = I18n.getLocale().getLanguage();
+            if (defaultLang == null || defaultLang.isEmpty()) {
+                defaultLang = "en";
+            }
+            Session.getInstance().setLanguage(defaultLang);
+        }
+    }
+
+    private boolean isHiddenForStudent(Decks deck) {
+        String role = Session.getInstance().getRole();
+        return "student".equalsIgnoreCase(role) && "private".equalsIgnoreCase(deck.getVisibility());
     }
 }
