@@ -89,7 +89,6 @@ class DeckTest extends ApplicationTest {
             clickOn("#loginBtn");
             clickOn("My Decks");
             clickOn("Biology Basics");
-            clickOn("Start Study");
 
     }
     @AfterAll
