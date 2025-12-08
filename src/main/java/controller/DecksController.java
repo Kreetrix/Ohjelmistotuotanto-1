@@ -190,6 +190,10 @@ public class DecksController {
 
     private boolean isHiddenForStudent(Decks deck) {
         String role = Session.getInstance().getRole();
-        return "student".equalsIgnoreCase(role) && "private".equalsIgnoreCase(deck.getVisibility());
+        boolean isStudent = "student".equalsIgnoreCase(role);
+        boolean isOwner = deck.getUser_id() == Session.getInstance().getUserId();
+        boolean isPrivate = "private".equalsIgnoreCase(deck.getVisibility());
+        return isStudent && isPrivate && !isOwner;
     }
+
 }

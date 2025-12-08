@@ -124,7 +124,7 @@ public class CreationController {
             // Add active (non-deleted) decks
             deckFilterComboBox.getItems().addAll(allDecks.stream()
                     .filter(deck -> !deck.isIs_deleted())
-                    .filter(deck -> !isHiddenForStudent(deck))
+                    .filter(this::isHiddenForStudent)
                     .toList());
 
             // Set up display converter for deck objects with translations
@@ -731,7 +731,10 @@ public class CreationController {
      */
     private boolean isHiddenForStudent(Decks deck) {
         String role = Session.getInstance().getRole();
-        return "student".equalsIgnoreCase(role) && "private".equalsIgnoreCase(deck.getVisibility());
+        boolean isStudent = "student".equalsIgnoreCase(role);
+        boolean isOwner = deck.getUser_id() == Session.getInstance().getUserId();
+        boolean isPrivate = "private".equalsIgnoreCase(deck.getVisibility());
+        return isStudent && isPrivate && !isOwner;
     }
 
     /**
