@@ -44,7 +44,7 @@ class DeckTest extends ApplicationTest {
             }
 
             try (PreparedStatement check = conn.prepareStatement("SELECT COUNT(*) FROM app_users WHERE username = ?")) {
-                check.setString(1, "user");
+                check.setString(1, "TestUser");
                 ResultSet rs = check.executeQuery();
                 rs.next();
                 if (rs.getInt(1) == 0) {
@@ -83,14 +83,14 @@ class DeckTest extends ApplicationTest {
 
     @Test
     void ChooseDeck() {
-        interact( () -> {
-            clickOn("#usernameField").write("user");
+
+            clickOn("#usernameField").write("TestUser");
             clickOn("#passwordField").write("1234");
             clickOn("#loginBtn");
             clickOn("My Decks");
             clickOn("Biology Basics");
             clickOn("Start Study");
-        });
+
     }
     @AfterAll
     static void cleanUp(){
